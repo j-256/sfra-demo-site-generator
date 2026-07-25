@@ -144,6 +144,35 @@ test('makeInventoryDoc concatenates multiple inventory-list files into one well-
   rmSync(work, { recursive: true });
 });
 
+// Regression: this project is fail-fast everywhere else (see e.g. parseOptions's --out
+// validation, or verifyTree gating the whole pipeline before archives are written), but
+// makeInventoryDoc previously degraded SILENTLY - an empty inventory-lists dir produced a
+// well-formed but EMPTY <inventory> root, and any xml file whose <inventory-list> match failed
+// was dropped via filter(Boolean) with no signal at all. Either shape ships an inventory document
+// that fails at IMPORT time in Business Manager, the hardest possible place to diagnose it
+test('makeInventoryDoc throws when the inventory-lists dir is empty (would otherwise emit zero inventory-list blocks)', () => {
+  const work = mkdtempSync(join(tmpdir(), 'arc-inv-empty-'));
+  mkdirSync(join(work, 'inventory-lists'), { recursive: true });
+
+  assert.throws(() => makeInventoryDoc(work), /inventory-list/i);
+
+  rmSync(work, { recursive: true });
+});
+
+test('makeInventoryDoc throws when a candidate .xml file yields no <inventory-list> match', () => {
+  const work = mkdtempSync(join(tmpdir(), 'arc-inv-nomatch-'));
+  mkdirSync(join(work, 'inventory-lists'), { recursive: true });
+  // well-formed xml, but missing the <inventory-list>...</inventory-list> shape entirely
+  writeFileSync(join(work, 'inventory-lists/malformed.xml'),
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    + '<inventory xmlns="http://www.demandware.com/xml/impex/inventory/2007-05-31">\n'
+    + '</inventory>\n');
+
+  assert.throws(() => makeInventoryDoc(work), /malformed\.xml/);
+
+  rmSync(work, { recursive: true });
+});
+
 test('makeInventoryDoc preserves each inventory-list block byte-identical, irregular indentation and xml entities intact', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-inv-entities-'));
   mkdirSync(join(work, 'inventory-lists'), { recursive: true });
