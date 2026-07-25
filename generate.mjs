@@ -32,7 +32,7 @@ export function run(argv) {
   mkdirSync(outRoot, { recursive: true });
 
   const ids = harvestIds(SRC);
-  const rename = buildRenameMap(ids, token, opts.only);
+  const rename = buildRenameMap(ids, token);
   transformTree(SRC, outTree, rename, { only: opts.only, keepAllocationTimestamps: opts.keepAllocationTimestamps });
 
   // overlay corrected cache settings into each emitted site

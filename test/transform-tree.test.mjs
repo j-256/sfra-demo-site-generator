@@ -85,7 +85,7 @@ function setupSrc() {
 }
 
 function run(src, out, token, only, keepAllocationTimestamps = false) {
-  const rename = buildRenameMap(harvestIds(src), token, only);
+  const rename = buildRenameMap(harvestIds(src), token);
   transformTree(src, out, rename, { only, keepAllocationTimestamps });
   return rename;
 }

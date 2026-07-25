@@ -6,7 +6,6 @@ import { transformFileContent } from '../lib/transform.mjs';
 const rename = {
   map: new Map([['RefArch', 'RefArchJ'], ['RefArchGlobal', 'RefArchGlobalJ'], ['RefArchSharedLibrary', 'RefArchSharedLibraryJ']]),
   primaryName: 'RefArchJ',
-  token: 'J',
 };
 
 test('site.xml name follows resolved site id', () => {
