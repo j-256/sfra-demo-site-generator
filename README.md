@@ -4,7 +4,7 @@ Generate an isolated, referentially-valid SFRA demo-data site-import archive und
 
 ## Why
 
-The OOTB SFRA import always creates the fixed `RefArch` / `RefArchGlobal` sites with fixed resource ids, so several people cannot each have their own isolated demo site on one shared instance. No ready-made SFRA demo data is offered on Staging (only on sandboxes), so the files have to be supplied by hand there – the usual workaround being to import the data on a sandbox, export it from there, then import that archive into Staging. This tool removes both problems at once: it appends your token to every identifier (sites, catalogs, products, pricebooks, inventory, library, customer list, stores) and hands you the resulting archive directly, so there is no sandbox round trip and no collision with anyone else's demo site.
+The OOTB SFRA import always creates the fixed `RefArch` / `RefArchGlobal` sites with fixed resource ids, so several people cannot each have their own isolated demo site on one shared instance. No ready-made SFRA demo data is offered on Staging (only on sandboxes), so the files have to be supplied by hand there – the usual workaround being to import the data on a sandbox, export it from there, then import that archive into Staging. This tool removes both problems at once: it appends your token to every ORG-SCOPED identifier that would otherwise collide across imports (sites, catalogs, products, pricebooks, inventory, library, customer list, stores, jobs) and hands you the resulting archive directly, so there is no sandbox round trip and no collision with anyone else's demo site. Site-scoped objects – coupons, campaigns, promotions, slots, customer groups, shipping/payment methods, search/sort rules, page-meta-tag rules – need no renaming: each site already owns its own namespace for them, so a second site's copy cannot collide with the first's.
 
 ## Requirements
 
@@ -40,7 +40,9 @@ Inventory lists are cleaned as they are tokenized:
 
 ## What it does NOT touch
 
-`active-data/*.csv`, `active-data-lite/*.csv`, `meta/*.xml`, `*.sample`, `urls/*`, `geolocations/*`, `version.txt`, the one `.css` file under the shared library's static assets, and all images are copied verbatim – they carry no site-scoped IDs that need isolation.
+`active-data/*.csv`, `active-data-lite/*.csv`, `meta/*.xml`, `*.sample`, `urls/*`, `geolocations/*`, `version.txt`, the one `.css` file under the shared library's static assets, and all images are copied verbatim.
+
+The active-data CSVs are a deliberate exception worth calling out: they DO carry product ids (keyed by the OOTB `productID` column), but those ids are left untouched while the catalog's own product ids get the token appended. That mismatch is expected, not a bug – but it means the imported Active Data rows will never match the tokenized catalog, so any activeData-driven sort rule (`most-popular`, `top-sellers`) has no data to sort by in the generated site and will not reorder results.
 
 ## Refreshing the source data
 
