@@ -49,6 +49,32 @@ test('FAILS with dangling ref (reproduces the manual J bug shape)', () => {
   rmSync(dir, { recursive: true });
 });
 
+test('detects a dangling element-form <product-id> reference on an already-transformed tree (promotions.xml shape: condition + bonus-products)', () => {
+  // The exact shape found in the real vendored data: <product-id-condition> wraps one-or-more
+  // bare <product-id>ID</product-id> elements, and <bonus-products> wraps its own bare
+  // <product-id>ID</product-id>. Both are REFERENCES to a catalog product, distinct from the
+  // ATTRIBUTE form product-id="..." that <product> and <variant> elements DEFINE. This fixture
+  // simulates the exact defect this collector exists to catch: the catalog's product id has
+  // already been tokenized (as a correct transform pass would do) but the promotion still names
+  // the pre-token id, so the reference is dangling. Before this collector existed, verifyTree
+  // was blind to this class entirely and reported ok:true on data shaped exactly like this
+  const dir = tree({
+    'catalogs/apparel-m-catalog/catalog.xml': '<catalog catalog-id="apparel-m-catalog"><product product-id="793775370033MJ"/></catalog>',
+    'sites/RefArch/promotions.xml': '<promotions>'
+      + '<product-promotion-rule><discounted-products><included-products><condition-group>'
+      + '<product-id-condition operator="is equal"><product-id>793775370033M</product-id></product-id-condition>'
+      + '</condition-group></included-products></discounted-products></product-promotion-rule>'
+      + '<order-promotion-rule><discounts><discount><bonus><bonus-products>'
+      + '<product-id>793775370033M</product-id>'
+      + '</bonus-products></bonus></discount></discounts></order-promotion-rule>'
+      + '</promotions>',
+  });
+  const r = verifyTree(dir);
+  assert.equal(r.ok, false, 'the untokenized element-form product-id must be reported as dangling');
+  assert.ok(r.dangling.includes('793775370033M'));
+  rmSync(dir, { recursive: true });
+});
+
 test('scoping regression: a category <parent> pointing at an undefined id is not reported as dangling', () => {
   // catalog <category> elements reuse the SAME bare <parent> tag as a pricebook's parent link,
   // but for their own (out-of-scope) category hierarchy. "does-not-exist-anywhere" is
@@ -76,6 +102,22 @@ test('a library folder <parent> pointing at an undefined id is not reported as d
   rmSync(dir, { recursive: true });
 });
 
+test('a reformatted <header> (line break before list-id) still counts as DEFINED, matching harvest.mjs\'s \\s+ scoping (no false dangling report)', () => {
+  // harvest.mjs's own pricebook-header scope regex uses \s+ between "<header" and the attribute
+  // name (it has to, to also match "<header pricebook-id="). The DEFINED collector for
+  // "<header list-id=" previously hardcoded a single literal space, so a header reformatted onto
+  // two lines (or with extra indentation) would fail to be collected as DEFINED while a
+  // REFERENCED collector elsewhere still finds the reference - a false dangling report (cry wolf)
+  // on data that is not actually broken
+  const dir = tree({
+    'inventory-lists/inv1.xml': '<inventory><inventory-list><header\n    list-id="inv1"></header></inventory-list></inventory>',
+    'sites/RefArch/stores.xml': '<stores><store store-id="s1"><custom-attributes><custom-attribute attribute-id="inventoryListId">inv1</custom-attribute></custom-attributes></store></stores>',
+  });
+  const r = verifyTree(dir);
+  assert.equal(r.ok, true, JSON.stringify(r.dangling));
+  rmSync(dir, { recursive: true });
+});
+
 test('single-quoted definition plus a reference to it must yield ok:true (real vendored data mixes quote styles)', () => {
   // electronics-m-catalog/catalog.xml uses catalog-id='...' and product product-id='...' with
   // single quotes, which harvest.mjs and transform.mjs already handle via the same backreference
@@ -97,7 +139,7 @@ test('real pipeline output (harvestIds -> buildRenameMap -> transformTree over s
   // it must never cry wolf on data the generator produced correctly
   const srcDir = join(here, '..', 'src', 'demo_data_sfra');
   const outDir = mkdtempSync(join(tmpdir(), 'verify-pipeline-out-'));
-  const rename = buildRenameMap(harvestIds(srcDir), 'J', null);
+  const rename = buildRenameMap(harvestIds(srcDir), 'J');
   transformTree(srcDir, outDir, rename, { only: null, keepAllocationTimestamps: false });
 
   const r = verifyTree(outDir);
