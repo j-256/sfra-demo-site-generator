@@ -1,5 +1,5 @@
 {
-  "name": "sfra-demo-data-generator",
+  "name": "sfra-demo-site-generator",
   "version": "1.0.0",
   "description": "Generate isolated, referentially-valid SFRA demo-data site-import archives for a chosen token",
   "type": "module",
