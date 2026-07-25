@@ -40,3 +40,23 @@ test('parses only/keep/out/force', () => {
 test('rejects invalid --only value', () => {
   assert.throws(() => parseOptions(['--token', 'x', '--only', 'both']), /only/);
 });
+
+// Regression: --out took ZERO validation (`o.out = argv[++i]`), so a missing value silently
+// swallowed the NEXT flag as the path instead. `--out --force` set out="--force" and left
+// force=false - no throw, no warning, just a wrong parse the user would not notice until the
+// generated files landed somewhere unexpected. A leading "-" on the value is the tell: it is
+// (almost) never a real intended directory name, and is exactly what happens when the value is
+// missing and argv parsing slides one flag over
+test('rejects --out value that looks like a swallowed flag (missing value case)', () => {
+  assert.throws(() => parseOptions(['--token', 'x', '--out', '--force']), /--out/);
+  // the swallowed --force must not silently take effect either
+  assert.throws(() => parseOptions(['--token', 'x', '--out', '--only']), /--out/);
+});
+
+test('rejects empty --out value', () => {
+  assert.throws(() => parseOptions(['--token', 'x', '--out', '']), /--out/);
+});
+
+test('rejects --out given with no following value at all (end of argv)', () => {
+  assert.throws(() => parseOptions(['--token', 'x', '--out']), /--out/);
+});
