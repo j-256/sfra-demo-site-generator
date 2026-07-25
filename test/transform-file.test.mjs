@@ -31,3 +31,24 @@ test('rebrand does not double-token an already-tokenized page-title', () => {
   const out = transformFileContent(xml, rename, { rebrand: true });
   assert.equal(out, '<page-title>RefArchJ Online Store</page-title>');
 });
+
+test('regression: isSiteXml + rebrand together must not corrupt a compound <name>', () => {
+  // the <name> substitution writes the compound "RefArchGlobalJ" as element TEXT BEFORE the
+  // rebrand pass runs. A short "RefArch" rule that is not aware of word boundaries can then
+  // match the "RefArch" prefix of that already-tokenized compound and rewrite it again
+  const xml = '<site site-id="RefArchGlobal"><name>RefArchGlobal</name></site>';
+  const out = transformFileContent(xml, rename, { isSiteXml: true, siteName: 'RefArchGlobalJ', rebrand: true });
+  assert.match(out, /<name>RefArchGlobalJ<\/name>/);
+  assert.doesNotMatch(out, /RefArchJGlobalJ/);
+});
+
+test('regression: SiteLibrary preference text is not double-tokenized under rebrand', () => {
+  // same shape as the <name> regression above but via a preference element: transformXml already
+  // end-appends the token to the whole value ("RefArchSharedLibrary" -> "RefArchSharedLibraryJ")
+  // before the rebrand pass runs, so rebrand must not then match the "RefArch" prefix of that
+  // already-tokenized compound value
+  const xml = '<preference preference-id="SiteLibrary">RefArchSharedLibrary</preference>';
+  const out = transformFileContent(xml, rename, { rebrand: true });
+  assert.match(out, /<preference preference-id="SiteLibrary">RefArchSharedLibraryJ<\/preference>/);
+  assert.doesNotMatch(out, /RefArchJSharedLibraryJ/);
+});
