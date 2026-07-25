@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page-meta-tags xmlns="http://www.demandware.com/xml/impex/pagemetatag/2016-08-22">
+    <page-meta-tag-definitions>
+        <page-meta-tag-definition meta-tag-id="description" type="name"/>
+        <page-meta-tag-definition meta-tag-id="og:url" type="property"/>
+        <page-meta-tag-definition meta-tag-id="robots" type="name"/>
+        <page-meta-tag-definition meta-tag-id="title" type="title"/>
+    </page-meta-tag-definitions>
+    <page-meta-tag-rules>
+        <home-page-meta-tag-rules>
+            <page-meta-tag-rule rule-id="Homepage Robots" meta-tag-id="robots">
+                <description>Allow indexation &amp; crawling of home pages by search crawlers.</description>
+                <rule xml:lang="x-default">index,follow</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Homepage Title" meta-tag-id="title">
+                <description>Generate title tag using some custom text and the site display name.</description>
+                <rule xml:lang="x-default">The website with best products at low prices. | ${Site.displayName}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Homepage Open Graph URL" meta-tag-id="og:url">
+                <description>Provide page URL in open graph tag.</description>
+                <rule xml:lang="x-default">${OriginalRequestURL}</rule>
+            </page-meta-tag-rule>
+        </home-page-meta-tag-rules>
+        <product-detail-page-meta-tag-rules>
+            <page-meta-tag-rule rule-id="Product Detail Page Title" meta-tag-id="title">
+                <description>Generate title tag based on available product name, product price range, product currency and site display name.</description>
+                <rule xml:lang="x-default">Buy ${Product.name} for ${ProductPrice.currency} ${IF ProductPrice.min EQ ProductPrice.max THEN ProductPrice.min ELSE ProductPrice.min AND('-') ProductPrice.max} | ${Site.displayName}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Detail Page Description" meta-tag-id="description">
+                <description>Use page description from product if available. If not available fall back to generic 'Buy Product at Site.', e.g. 'Buy Black Single Pleat Athletic Fit Wool Suit at SiteGenesis.'</description>
+                <rule xml:lang="x-default">${Product.pageDescription ELSE Constant('Buy ') AND Product.name AND Constant(' at ') AND Site.displayName AND Constant('.')}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Detail Page Robots" meta-tag-id="robots">
+                <description>Allow indexation &amp; crawling of Product Detail Pages by search crawlers.</description>
+                <rule xml:lang="x-default">index, follow</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Detail Page Open Graph URL" meta-tag-id="og:url">
+                <description>Product Detail Page Open Graph URL</description>
+                <rule xml:lang="x-default">${OriginalRequestURL}</rule>
+            </page-meta-tag-rule>
+        </product-detail-page-meta-tag-rules>
+        <product-listing-page-meta-tag-rules>
+            <page-meta-tag-rule rule-id="Product Listing Page Robots - Global" meta-tag-id="robots">
+                <description>Example rule to block indexation of color &amp; size refinements by search crawlers.</description>
+                <rule xml:lang="x-default">${IF SearchRefinement.refinementColor OR SearchRefinement.size THEN Constant('noindex,nofollow') ELSE Constant('index,follow')}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Listing Page Robots - Electronics" meta-tag-id="robots">
+                <description>Block indexation of all refinements in electronics categories (except brand) by search crawlers.</description>
+                <rule xml:lang="x-default">${IF SearchRefinement.batteryType OR SearchRefinement.portableAudioType OR SearchRefinement.displaySize OR SearchRefinement.mediaFormat OR SearchRefinement.gpsType OR SearchRefinement.resolution OR SearchRefinement.tvSize OR SearchRefinement.tvType OR SearchRefinement.digitalCameraFeatures OR SearchRefinement.digitalCameraType OR SearchRefinement.digitalCameraPixels OR SearchRefinement.gpsFeaturesTHEN Constant('noindex,nofollow') ELSE Constant('index,follow')}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Listing Page Title" meta-tag-id="title">
+                <description>Generate title tag based on available category page title or alternatively on category display name.</description>
+                <rule xml:lang="x-default">${Category.pageTitle ELSE Constant('Find amazing products in ') AND Category.displayName AND Constant('' today | ') AND Site.displayName}</rule>
+            </page-meta-tag-rule>
+            <page-meta-tag-rule rule-id="Product Listing Page Open Graph URL" meta-tag-id="og:url">
+                <description>Provide page URL in open graph tag.</description>
+                <rule xml:lang="x-default">${OriginalRequestURL}</rule>
+            </page-meta-tag-rule>
+        </product-listing-page-meta-tag-rules>
+        <content-detail-page-meta-tag-rules>
+            <page-meta-tag-rule rule-id="Content Detail Page Title" meta-tag-id="title">
+                <description>Generate title tag for Customer Service based on content name and site name.</description>
+                <rule xml:lang="x-default">Help required? Find our ${Content.Name} at ${Site.displayName}.</rule>
+            </page-meta-tag-rule>
+        </content-detail-page-meta-tag-rules>
+        <content-listing-page-meta-tag-rules>
+            <page-meta-tag-rule rule-id="Content Folder Page Title Example" meta-tag-id="title">
+                <description>Generate title tag for about us content pages based on folder page title and site display name.</description>
+                <rule xml:lang="x-default">Find information about ${Site.displayName} at ${Folder.displayName}.</rule>
+            </page-meta-tag-rule>
+        </content-listing-page-meta-tag-rules>
+    </page-meta-tag-rules>
+</page-meta-tags>

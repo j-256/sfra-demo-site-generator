@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache-settings xmlns="http://www.demandware.com/xml/impex/cachesettings/2013-08-15">
+    <settings>
+        <development>
+            <static-cache-ttl>2592000</static-cache-ttl>
+            <page-cache-enabled>true</page-cache-enabled>
+        </development>
+        <staging>
+            <static-cache-ttl>0</static-cache-ttl>
+            <page-cache-enabled>false</page-cache-enabled>
+        </staging>
+        <production>
+            <static-cache-ttl>2592000</static-cache-ttl>
+            <page-cache-enabled>true</page-cache-enabled>
+        </production>
+    </settings>
+</cache-settings>

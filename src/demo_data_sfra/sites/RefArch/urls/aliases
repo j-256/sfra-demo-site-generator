@@ -1,0 +1,81 @@
+{
+	/* 
+	 *
+	 * The file is used to configure host names for a site.
+	 *
+	 * Please remove all comments before installing this file!
+	 *
+	 * Go to http://www.jsonlint.com/ to validate our file.
+	 * 
+	 */
+   
+	/*	
+	 *  __version must be set to "1"	
+	 */
+	
+	"__version" : "1",
+	
+	/*
+	 * Settings section is used to configure main HTTP and HTTPS hostnames for a site.
+	 *  
+	 */
+	"settings" : {
+		// "http-host" : "www.refarch.com",
+		// "https-host" : "secure. refarch.com"
+	},
+	
+
+	/*	
+	 * Host name definitions. 
+	 * The following section allows to define additional hostnames associated with the site.
+	 * With each hostname it is possible to define set of redirect rules.  
+	 *
+	 */
+	 
+	/*
+	 * Examples
+	 */
+	  
+	/*
+	 * Host redirect from refarch.com to www.sitegesis.com.
+	 * All URLs coming to refarch.com (http://refarch.com/*) will be permanently redirected (301) to www.refarch.com
+	 *  
+	 *	"refarch.com": [
+	 *      {
+	 *        "host": "www.refarch.com"
+	 *		}
+	 *  ],
+	 */
+    
+	/*
+	 * Host redirect to specific pipeline.
+	 * Hostname-only URL (e.g. http://electronics.refarch.com/) will result in a call of Search-Show pipeline.    
+	 *
+	 *	"electronics.refarch.com": [
+	 *      {
+	 *        "pipeline": "Search-Show",
+	 *        "params" : {"cgid":"electronics"}
+	 *		}
+	 *  ],
+	 */
+
+
+	/*
+	 * Host redirect based on user agent header.
+	 * With each rule it is possible to associate precondition based on content of "user-agent" http header.
+	 * In the example below an HTTP requests with "User-Agent" header containing "iphone" or "ipod" will be redirected (301) to apple.refarch.com
+	 * and those with "blackberry" to bb.refarch.com.      
+	 *
+	 *	"www.refarch.com": [
+	 *     	{
+	 *        "if-agent-contains": ["iphone","ipod"],
+	 *        "host": "apple.refarch.com"
+	 *	   	},
+	 *     	{
+	 *        "if-agent-contains": ["blackberry"],
+	 *        "host": "bb.refarch.com"
+	 *		}
+	 *  ]
+	 */
+ 
+}

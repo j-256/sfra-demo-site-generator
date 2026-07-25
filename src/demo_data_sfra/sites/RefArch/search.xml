@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<search xmlns="http://www.demandware.com/xml/impex/search/2007-02-28">
+    <indexes>
+        <index index-id="product" xml:lang="x-default">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="content" xml:lang="x-default">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="synonym" xml:lang="x-default">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="suggest" xml:lang="x-default">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="product" xml:lang="en">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="content" xml:lang="en">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="synonym" xml:lang="en">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="suggest" xml:lang="en">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="product" xml:lang="en-US">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="content" xml:lang="en-US">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="synonym" xml:lang="en-US">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+        <index index-id="suggest" xml:lang="en-US">
+            <settings>
+                <indexing-mode>production</indexing-mode>
+            </settings>
+        </index>
+    </indexes>
+
+</search>

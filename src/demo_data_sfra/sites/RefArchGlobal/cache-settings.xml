@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache-settings xmlns="http://www.demandware.com/xml/impex/cachesettings/2013-08-15">
+    <settings>
+        <development>
+            <static-cache-ttl>0</static-cache-ttl>
+            <page-cache-enabled>false</page-cache-enabled>
+        </development>
+        <staging>
+            <static-cache-ttl>2592000</static-cache-ttl>
+            <page-cache-enabled>true</page-cache-enabled>
+        </staging>
+        <production>
+            <static-cache-ttl>2592000</static-cache-ttl>
+            <page-cache-enabled>true</page-cache-enabled>
+        </production>
+    </settings>
+
+    <page-cache-partitions>
+        <page-cache-partition partition-id="Homepage">
+            <name>Homepage</name>
+            <pipelines>
+                <pipeline>Default-Start</pipeline>
+                <pipeline>Home-Show</pipeline>
+                <pipeline>Home-IncludeHeaderMenu</pipeline>
+            </pipelines>
+        </page-cache-partition>
+        <page-cache-partition partition-id="ProductDetailPage">
+            <name>Product Detail Page</name>
+            <pipelines>
+                <pipeline>Product-Show</pipeline>
+                <pipeline>Product-Detail</pipeline>
+                <pipeline>Product-GetVariants</pipeline>
+            </pipelines>
+        </page-cache-partition>
+        <page-cache-partition partition-id="ProductTiles">
+            <name>Product Tiles</name>
+            <pipelines>
+                <pipeline>Product-HitTile</pipeline>
+            </pipelines>
+        </page-cache-partition>
+        <page-cache-partition partition-id="Redirects">
+            <name>Redirects</name>
+            <pipelines>
+                <pipeline>RedirectURL-Start</pipeline>
+            </pipelines>
+        </page-cache-partition>
+        <page-cache-partition partition-id="SearchNavigation">
+            <name>Search &amp; Navigation</name>
+            <pipelines>
+                <pipeline>SiteMap-Start</pipeline>
+                <pipeline>Search-Show</pipeline>
+                <pipeline>Product-Productnav</pipeline>
+            </pipelines>
+        </page-cache-partition>
+        <page-cache-partition partition-id="SlotsContent">
+            <name>Content Slots &amp; Assets</name>
+            <pipelines>
+                <pipeline>Page-Show</pipeline>
+                <pipeline>Page-Include</pipeline>
+                <pipeline>Search-ShowContent</pipeline>
+                <pipeline>__SYSTEM__Slot-Request</pipeline>
+                <pipeline>__SYSTEM__Slot-Render</pipeline>
+            </pipelines>
+        </page-cache-partition>
+    </page-cache-partitions>
+
+</cache-settings>

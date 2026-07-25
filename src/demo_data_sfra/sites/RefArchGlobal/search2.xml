@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<search xmlns="http://www.demandware.com/xml/impex/search2/2010-02-19">
+    <searchable-attributes>
+        <searchable-attribute>
+            <attribute-path>category.displayName</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>content.custom.body</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>content.description</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>content.name</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.ID</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.brand</attribute-path>
+            <boost>1.01</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.custom.color</attribute-path>
+            <boost>1.0</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.custom.digitalCameraFeatures</attribute-path>
+            <boost>0.5</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.custom.digitalCameraType</attribute-path>
+            <boost>0.5</boost>
+        </searchable-attribute>
+        <searchable-attribute>
+            <attribute-path>product.name</attribute-path>
+            <boost>2.0</boost>
+        </searchable-attribute>
+    </searchable-attributes>
+    <stopword-list xml:lang="en-GB">
+        <stopwords>a, an, and, are, as, at, be, but, by, for, if, in, into, is, it, no, not, of, on, or, s, such, t, that, the, their, then, there, these, they, this, to, was, will, with, x</stopwords>
+    </stopword-list>
+    <synonym-list xml:lang="en-GB">
+        <synonyms>camera, digital camera, digitalcamera</synonyms>
+        <synonyms>dresses, dress, -dress shirts, -shirts</synonyms>
+        <synonyms>glove, gloves, mittens, mitten, mittans, mittans</synonyms>
+        <synonyms>gps, globalpositioningsystem</synonyms>
+        <synonyms>mp3, mp3 player, music player</synonyms>
+        <synonyms>scarf, scarves</synonyms>
+        <synonyms>tv, television, televisions, tv set, hdtv</synonyms>
+    </synonym-list>
+    <hypernym-list xml:lang="en-GB">
+        <hypernym-rule>
+            <hyponyms>boot</hyponyms>
+            <hypernyms>shoe</hypernyms>
+        </hypernym-rule>
+        <hypernym-rule>
+            <hyponyms>jeans, khakis</hyponyms>
+            <hypernyms>pants</hypernyms>
+        </hypernym-rule>
+        <hypernym-rule>
+            <hyponyms>thong, flip flop</hyponyms>
+            <hypernyms>sandal</hypernyms>
+        </hypernym-rule>
+    </hypernym-list>
+    <redirect-list>
+        <redirect>
+            <keywords xml:lang="en-GB">new arrivals, what's new, just in</keywords>
+            <online-flag>true</online-flag>
+            <category-redirect category-id="newarrivals"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">about, about us, history</keywords>
+            <online-flag>true</online-flag>
+            <page-redirect page-id="about-us"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">jobs, employment, careers</keywords>
+            <online-flag>true</online-flag>
+            <page-redirect page-id="jobs-landing"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">shipping, delivery, timetables</keywords>
+            <online-flag>true</online-flag>
+            <page-redirect page-id="shipping"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">account, my account, order history</keywords>
+            <online-flag>true</online-flag>
+            <pipeline-redirect pipeline-name="Account-Show"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">contact, contact us</keywords>
+            <online-flag>true</online-flag>
+            <pipeline-redirect pipeline-name="CustomerService-ContactUs"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">customer service, help, order status</keywords>
+            <online-flag>true</online-flag>
+            <pipeline-redirect pipeline-name="CustomerService-Show"/>
+        </redirect>
+        <redirect>
+            <keywords xml:lang="en-GB">stores, store, store locator</keywords>
+            <online-flag>true</online-flag>
+            <pipeline-redirect pipeline-name="Stores-Find"/>
+        </redirect>
+    </redirect-list>
+    <suggestion-list xml:lang="en-GB">
+        <suggestions>Cargo</suggestions>
+        <suggestions>Chino</suggestions>
+        <suggestions>Coat</suggestions>
+        <suggestions>Denim</suggestions>
+        <suggestions>Dresses</suggestions>
+        <suggestions>GPS</suggestions>
+        <suggestions>Gloves</suggestions>
+        <suggestions>Jacket</suggestions>
+        <suggestions>Jean</suggestions>
+        <suggestions>LCD</suggestions>
+        <suggestions>Leather</suggestions>
+        <suggestions>Long sleeve</suggestions>
+        <suggestions>Plasma</suggestions>
+        <suggestions>Playstation</suggestions>
+        <suggestions>Point and Shoot</suggestions>
+        <suggestions>Polo</suggestions>
+        <suggestions>SLR</suggestions>
+        <suggestions>Scarf</suggestions>
+        <suggestions>Short Sleeve</suggestions>
+        <suggestions>Wii</suggestions>
+        <suggestions>Xbox</suggestions>
+        <suggestions>iPod</suggestions>
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <suggestion-list xml:lang="default">
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <suggestion-list xml:lang="it-IT">
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <suggestion-list xml:lang="fr-FR">
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <suggestion-list xml:lang="ja-JP">
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <suggestion-list xml:lang="zh-CN">
+        <minimum-term-length>1</minimum-term-length>
+    </suggestion-list>
+    <compound-word-list xml:lang="en-GB">
+        <compound-words>digital-camera</compound-words>
+        <compound-words>global-positioning-system</compound-words>
+        <compound-words>mp3-player, music-player, mp3-players, music-players</compound-words>
+        <compound-words>tv-set, tv-sets</compound-words>
+    </compound-word-list>
+    <common-phrase-list xml:lang="en-GB">
+        <common-phrases match-mode="exact-match">ankle boots</common-phrases>
+        <common-phrases match-mode="exact-match">digital camera</common-phrases>
+        <common-phrases match-mode="exact-match">hand bag</common-phrases>
+        <common-phrases match-mode="exact-match">mp3 player, music player</common-phrases>
+        <common-phrases match-mode="exact-match">product care</common-phrases>
+        <common-phrases match-mode="exact-match">shoe cleaner, boot cleaner</common-phrases>
+        <common-phrases match-mode="exact-match">tv sets</common-phrases>
+    </common-phrase-list>
+    <category-exclusion-list xml:lang="en-GB">
+        <category-exclusions>belts &amp; scarves</category-exclusions>
+        <category-exclusions>boy &amp; girl</category-exclusions>
+        <category-exclusions>hats &amp; gloves</category-exclusions>
+    </category-exclusion-list>
+    <index-settings>
+        <full-reindexing-schedule>
+            <date-from>2011-06-03Z</date-from>
+            <start-time>14:57:00.000Z</start-time>
+            <factor>1</factor>
+            <unit>days</unit>
+        </full-reindexing-schedule>
+        <full-reindexing-enabled>
+            <index-type>product</index-type>
+            <index-type>synonym</index-type>
+            <index-type>suggest</index-type>
+            <index-type>activedata</index-type>
+            <index-type>content</index-type>
+        </full-reindexing-enabled>
+        <incremental-reindexing-enabled>
+            <index-type>product</index-type>
+            <index-type>synonym</index-type>
+            <index-type>suggest</index-type>
+            <index-type>activedata</index-type>
+            <index-type>content</index-type>
+        </incremental-reindexing-enabled>
+        <indexed-locales>
+            <locale>x-default</locale>
+            <locale>it-IT</locale>
+            <locale>en-GB</locale>
+            <locale>fr-FR</locale>
+            <locale>ja-JP</locale>
+            <locale>zh-CN</locale>
+        </indexed-locales>
+        <stemming xml:lang="x-default">English</stemming>
+        <stemming xml:lang="it-IT">Italian</stemming>
+        <stemming xml:lang="en-GB">English</stemming>
+        <stemming xml:lang="fr-FR">French</stemming>
+        <stemming xml:lang="ja-JP">Japanese</stemming>
+        <stemming xml:lang="zh-CN">Chinese</stemming>
+    </index-settings>
+</search>
+

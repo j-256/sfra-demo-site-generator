@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site xmlns="http://www.demandware.com/xml/impex/site/2007-04-30" site-id="RefArchGlobal">
+    <name>RefArchGlobal</name>
+    <currency>GBP</currency>
+    <taxation>gross</taxation>
+    <custom-cartridges>app_storefront_base</custom-cartridges>
+    <storefront-status>online</storefront-status>
+     <home-page-meta-tag-rules>
+        <page-meta-tag-rule rule-id="Homepage Title"/>
+        <page-meta-tag-rule rule-id="Homepage Robots"/>
+        <page-meta-tag-rule rule-id="Homepage Open Graph URL"/>
+    </home-page-meta-tag-rules>
+</site>
+

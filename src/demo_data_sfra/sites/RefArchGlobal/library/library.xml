@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library xmlns="http://www.demandware.com/xml/impex/library/2006-10-31">
+    <folder folder-id="root">
+        <online-flag>true</online-flag>
+        <page-attributes/>
+    </folder>
+
+</library>

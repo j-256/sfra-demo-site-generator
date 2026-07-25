@@ -1,0 +1,5 @@
+Commerce Cloud Customer Active Data,,,,,,,,,,,,,,,,
+customerNo,visitsWeek,visitsMonth,orderValueMonth,productsViewedMonth,productsAbandonedMonth,visitsYear,orders,orderValue,discountValueWithoutCoupon,discountValueWithCoupon,giftUnits,avgOrderValue,sourceCodeOrders,topCategoriesOrdered,productsOrdered,giftOrders
+D00000001,1,2,48.95,,,19,8,712.96,64.13,61.74,0,89.12,1,,,0
+D00000002,4,15,245.66,,,72,39,939.51,73.34,110.88,19,24.09,0,,,16
+D00000003,3,7,95.27,,,33,22,1019.92,84.52,32.6,0,46.36,0,,,0

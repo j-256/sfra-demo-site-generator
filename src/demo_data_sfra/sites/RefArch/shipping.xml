@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shipping xmlns="http://www.demandware.com/xml/impex/shipping/2007-03-31">
+    <shipping-method method-id="001" default="true">
+        <display-name xml:lang="x-default">Ground</display-name>
+        <display-name xml:lang="fr-FR">Transport terrestre</display-name>
+        <display-name xml:lang="it">Via terra</display-name>
+        <display-name xml:lang="it-IT">Via terra</display-name>
+        <display-name xml:lang="ja-JP">通常便</display-name>
+        <display-name xml:lang="zh-CN">陆路</display-name>
+        <description xml:lang="x-default">Order received within 7-10 business days</description>
+        <description xml:lang="fr-FR">Commande reçue en 7 à 10 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordine entro 7-10 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordine entro 7-10 giorni lavorativi</description>
+        <description xml:lang="ja-JP">ご注文の商品を 7 ～ 10 営業日以内にお届け</description>
+        <description xml:lang="zh-CN">在 7-10 个工作日内收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">5.99</amount>
+            <amount order-value="100">7.99</amount>
+            <amount order-value="200">9.99</amount>
+            <amount order-value="500">15.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>25.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>womens-jewelry</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>10.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">7-10 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="002" default="false">
+        <display-name xml:lang="x-default">2-Day Express</display-name>
+        <display-name xml:lang="fr-FR">Express - 2 jours </display-name>
+        <display-name xml:lang="it">Consegna espressa in 2 giorni</display-name>
+        <display-name xml:lang="it-IT">Consegna espressa in 2 giorni</display-name>
+        <display-name xml:lang="ja-JP">2 日お急ぎ便</display-name>
+        <display-name xml:lang="zh-CN">2 天速递</display-name>
+        <description xml:lang="x-default">Order received in 2 business days</description>
+        <description xml:lang="fr-FR">Commande reçue en 2 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordine entro 2 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordine entro 2 giorni lavorativi</description>
+        <description xml:lang="ja-JP">ご注文の商品を 2 営業日でお届け</description>
+        <description xml:lang="zh-CN">在 2 个工作日内收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">9.99</amount>
+            <amount order-value="100">11.99</amount>
+            <amount order-value="200">15.99</amount>
+            <amount order-value="500">20.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>25.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">2 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="003" default="false">
+        <display-name xml:lang="x-default">Overnight</display-name>
+        <display-name xml:lang="fr-FR">Le lendemain</display-name>
+        <display-name xml:lang="it">Il giorno successivo</display-name>
+        <display-name xml:lang="it-IT">Il giorno successivo</display-name>
+        <display-name xml:lang="ja-JP">翌日便</display-name>
+        <display-name xml:lang="zh-CN">连夜送货</display-name>
+        <description xml:lang="x-default">Order received the next business day</description>
+        <description xml:lang="fr-FR">Commande reçue le jour ouvré suivant (J+1)</description>
+        <description xml:lang="it">Ricezione ordine entro il giorno lavorativo successivo</description>
+        <description xml:lang="it-IT">Ricezione ordine entro il giorno lavorativo successivo</description>
+        <description xml:lang="ja-JP">ご注文の商品を翌営業日にお届け</description>
+        <description xml:lang="zh-CN">在下一工作日收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">15.99</amount>
+            <amount order-value="100">19.99</amount>
+            <amount order-value="200">21.99</amount>
+            <amount order-value="500">29.99</amount>
+        </price-table>
+        <excluded-products>
+            <included-products>
+                <condition-group>
+                    <category-condition catalog-id="storefront-catalog-m-en">
+                        <category-id>electronics-televisions</category-id>
+                    </category-condition>
+                </condition-group>
+            </included-products>
+        </excluded-products>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">Next Day</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="004" default="false">
+        <display-name xml:lang="x-default">Super Saver</display-name>
+        <display-name xml:lang="fr-FR">Ultra-économique</display-name>
+        <display-name xml:lang="it">Spedizione ridotta</display-name>
+        <display-name xml:lang="it-IT">Spedizione ridotta</display-name>
+        <display-name xml:lang="ja-JP">超おトク</display-name>
+        <display-name xml:lang="zh-CN">Super Saver</display-name>
+        <description xml:lang="x-default">Super Saver Delivery (arrives in 3-7 business days)</description>
+        <description xml:lang="fr-FR">Livraison ultra-économique (en 3 à 7 jours ouvrés)</description>
+        <description xml:lang="it">Spedizione ridotta (consegna in 3-7 giorni lavorativi)</description>
+        <description xml:lang="it-IT">Spedizione ridotta (consegna in 3-7 giorni lavorativi)</description>
+        <description xml:lang="ja-JP">超おトク便 (お受け取りまで 3 ～ 7 営業日)</description>
+        <description xml:lang="zh-CN">Super Saver 交货（3 到 7 个工作日内送达）</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">1.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronic-games</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>100.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-products>
+            <included-products>
+                <condition-group>
+                    <category-condition catalog-id="storefront-catalog-m-en">
+                        <category-id>newarrivals</category-id>
+                        <category-id>womens</category-id>
+                        <category-id>mens</category-id>
+                        <category-id>hidden</category-id>
+                        <category-id>electronics-televisions</category-id>
+                        <category-id>electronics-digital-cameras</category-id>
+                        <category-id>electronics-digital-media-players</category-id>
+                        <category-id>electronics-gps-units</category-id>
+                        <category-id>electronics-game-consoles</category-id>
+                    </category-condition>
+                </condition-group>
+            </included-products>
+        </excluded-products>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">3-7 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="005" default="false">
+        <display-name xml:lang="x-default">Store Pickup</display-name>
+        <display-name xml:lang="fr-FR">Livraison en magasin</display-name>
+        <display-name xml:lang="it">Ritiro in negozio</display-name>
+        <display-name xml:lang="it-IT">Ritiro in negozio</display-name>
+        <display-name xml:lang="ja-JP">店舗にて受け取り</display-name>
+        <display-name xml:lang="zh-CN">到店提货</display-name>
+        <description xml:lang="x-default">Store Pickup</description>
+        <description xml:lang="fr-FR">Livraison en magasin</description>
+        <description xml:lang="it">Ritiro in negozio</description>
+        <description xml:lang="it-IT">Ritiro in negozio</description>
+        <description xml:lang="ja-JP">店舗にて受け取り</description>
+        <description xml:lang="zh-CN">到店提货</description>
+        <online-flag>true</online-flag>
+        <price-table>
+            <amount order-value="0">0</amount>
+        </price-table>
+        <custom-attributes>
+            <custom-attribute attribute-id="storePickupEnabled">true</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="012" default="false">
+        <display-name xml:lang="x-default">Express</display-name>
+        <display-name xml:lang="fr-FR">Express</display-name>
+        <display-name xml:lang="it">Espressa</display-name>
+        <display-name xml:lang="it-IT">Espressa</display-name>
+        <display-name xml:lang="ja-JP">お急ぎ便</display-name>
+        <display-name xml:lang="zh-CN">速递</display-name>
+        <description xml:lang="x-default">Orders shipped outside continental US received in 2-3 business days</description>
+        <description xml:lang="fr-FR">Commandes envoyées en dehors des États-Unis (continent) reçues en 2 à 3 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordini spediti fuori dagli Stati Uniti continentali entro 2-3 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordini spediti fuori dagli Stati Uniti continentali entro 2-3 giorni lavorativi</description>
+        <description xml:lang="ja-JP">配送先が米国本土以外のご注文の商品を 2 ～ 3 営業日でお届け</description>
+        <description xml:lang="zh-CN">送往美国本土以外的订单于 2-3 个工作日内收货</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">16.99</amount>
+            <amount order-value="100">22.99</amount>
+            <amount order-value="200">28.99</amount>
+            <amount order-value="500">34.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>25.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="any">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-not-equal</operator>
+                        <string>AB</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">2-3 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+    <shipping-method method-id="021" default="false">
+        <display-name xml:lang="x-default">USPS</display-name>
+        <display-name xml:lang="fr-FR">USPS</display-name>
+        <display-name xml:lang="it">USPS</display-name>
+        <display-name xml:lang="it-IT">USPS</display-name>
+        <display-name xml:lang="ja-JP">郵便</display-name>
+        <display-name xml:lang="zh-CN">USPS</display-name>
+        <description xml:lang="x-default">Order shipped by USPS received within 7-10 business days</description>
+        <description xml:lang="fr-FR">Commande envoyée par USPS reçue en 7 à 10 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordini spediti tramite USPS entro 7-10 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordini spediti tramite USPS entro 7-10 giorni lavorativi</description>
+        <description xml:lang="ja-JP">ご注文の商品を 7 ～ 10 営業日以内に郵便でお届け</description>
+        <description xml:lang="zh-CN">通过 USPS 送货的订单在 7-10 个工作日内收货</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0">0</amount>
+            <amount order-value="0.01">5.99</amount>
+            <amount order-value="100">7.99</amount>
+            <amount order-value="200">9.99</amount>
+            <amount order-value="500">15.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>25.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-not-equal</operator>
+                        <string>AA</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">7-10 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>USD</currency>
+    </shipping-method>
+
+
+    <shipping-method method-id="EUR001" default="true">
+        <display-name xml:lang="x-default">Ground</display-name>
+        <display-name xml:lang="fr-FR">Transport terrestre</display-name>
+        <display-name xml:lang="it">Via terra</display-name>
+        <display-name xml:lang="it-IT">Via terra</display-name>
+        <display-name xml:lang="ja-JP">通常便</display-name>
+        <display-name xml:lang="zh-CN">陆路</display-name>
+        <description xml:lang="x-default">Order received within 7-10 business days</description>
+        <description xml:lang="fr-FR">Commande reçue en 7 à 10 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordine entro 7-10 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordine entro 7-10 giorni lavorativi</description>
+        <description xml:lang="ja-JP">ご注文の商品を 7 ～ 10 営業日以内にお届け</description>
+        <description xml:lang="zh-CN">在 7-10 个工作日内收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0.0">0.0</amount>
+            <amount order-value="0.01">5.99</amount>
+            <amount order-value="100.0">7.99</amount>
+            <amount order-value="200.0">9.99</amount>
+            <amount order-value="500.0">15.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="electronics-m-catalog">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>25.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>womens-jewelry</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>10.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">7-10 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>EUR</currency>
+    </shipping-method>
+
+    <shipping-method method-id="EUR002" default="false">
+        <display-name xml:lang="x-default">2-Day Express</display-name>
+        <display-name xml:lang="fr-FR">Express - 2 jours </display-name>
+        <display-name xml:lang="it">Consegna espressa in 2 giorni</display-name>
+        <display-name xml:lang="it-IT">Consegna espressa in 2 giorni</display-name>
+        <display-name xml:lang="ja-JP">2 日お急ぎ便</display-name>
+        <display-name xml:lang="zh-CN">2 天速递</display-name>
+        <description xml:lang="x-default">Order received in 2 business days</description>
+        <description xml:lang="fr-FR">Commande reçue en 2 jours ouvrés</description>
+        <description xml:lang="it">Ricezione ordine entro 2 giorni lavorativi</description>
+        <description xml:lang="it-IT">Ricezione ordine entro 2 giorni lavorativi</description>
+        <description xml:lang="ja-JP">ご注文の商品を 2 営業日でお届け</description>
+        <description xml:lang="zh-CN">在 2 个工作日内收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0.0">0.0</amount>
+            <amount order-value="0.01">9.99</amount>
+            <amount order-value="100.0">11.99</amount>
+            <amount order-value="200.0">15.99</amount>
+            <amount order-value="500.0">20.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-televisions</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>0.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">2 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>EUR</currency>
+    </shipping-method>
+
+    <shipping-method method-id="EUR003" default="false">
+        <display-name xml:lang="x-default">Overnight</display-name>
+        <display-name xml:lang="fr-FR">Le lendemain</display-name>
+        <display-name xml:lang="it">Il giorno successivo</display-name>
+        <display-name xml:lang="it-IT">Il giorno successivo</display-name>
+        <display-name xml:lang="ja-JP">翌日便</display-name>
+        <display-name xml:lang="zh-CN">连夜送货</display-name>
+        <description xml:lang="x-default">Order received the next business day</description>
+        <description xml:lang="fr-FR">Commande reçue le jour ouvré suivant (J+1)</description>
+        <description xml:lang="it">Ricezione ordine entro il giorno lavorativo successivo</description>
+        <description xml:lang="it-IT">Ricezione ordine entro il giorno lavorativo successivo</description>
+        <description xml:lang="ja-JP">ご注文の商品を翌営業日にお届け</description>
+        <description xml:lang="zh-CN">在下一工作日收到订单</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0.0">0.0</amount>
+            <amount order-value="0.01">15.99</amount>
+            <amount order-value="100.0">19.99</amount>
+            <amount order-value="200.0">21.99</amount>
+            <amount order-value="500.0">29.99</amount>
+        </price-table>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">Next Day</custom-attribute>
+        </custom-attributes>
+        <currency>EUR</currency>
+    </shipping-method>
+
+    <shipping-method method-id="EUR004" default="false">
+        <display-name xml:lang="x-default">Super Saver</display-name>
+        <display-name xml:lang="fr-FR">Ultra-économique</display-name>
+        <display-name xml:lang="it">Spedizione ridotta</display-name>
+        <display-name xml:lang="it-IT">Spedizione ridotta</display-name>
+        <display-name xml:lang="ja-JP">超おトク</display-name>
+        <display-name xml:lang="zh-CN">Super Saver</display-name>
+        <description xml:lang="x-default">Super Saver delivery (arrives in 3-7 business days)</description>
+        <description xml:lang="fr-FR">Livraison ultra-économique (en 3 à 7 jours ouvrés)</description>
+        <description xml:lang="it">Spedizione ridotta (consegna in 3-7 giorni lavorativi)</description>
+        <description xml:lang="it-IT">Spedizione ridotta (consegna in 3-7 giorni lavorativi)</description>
+        <description xml:lang="ja-JP">超おトク便 (お受け取りまで 3 ～ 7 営業日)</description>
+        <description xml:lang="zh-CN">Super Saver 交货（3 到 7 个工作日内送达）</description>
+        <online-flag>true</online-flag>
+        <tax-class-id>standard</tax-class-id>
+        <price-table>
+            <amount order-value="0.0">0.0</amount>
+            <amount order-value="0.01">1.99</amount>
+        </price-table>
+        <product-cost-groups>
+            <product-cost-group>
+                <products>
+                    <included-products>
+                        <condition-group>
+                            <category-condition catalog-id="storefront-catalog-m-en">
+                                <category-id>electronics-gaming</category-id>
+                            </category-condition>
+                        </condition-group>
+                    </included-products>
+                </products>
+                <cost-per-item>
+                    <surcharge>100.00</surcharge>
+                </cost-per-item>
+            </product-cost-group>
+        </product-cost-groups>
+        <excluded-addresses>
+            <included-addresses>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>shipment.shippingAddress.stateCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>AA</string>
+                        <string>AB</string>
+                        <string>AE</string>
+                        <string>AP</string>
+                        <string>AK</string>
+                        <string>AS</string>
+                        <string>BC</string>
+                        <string>GU</string>
+                        <string>HI</string>
+                        <string>MB</string>
+                        <string>NB</string>
+                        <string>NL</string>
+                        <string>NT</string>
+                        <string>NS</string>
+                        <string>NU</string>
+                        <string>ON</string>
+                        <string>PE</string>
+                        <string>PR</string>
+                        <string>QC</string>
+                        <string>SK</string>
+                        <string>VI</string>
+                        <string>YT</string>
+                    </condition>
+                </condition-group>
+            </included-addresses>
+        </excluded-addresses>
+        <custom-attributes>
+            <custom-attribute attribute-id="estimatedArrivalTime" xml:lang="x-default">3-7 Business Days</custom-attribute>
+        </custom-attributes>
+        <currency>EUR</currency>
+    </shipping-method>
+
+    <shipping-method method-id="EUR005" default="false">
+        <display-name xml:lang="x-default">EUR Store Pickup</display-name>
+        <display-name xml:lang="fr-FR">EUR Livraison en magasin</display-name>
+        <display-name xml:lang="it">EUR Ritiro in negozio</display-name>
+        <display-name xml:lang="it-IT">EUR Ritiro in negozio</display-name>
+        <display-name xml:lang="ja-JP">EUR 店舗にて受け取り</display-name>
+        <display-name xml:lang="zh-CN">欧元到店提货</display-name>
+        <description xml:lang="x-default">EUR Pickup in store</description>
+        <description xml:lang="fr-FR">EUR Livraison en magasin</description>
+        <description xml:lang="it">EUR Ritiro in negozio</description>
+        <description xml:lang="it-IT">EUR Ritiro in negozio</description>
+        <description xml:lang="ja-JP">EUR 店舗にて受け取り</description>
+        <description xml:lang="zh-CN">欧元到店提货</description>
+        <online-flag>true</online-flag>
+        <price-table>
+            <amount order-value="0">0</amount>
+        </price-table>
+        <custom-attributes>
+            <custom-attribute attribute-id="storePickupEnabled">true</custom-attribute>
+        </custom-attributes>
+        <currency>EUR</currency>
+    </shipping-method>
+
+</shipping>

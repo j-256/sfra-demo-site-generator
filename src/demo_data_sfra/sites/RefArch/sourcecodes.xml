@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sourcecodes xmlns="http://www.demandware.com/xml/impex/sourcecode/2007-03-31">
+    <sourcecode-group group-id="affiliate-email">
+        <description>Affiliate Source Code Email promoting PS3 Bundle</description>
+        <enabled-flag>true</enabled-flag>
+        <active-redirect>
+            <product-redirect product-id="sony-ps3-bundleM"/>
+        </active-redirect>
+        <inactive-redirect>
+            <default-redirect/>
+        </inactive-redirect>
+        <code-specs>
+            <code-spec>ps3bundle[1..10000]</code-spec>
+        </code-specs>
+        <pricebooks/>
+    </sourcecode-group>
+
+    <sourcecode-group group-id="contentTest">
+        <description>test for linking to a content asset page</description>
+        <enabled-flag>true</enabled-flag>
+        <cookie-max-age>6</cookie-max-age>
+        <active-redirect>
+            <page-redirect page-id="privacy-policy"/>
+        </active-redirect>
+        <inactive-redirect>
+            <default-redirect/>
+        </inactive-redirect>
+        <code-specs>
+            <code-spec>privacy[1..10000]</code-spec>
+        </code-specs>
+        <pricebooks/>
+    </sourcecode-group>
+
+    <sourcecode-group group-id="gaming-email">
+        <description>Email promoting save 20% of WII game when buying system</description>
+        <enabled-flag>true</enabled-flag>
+        <active-redirect>
+            <product-redirect product-id="nintendo-wii-consoleM"/>
+        </active-redirect>
+        <inactive-redirect>
+            <page-redirect page-id="inactive-source-code"/>
+        </inactive-redirect>
+        <code-specs>
+            <code-spec>wii[1..10000]</code-spec>
+        </code-specs>
+        <pricebooks/>
+    </sourcecode-group>
+
+    <sourcecode-group group-id="tv-email">
+        <description>Email promoting Flat Screen Televeisions</description>
+        <enabled-flag>true</enabled-flag>
+        <active-redirect>
+            <category-redirect category-id="electronics-televisions-flat-screen"/>
+        </active-redirect>
+        <inactive-redirect>
+            <default-redirect/>
+        </inactive-redirect>
+        <code-specs>
+            <code-spec>televisions[1..10000]</code-spec>
+        </code-specs>
+        <pricebooks/>
+    </sourcecode-group>
+
+</sourcecodes>

@@ -1,0 +1,13 @@
+{
+  "name": "sfra-demo-data-generator",
+  "version": "1.0.0",
+  "description": "Generate isolated, referentially-valid SFRA demo-data site-import archives for a chosen token",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "generate": "node generate.mjs",
+    "test": "node --test"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

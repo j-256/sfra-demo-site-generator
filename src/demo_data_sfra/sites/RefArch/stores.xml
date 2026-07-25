@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stores xmlns="http://www.demandware.com/xml/impex/store/2007-04-30">
+    <store store-id="german_store">
+        <name>Kaufen Kaufen</name>
+        <address1>Leutragraben 2-4</address1>
+        <city>Jena</city>
+        <postal-code>07743</postal-code>
+        <country-code>DE</country-code>
+        <store-hours xml:lang="x-default">Closed Sundays.</store-hours>
+        <latitude>50.9288039</latitude>
+        <longitude>11.583270299999981</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">DE</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_german_store</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store1">
+        <name>Commerce Cloud</name>
+        <address1>10 Presidential Way</address1>
+        <city>Woburn</city>
+        <postal-code>01801</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <email>store@email.com</email>
+        <fax>800-800-8000</fax>
+        <store-events xml:lang="x-default">Men's Denim Jeans $20 off!&lt;br /&gt;&#13;
+All Men's T-shirts are 2 for $40!&lt;br /&gt;</store-events>
+        <store-hours xml:lang="x-default">Mon - Sat: 10am - 9pm&lt;br /&gt;&#13;
+Sun: 12pm - 6pm</store-hours>
+        <latitude>42.5273334</latitude>
+        <longitude>-71.13758250000001</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store1</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store10">
+        <name>Downtown TV Shop</name>
+        <address1>333 Washington St</address1>
+        <city>Boston</city>
+        <postal-code>02108</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <email>contact@downtowntvshop.com</email>
+        <phone>+1-617-695-1565</phone>
+        <store-hours xml:lang="x-default">Mon - Sat: 10am - 9pm&lt;br /&gt;&#13;
+            Sun: 12pm - 6pm</store-hours>
+        <latitude>42.3569512</latitude>
+        <longitude>-71.05902600000002</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store10</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store11">
+        <name>Electronics Super Store</name>
+        <address1>70 Wood Ave</address1>
+        <city>Bridgeport</city>
+        <postal-code>06605</postal-code>
+        <state-code>CT</state-code>
+        <country-code>US</country-code>
+        <email>store1@company.com</email>
+        <phone>+1-203-965-7014</phone>
+        <latitude>41.177589</latitude>
+        <longitude>-73.20250829999998</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store11</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store2">
+        <name>Super Electronics</name>
+        <address1>110 Smith St</address1>
+        <city>Providence</city>
+        <postal-code>02903</postal-code>
+        <state-code>RI</state-code>
+        <country-code>US</country-code>
+        <email>store2@company.com</email>
+        <phone>+1-401-312-6284</phone>
+        <latitude>41.83170819999999</latitude>
+        <longitude>-71.41499299999998</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store2</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store3">
+        <name>Wire-Wire</name>
+        <address1>363 Hancock St</address1>
+        <city>North Quincy</city>
+        <postal-code>02171</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <email>store3@company.com</email>
+        <phone>+1-617-318-2860</phone>
+        <latitude>42.27451190000001</latitude>
+        <longitude>-71.02692050000002</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store3</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store4">
+        <name>Champaign Electronic Shop</name>
+        <address1>1001 Cambridge St</address1>
+        <city>Cambridge</city>
+        <postal-code>02141</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <email>store4@company.com</email>
+        <phone>+1-617-714-2640</phone>
+        <latitude>42.3729794</latitude>
+        <longitude>-71.09346089999997</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store4</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store5">
+        <name>Short Electro</name>
+        <address1>584 Columbus Ave</address1>
+        <city>Boston</city>
+        <postal-code>02118</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <phone>+1-617-888-7276</phone>
+        <store-hours xml:lang="x-default">Mon - Sat: 10am - 9pm&lt;br /&gt;&#13;
+            Sun: 12pm - 6pm</store-hours>
+        <latitude>42.3403189</latitude>
+        <longitude>-71.0817859</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store5</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store6">
+        <name>Khale Street Electronics</name>
+        <address1>150 Winthrop Ave</address1>
+        <city>Lawrence</city>
+        <postal-code>01843</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <phone>+1-978-580-2704</phone>
+        <latitude>42.6895548</latitude>
+        <longitude>-71.14878340000001</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store6</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store7">
+        <name>Electro Turbo</name>
+        <address1>2 Canal Plz</address1>
+        <city>Portland</city>
+        <postal-code>04101</postal-code>
+        <state-code>ME</state-code>
+        <country-code>US</country-code>
+        <phone>+1-207-599-5467</phone>
+        <latitude>43.656852</latitude>
+        <longitude>-70.25567999999998</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store7</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store8">
+        <name>Gardena Mart</name>
+        <address1>239 Bridge St</address1>
+        <city>Manchester</city>
+        <postal-code>03104</postal-code>
+        <state-code>NH</state-code>
+        <country-code>US</country-code>
+        <phone>+1-603-715-9773</phone>
+        <store-hours xml:lang="x-default">Mon - Sat: 10am - 9pm&lt;br /&gt;&#13;
+            Sun: 12pm - 6pm</store-hours>
+        <latitude>42.99555650000001</latitude>
+        <longitude>-71.45255480000003</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store8</custom-attribute>
+        </custom-attributes>
+    </store>
+
+    <store store-id="store9">
+        <name>Springfield Media Store</name>
+        <address1>1487 Bay St</address1>
+        <city>Springfield</city>
+        <postal-code>01109</postal-code>
+        <state-code>MA</state-code>
+        <country-code>US</country-code>
+        <phone>+1-413-413-6916</phone>
+        <store-events xml:lang="x-default">Here are some store events.</store-events>
+        <store-hours xml:lang="x-default">Here are the store hours</store-hours>
+        <latitude>42.13028129999999</latitude>
+        <longitude>-72.53457359999999</longitude>
+        <custom-attributes>
+            <custom-attribute attribute-id="countryCodeValue">US</custom-attribute>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store9</custom-attribute>
+        </custom-attributes>
+    </store>
+
+</stores>

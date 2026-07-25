@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences xmlns="http://www.demandware.com/xml/impex/preferences/2007-03-31">
+    <standard-preferences>
+        <all-instances>
+            <preference preference-id="AddProductToBasketBehavior">IncrementQuantities</preference>
+            <preference preference-id="CouponGeneratorIncludeDashes">true</preference>
+            <preference preference-id="CouponGeneratorIncludeVowels">true</preference>
+            <preference preference-id="EnableSiteOrderNumbers">false</preference>
+            <preference preference-id="OrderEditExportDelay">30</preference>
+            <preference preference-id="OrderExportDelay">30</preference>
+            <preference preference-id="OrderIPLoggingEnabled">true</preference>
+            <preference preference-id="OrderLifetime">0</preference>
+            <preference preference-id="AccountNumberRetentionDays">0</preference>
+            <preference preference-id="SiteCatalog">storefront-catalog-m-non-en</preference>
+            <preference preference-id="SiteCurrencies">EUR:JPY:CNY:GBP</preference>
+            <preference preference-id="SiteCustomerList">RefArch</preference>
+            <preference preference-id="SiteDefaultLocale">en_GB</preference>
+            <preference preference-id="SiteInventoryList">inventory_m</preference>
+            <preference preference-id="SiteLibrary">RefArchSharedLibrary</preference>
+            <preference preference-id="SiteLocales">en_GB:fr_FR:ja_JP:zh_CN:default:it_IT</preference>
+            <preference preference-id="SitePriceBooks">cny-m-list-prices:cny-m-sale-prices:eur-m-list-prices:eur-m-sale-prices:gbp-m-list-prices:gbp-m-sale-prices:jpy-m-list-prices:jpy-m-sale-prices:usd-m-list-prices:usd-m-sale-prices</preference>
+            <preference preference-id="SiteTimezone">Etc/UTC</preference>
+            <preference preference-id="StorefrontURLsEnabled">true</preference>
+        </all-instances>
+        <development>
+            <preference preference-id="AvailabilityFiltering">Disabled</preference>
+            <preference preference-id="AvailabilityLowRankingThreshold">0.0</preference>
+            <preference preference-id="IncludePromotionIDInProductIndex">true</preference>
+            <preference preference-id="RobotsTxtContent"/>
+            <preference preference-id="RobotsTxtMode">Cartridge</preference>
+            <preference preference-id="SearchSuggestions">Disabled</preference>
+        </development>
+        <staging>
+            <preference preference-id="AvailabilityFiltering">Disabled</preference>
+            <preference preference-id="AvailabilityLowRankingThreshold">0.0</preference>
+            <preference preference-id="IncludePromotionIDInProductIndex">true</preference>
+            <preference preference-id="RobotsTxtContent"/>
+            <preference preference-id="RobotsTxtMode">Cartridge</preference>
+            <preference preference-id="SearchSuggestions">Enabled</preference>
+        </staging>
+        <production>
+            <preference preference-id="AvailabilityFiltering">Disabled</preference>
+            <preference preference-id="AvailabilityLowRankingThreshold">0.0</preference>
+            <preference preference-id="IncludePromotionIDInProductIndex">true</preference>
+            <preference preference-id="RobotsTxtContent"/>
+            <preference preference-id="RobotsTxtMode">Cartridge</preference>
+            <preference preference-id="SearchSuggestions">Disabled</preference>
+        </production>
+    </standard-preferences>
+    <custom-preferences>
+        <all-instances/>
+        <development>
+            <preference preference-id="disableResponsiveDesign">false</preference>
+            <preference preference-id="enableInfiniteScroll">false</preference>
+            <preference preference-id="enableMultiShipping">false</preference>
+        </development>
+        <staging>
+            <preference preference-id="disableResponsiveDesign">false</preference>
+            <preference preference-id="slideshoweffect">growX</preference>
+        </staging>
+        <production/>
+    </custom-preferences>
+</preferences>
+

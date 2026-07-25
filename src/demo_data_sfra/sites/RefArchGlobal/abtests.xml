@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ab-tests xmlns="http://www.demandware.com/xml/impex/abtest/2010-04-01">
+    <ab-test test-id="mens-sortingrules">
+        <description>Testing default Sorting Rules for all Mens categories.</description>
+        <tags>
+            <tag>sorting rules</tag>
+            <tag>order conversion</tag>
+            <tag>mens</tag>
+        </tags>
+        <enabled-flag>true</enabled-flag>
+        <schedule>
+            <start-date>2011-06-15T00:00:00.000Z</start-date>
+            <end-date>2011-06-22T00:00:00.000Z</end-date>
+        </schedule>
+        <key-metric>conversion-rate</key-metric>
+        <participation>
+            <trigger>
+                <immediately/>
+            </trigger>
+            <expiration>never</expiration>
+        </participation>
+        <customer-groups>
+            <customer-group group-id="Everyone"/>
+        </customer-groups>
+        <test-segments>
+            <control-segment>
+                <allocation-percent>20</allocation-percent>
+            </control-segment>
+            <test-segment segment-id="Test Segment A">
+                <allocation-percent>40</allocation-percent>
+            </test-segment>
+            <test-segment segment-id="Test Segment B">
+                <allocation-percent>40</allocation-percent>
+            </test-segment>
+        </test-segments>
+    </ab-test>
+
+    <ab-test test-id="orders-over150">
+        <description>Testing what promotion is better for orders over $150</description>
+        <tags>
+            <tag>Orders</tag>
+            <tag>Shipping</tag>
+            <tag>Promotion</tag>
+        </tags>
+        <enabled-flag>true</enabled-flag>
+        <schedule>
+            <start-date>2011-06-15T00:00:00.000Z</start-date>
+            <end-date>2011-06-22T00:00:00.000Z</end-date>
+        </schedule>
+        <key-metric>avg-revenue-per-visit</key-metric>
+        <participation>
+            <trigger>
+                <immediately/>
+            </trigger>
+            <expiration>never</expiration>
+        </participation>
+        <customer-groups>
+            <customer-group group-id="Everyone"/>
+        </customer-groups>
+        <test-segments>
+            <control-segment>
+                <allocation-percent>20</allocation-percent>
+            </control-segment>
+            <test-segment segment-id="Test Segment A">
+                <allocation-percent>40</allocation-percent>
+                <experiences>
+                    <promotion promotion-id="freeship-over150"/>
+                </experiences>
+            </test-segment>
+            <test-segment segment-id="Test Segment B">
+                <allocation-percent>40</allocation-percent>
+                <experiences>
+                    <promotion promotion-id="10%offordersover150"/>
+                </experiences>
+            </test-segment>
+        </test-segments>
+    </ab-test>
+
+    <ab-test test-id="womens-landing">
+        <tags>
+            <tag>banner</tag>
+            <tag>womens</tag>
+            <tag>slot</tag>
+        </tags>
+        <enabled-flag>false</enabled-flag>
+        <schedule>
+            <start-date>2011-06-15T00:00:00.000Z</start-date>
+            <end-date>2011-06-22T00:00:00.000Z</end-date>
+        </schedule>
+        <key-metric>orders</key-metric>
+        <participation>
+            <trigger>
+                <immediately/>
+            </trigger>
+            <expiration>session</expiration>
+        </participation>
+        <customer-groups>
+            <customer-group group-id="Everyone"/>
+        </customer-groups>
+        <test-segments>
+            <control-segment>
+                <allocation-percent>20</allocation-percent>
+            </control-segment>
+            <test-segment segment-id="Test Segment B">
+                <allocation-percent>40</allocation-percent>
+                <experiences>
+                    <slot-configuration slot-id="cat-landing-slotbanner-m" slot-context="category" slot-context-id="womens" slot-configuration-id="womens"/>
+                </experiences>
+            </test-segment>
+            <test-segment segment-id="Test Segment A">
+                <allocation-percent>40</allocation-percent>
+                <experiences>
+                    <slot-configuration slot-id="cat-landing-slotbanner-m" slot-context="category" slot-context-id="womens" slot-configuration-id="womens-abtest"/>
+                </experiences>
+            </test-segment>
+        </test-segments>
+    </ab-test>
+
+</ab-tests>

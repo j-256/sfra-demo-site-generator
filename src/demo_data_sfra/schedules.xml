@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schedules xmlns="http://www.demandware.com/xml/impex/schedules/2007-03-31">
+	<schedule schedule-id="TestDataReset">
+	<description/>
+	<enabled-flag>true</enabled-flag>
+	<execution-scope>site</execution-scope>
+	<pipeline>
+		<name>TestData</name>
+		<startnode>Reset</startnode>
+	</pipeline>
+	<sites>
+		<site site-id="RefArch"/>
+	</sites>
+	<run-once>2015-05-22T13:40:00.000Z</run-once>
+	<notification>
+		<enabled-flag>false</enabled-flag>
+		<hang-detection-enabled-flag>false</hang-detection-enabled-flag>
+		<failure-rule>continue</failure-rule>
+	</notification>
+	</schedule>
+</schedules>

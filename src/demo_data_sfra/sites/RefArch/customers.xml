@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers xmlns="http://www.demandware.com/xml/impex/customer/2006-10-31">
+
+     <customer customer-no="D00000001">
+        <credentials>
+            <login>testuser1@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$bqkutW4x877v/wWcmC+Xkw==$mAtW38GoEc/R08nIUV/q0GJobTa2Z2/nkIgqBttOkfg=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>Test1</first-name>
+            <second-name/>
+            <last-name>User1</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>testuser1@demandware.com</email>
+            <phone-home/>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <birthday>1988-10-21Z</birthday>
+            <gender>2</gender>
+            <creation-date>2015-05-18T19:19:51.983Z</creation-date>
+            <last-login-time>2015-05-18T20:43:17.425Z</last-login-time>
+            <last-visit-time>2015-05-18T20:43:17.425Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <addresses>
+            <address address-id="Home" preferred="true">
+                <salutation/>
+                <title/>
+                <first-name>Test1</first-name>
+                <second-name/>
+                <last-name>User1</last-name>
+                <suffix/>
+                <company-name/>
+                <job-title/>
+                <address1>104 Presidential Way</address1>
+                <address2/>
+                <suite/>
+                <postbox/>
+                <city>Woburn</city>
+                <postal-code>01801</postal-code>
+                <state-code>MA</state-code>
+		<country-code>US</country-code>
+                <phone>781-555-1212</phone>
+            </address>
+            <address address-id="Work" preferred="false">
+                <salutation/>
+                <title/>
+                <first-name>Test1</first-name>
+                <second-name/>
+                <last-name>User1</last-name>
+                <suffix/>
+                <company-name/>
+                <job-title/>
+                <address1>91 Middlesex Tpke</address1>
+                <address2/>
+                <suite/>
+                <postbox/>
+                <city>Burlington</city>
+                <postal-code>01803</postal-code>
+                <state-code>MA</state-code>
+		<country-code>US</country-code>
+                <phone>781-555-1212</phone>
+            </address>
+        </addresses>
+        <note/>
+    </customer>
+
+    <customer customer-no="D00000002">
+        <credentials>
+            <login>testuser2@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$U6gHoDj17zG/MZr8SdepoA==$M1xOrw4zPwIeuJEubC2zyJdS8CcXI8xySIFo1vrdt2A=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>Test2</first-name>
+            <second-name/>
+            <last-name>User2</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>testuser2@demandware.com</email>
+            <phone-home/>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <gender>1</gender>
+            <creation-date>2015-05-18T19:20:42.222Z</creation-date>
+            <last-login-time>2015-05-18T20:49:06.603Z</last-login-time>
+            <last-visit-time>2015-05-18T20:49:06.603Z</last-visit-time>
+            <preferred-locale>en_US</preferred-locale>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="D00000003">
+        <credentials>
+            <login>testuser3@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$qmOLrCtInR0ADEeC0mJejQ==$VAxXCsxvrUZ/Ma7VDcg+yWgStINMEKn2PNE71TPk1t0=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>Test3</first-name>
+            <second-name/>
+            <last-name>User3</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>testuser3@demandware.com</email>
+            <phone-home/>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <gender>2</gender>
+            <creation-date>2015-05-18T19:21:31.974Z</creation-date>
+            <last-login-time>2015-05-18T20:49:51.203Z</last-login-time>
+            <last-visit-time>2015-05-18T20:49:51.203Z</last-visit-time>
+            <preferred-locale>en</preferred-locale>
+        </profile>
+        <addresses>
+            <address address-id="Mom's" preferred="true">
+                <salutation/>
+                <title/>
+                <first-name>Test3</first-name>
+                <second-name/>
+                <last-name>User3</last-name>
+                <suffix/>
+                <company-name/>
+                <job-title/>
+                <address1>3486 Mission St</address1>
+                <address2/>
+                <suite/>
+                <postbox/>
+                <city>San Francisco</city>
+                <postal-code>94110</postal-code>
+                <state-code>CA</state-code>
+                <country-code>US</country-code>
+                <phone>415-555-1212</phone>
+            </address>
+        </addresses>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000001">
+        <credentials>
+            <login>wluser1@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$JWmKH3Xn7rPnwhKdAzdkjQ==$39iSM+73k/j0kloOaD3Awln0sz8K53YdsdTF30efeQ8=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser1</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser1@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:25:24.806Z</creation-date>
+            <last-login-time>2018-07-16T12:25:24.871Z</last-login-time>
+            <last-visit-time>2018-07-16T12:25:24.871Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000002">
+        <credentials>
+            <login>wluser2@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$nKWgOdXLgEY5D27S+XfJ7A==$MdCTGyxkE/ItvGQ/4kOO2hDnOAPaEUIOD3Y4Uc/5fhg=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser2</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser2@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:27:26.023Z</creation-date>
+            <last-login-time>2018-07-16T12:27:26.049Z</last-login-time>
+            <last-visit-time>2018-07-16T12:27:26.049Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000003">
+        <credentials>
+            <login>wluser3@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$ILRmomwYlqVLMzEIuyrEwA==$R7nVMUAVGsAy3Lkct3v14+nQq2WiKHOagJcCfLCWmzQ=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser3</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser3@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:33:13.360Z</creation-date>
+            <last-login-time>2018-07-16T12:33:13.389Z</last-login-time>
+            <last-visit-time>2018-07-16T12:33:13.389Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000004">
+        <credentials>
+            <login>wluser4@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$fCWWvDe33TDOjqU98eVFeA==$X4a0XM/ZsrSNcFqJx0UAw+HrA80t+q6+vuwWOHLwyi0=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser4</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser4@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:40:07.905Z</creation-date>
+            <last-login-time>2018-07-16T12:40:07.933Z</last-login-time>
+            <last-visit-time>2018-07-16T12:40:07.933Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000005">
+        <credentials>
+            <login>wluser5@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$ajld+bsE+8dsHCw7givbxg==$9M3zegBebh+txuC1ox4HZ9GrtZ7nSZlS1VckQRbETdg=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser5</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser5@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:41:46.377Z</creation-date>
+            <last-login-time>2018-07-16T12:41:46.414Z</last-login-time>
+            <last-visit-time>2018-07-16T12:41:46.414Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000006">
+        <credentials>
+            <login>wluser6@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$ACUNggj9D1chwLLLfR8Emg==$G8ZwosP1z5Dqe/HlofYHOIuSbRKZGZPYFOnHRBXjRI0=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser6</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser6@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:42:59.271Z</creation-date>
+            <last-login-time>2018-07-16T12:42:59.292Z</last-login-time>
+            <last-visit-time>2018-07-16T12:42:59.292Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000007">
+        <credentials>
+            <login>wluser7@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$dOnFX/wPzdWoAoEe6vGgJQ==$166AJyTWNwFEGGvJwTZtEtMsrfQKJ4sNDESZSVXNIW8=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser7</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser7@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:44:10.850Z</creation-date>
+            <last-login-time>2018-07-16T12:44:10.873Z</last-login-time>
+            <last-visit-time>2018-07-16T12:44:10.873Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000008">
+        <credentials>
+            <login>wluser8@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$z57J7zErn5a6tntvoVr8iA==$WkcSgXhO1tpSwzied93McMFzoO2GL+m3t0nj6gfPNDM=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser8</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser8@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:45:31.457Z</creation-date>
+            <last-login-time>2018-07-16T12:45:31.487Z</last-login-time>
+            <last-visit-time>2018-07-16T12:45:31.487Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000009">
+        <credentials>
+            <login>wluser9@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$rvu/18rJfLaPIoU760nGrA==$AxXOcPIjdnAMNQ46kGxIJFKheG2iepaA8H5uSZdoPWM=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser9</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser9@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:46:46.051Z</creation-date>
+            <last-login-time>2018-07-16T12:46:46.074Z</last-login-time>
+            <last-visit-time>2018-07-16T12:46:46.074Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+
+    <customer customer-no="W00000010">
+        <credentials>
+            <login>wluser10@demandware.com</login>
+            <password encrypted="true" encryptionScheme="scrypt">$s0$b0401$rvu/18rJfLaPIoU760nGrA==$AxXOcPIjdnAMNQ46kGxIJFKheG2iepaA8H5uSZdoPWM=</password>
+            <enabled-flag>true</enabled-flag>
+            <password-question/>
+            <password-answer/>
+        </credentials>
+        <profile>
+            <salutation/>
+            <title/>
+            <first-name>WLUser10</first-name>
+            <second-name/>
+            <last-name>WLuser</last-name>
+            <suffix/>
+            <company-name/>
+            <job-title/>
+            <email>wluser10@demandware.com</email>
+            <phone-home>9009009000</phone-home>
+            <phone-business/>
+            <phone-mobile/>
+            <fax/>
+            <creation-date>2018-07-16T12:46:46.051Z</creation-date>
+            <last-login-time>2018-07-16T12:46:46.074Z</last-login-time>
+            <last-visit-time>2018-07-16T12:46:46.074Z</last-visit-time>
+            <preferred-locale/>
+        </profile>
+        <note/>
+    </customer>
+</customers>
+

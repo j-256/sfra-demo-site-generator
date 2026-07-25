@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<slot-configurations xmlns="http://www.demandware.com/xml/impex/slot/2008-09-08">
+    <slot-configuration slot-id="404-banner-m" context="global" configuration-id="404 banner" assigned-to-site="true">
+        <template>slots/content/giftcertificates.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="404-banner"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="account-banner-m" context="global" configuration-id="Account Banner" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cart-footer-m" context="global" configuration-id="CartFooterFeatured" assigned-to-site="true">
+        <description>Featured Products that display in the footer of the cart page, below the cart-actions buttons.</description>
+        <template>slots/product/product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="x-default">Featured Products</callout-msg>
+        <callout-msg xml:lang="fr-FR">Produits présentés</callout-msg>
+        <callout-msg xml:lang="it-IT">Prodotti in primo piano</callout-msg>
+        <callout-msg xml:lang="ja-JP">おすすめの商品</callout-msg>
+        <callout-msg xml:lang="zh-CN">推荐商品</callout-msg>
+        <content>
+            <products>
+                <product product-id="25697682M"/>
+                <product product-id="25686544M"/>
+                <product product-id="25697087M"/>
+                <product product-id="793775370033M"/>
+                <product product-id="25697294M"/>
+                <product product-id="62516752M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="error-banner-m" context="global" configuration-id="Error Banner" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cart-banner-m" context="global" configuration-id="Global cart slot" assigned-to-site="true">
+        <description>Global cart slot</description>
+        <template>slots/product/horizontalcarousel.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <callout-msg xml:lang="x-default">Take a look at one of these!</callout-msg>
+        <callout-msg xml:lang="fr-FR">À voir absolument !</callout-msg>
+        <callout-msg xml:lang="it-IT">Guarda uno di questi!</callout-msg>
+        <callout-msg xml:lang="ja-JP">こちらをご覧ください!</callout-msg>
+        <callout-msg xml:lang="zh-CN">看看其中之一！</callout-msg>
+        <content>
+            <products>
+                <product product-id="P0150M"/>
+                <product product-id="013742000320M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="search-promo-m" context="global" configuration-id="New Slot Configuration - 2011-11-14 09:51:41" assigned-to-site="true">
+        <template>slots/content/homepage/home-bottom-slot.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="folder-main-slot-m" context="folder" context-id="about-us" configuration-id="New Slot Configuration - 2014-12-31 11:14:21" default="true" assigned-to-site="false">
+        <description>default slot for about us page</description>
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="x-default">&lt;div class="folder-slot"&gt;
+    &lt;h2&gt;
+        About Commerce Cloud
+    &lt;/h2&gt;
+    &lt;p&gt;
+It all started with a series of observations: eCommerce merchandising and marketing innovation is what generates the revenue, yet most operations are spending 80% of their budgets simply maintaining current infrastructure. The pace of ecommerce accelerates daily, yet most operations are scrambling to stand still. Merchandisers and marketers are supremely frustrated, spending more time chasing outsourced providers and internal IT organizations, than actually merchandising and marketing their own businesses. There had to be a better way.
+    &lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="fr-FR">&lt;div class="folder-slot"&gt;
+    &lt;h2&gt;
+        À propos de Commerce Cloud
+    &lt;/h2&gt;
+    &lt;p&gt;
+Tout a débuté par une série d'observations : dans l'e-commerce, l'innovation en matière de merchandising et de marketing est le générateur de recettes. Pourtant, la plupart des entreprises consacrent 80 % de leur budget au seul maintien de leur infrastructure actuelle. Alors que le rythme du commerce s'accélère chaque jour, la plupart des entreprises ont toutes les peines à simplement se maintenir à jour. Les spécialistes du merchandising et du marketing sont d'autant plus frustrés qu'ils passent davantage de temps à rechercher des prestataires d'infogérance et des ressources informatiques internes qu'à déployer leurs propres actions de merchandising et de marketing. Cette situation n'était pas satisfaisante.
+    &lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="it-IT">&lt;div class="folder-slot"&gt;
+    &lt;h2&gt;
+        Informazioni su Commerce Cloud
+    &lt;/h2&gt;
+    &lt;p&gt;
+Tutto è iniziato da una serie di osservazioni: le innovazioni del modello e-commerce e materia di marketing sono il motore che genera i profitti, tuttavia la maggior parte delle aziende spende ancora l'80% dei budget per la manutenzione dell'infrastruttura esistente. L'e-commerce ormai avanza inesorabilmente ogni giorno di più, mentre nelle aziende si fanno i salti mortali per cercare il modo di non adeguarsi ai cambiamenti. I venditori e gli esperti di marketing lavorano in continua frustrazione, costretti a correre dietro ai fornitori esterni e ai reparti IT interni, piuttosto che dedicarsi alla commercializzazione e al marketing per la loro attività. Deve esserci una soluzione.
+    &lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="ja-JP">&lt;div class="folder-slot"&gt;
+    &lt;h2&gt;
+        Commerce Cloud について
+    &lt;/h2&gt;
+    &lt;p&gt;
+始まりは現状を見つめるところから: eコマースによるマーチャンダイジングとマーケティングのイノベーションは、収益を生み出すものであるにもかかわらず、大部分の事業では予算の 80% を現在のインフラを保守するためだけに使っています。eコマースは日々加速しているのにもかかわらず、大部分の事業は混乱してただ立ち尽くしています。マーチャンダイザーとマーケット担当者の葛藤は度合いを増し、実際に自社ビジネスのマーチャンダイジングとマーケティングを行うことよりも、外注先のプロバイダーや社内の IT 部門への対応に、より多くの時間を費やしています。他にもっとよい方法があるのではないか、私達はそう考えました。
+    &lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="zh-CN">&lt;div class="folder-slot"&gt;
+    &lt;h2&gt;
+        关于 Commerce Cloud
+    &lt;/h2&gt;
+    &lt;p&gt;
+一系列结果向人们表明：eCommerce 销售和营销创新可以产生收益，而大多数企业都要将预算的 80% 拿出来仅仅是为了维持现有的基础设施。eCommerce 的发展步伐日新月异，而大多数企业还是原地踏步。。商家和营销人员感到无所适从，花费比实际销售和营销自己业务要多得多的时间来追逐外包供应商和内部 IT 组织。肯定有更好的办法。
+    &lt;/p&gt;
+&lt;/div&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="folder-main-slot-m" context="folder" context-id="customer-service" configuration-id="New Slot Configuration - 2014-12-31 11:43:32" default="true" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="x-default">&lt;div class="folder-slot"&gt;
+&lt;h2&gt;
+Customer Service
+&lt;/h2&gt;
+&lt;p&gt;
+Here you will find answers to your questions about shopping at our online store, your order, payment options and more. Simply select from the categories below for you complete information.
+&lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="fr-FR">&lt;div class="folder-slot"&gt;
+&lt;h2&gt;
+Service client
+&lt;/h2&gt;
+&lt;p&gt;
+Vous trouverez ici toutes les réponses à vos questions sur vos achats dans notre magasin en ligne, votre commande, votre mode de règlement, etc. Pour obtenir des informations complètes, choisissez simplement parmi les catégories ci-dessous.
+&lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="it-IT">&lt;div class="folder-slot"&gt;
+&lt;h2&gt;
+Servizio clienti
+&lt;/h2&gt;
+&lt;p&gt;
+In questa sezione troverai tante risposte alle tue domande sullo shopping online nel nostro negozio, sulla gestione degli ordini, sui metodi di pagamento e non solo. Basta selezionare una categoria per visualizzare tutte le informazioni pertinenti.
+&lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="ja-JP">&lt;div class="folder-slot"&gt;
+&lt;h2&gt;
+カスタマーサービス
+&lt;/h2&gt;
+&lt;p&gt;
+弊社のオンラインストアでのお買い物、お客様のご注文、支払いオプションその他に関するご質問への回答をこちらにご用意しております。以下のカテゴリから選択し、ご希望の情報をご覧ください。
+&lt;/p&gt;
+&lt;/div&gt;</body>
+                <body xml:lang="zh-CN">&lt;div class="folder-slot"&gt;
+&lt;h2&gt;
+客户服务
+&lt;/h2&gt;
+&lt;p&gt;
+您可以在这里查看有关网上商店购物、订单、支付选项等方面的问题的答案。只需从以下分类中作出选择以获得完整信息。
+&lt;/p&gt;
+&lt;/div&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="noresult-banner-m" context="global" configuration-id="Noresult Banner" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="placeorder-slot-m" context="global" configuration-id="Placeorder Slot" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="404-promo-m" context="global" configuration-id="Promo Zune" default="true" assigned-to-site="true">
+        <description>Free Microsoft Zune with Purchase of $500 or More in Electronics</description>
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="x-default">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Free Microsoft Zune with Purchase of $500 or More in Electronics" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="fr-FR">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Microsoft Zune offert pour tout achat d'un montant égal ou supérieur à 500 euros dans le rayon électronique" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="it-IT">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Microsoft Zune gratuito con acquisti di almeno € 500 in prodotti di elettronica" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="ja-JP">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="電子機器を ¥50,000 以上購入すると Microsoft Zune を無料で進呈" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="zh-CN">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="电子产品满 500 美元即免费赠送 Microsoft Zune" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="registry-header-m" context="global" configuration-id="Registry Header" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="wishlist-banner-m" context="global" configuration-id="Wishlist Banner" assigned-to-site="false">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>false</enabled-flag>
+        <content>
+            <html/>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom2-m" context="category" context-id="womens" configuration-id="WomensSubCatProducts" default="true" assigned-to-site="false">
+        <description>Products from sub categories of Womens</description>
+        <template>slots/product/cat_product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <products>
+                <product product-id="799927735422M"/>
+                <product product-id="013742002898M"/>
+                <product product-id="701643472376M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="error-promo-m" context="global" configuration-id="Zune Promo Image" assigned-to-site="true">
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="x-default">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Free Microsoft Zune with Purchase of $500 or More in Electronics" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="fr-FR">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Microsoft Zune offert pour tout achat d'un montant égal ou supérieur à 500 euros dans le rayon électronique" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="it-IT">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="Microsoft Zune gratuito con acquisti di almeno € 500 in prodotti di elettronica" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="ja-JP">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="電子機器を ¥50,000 以上購入すると Microsoft Zune を無料で進呈" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+                <body xml:lang="zh-CN">&lt;p style="margin:10px 0 0 0"&gt;&lt;img height="139" width="350" alt="电子产品满 500 美元即免费赠送 Microsoft Zune" src="images/slot/404-promo-zune.jpg?$staticlink$" /&gt;&lt;/p&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cart-empty-m" context="global" configuration-id="cartempty-lastvisited" assigned-to-site="true">
+        <description>Slot for products which displays below the empty cart message.</description>
+        <template>slots/product/product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="x-default">Product Recommendations</callout-msg>
+        <callout-msg xml:lang="fr-FR">Recommandations de produit</callout-msg>
+        <callout-msg xml:lang="it-IT">Suggerimenti prodotto</callout-msg>
+        <callout-msg xml:lang="ja-JP">おすすめ商品</callout-msg>
+        <callout-msg xml:lang="zh-CN">产品推荐</callout-msg>
+        <content>
+            <products>
+                <product product-id="640188017003M"/>
+                <product product-id="013742003048M"/>
+                <product product-id="095068990509M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronic-games" configuration-id="electronic-games" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronic-games"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-televisions-flat-screen" configuration-id="electronics-FlatTV" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-televisions-flat-screen"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-digital-cameras" configuration-id="electronics-cameras" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-digital-cameras"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-game-consoles" configuration-id="electronics-gameconsoles" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-game-consoles"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-gaming" configuration-id="electronics-gaming" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-gaming"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-gps-units" configuration-id="electronics-gps" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-gps-units"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-digital-media-players" configuration-id="electronics-mp3" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-digital-media-players"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom-m" context="category" context-id="electronics" configuration-id="electronics-products" default="true" assigned-to-site="true">
+        <description>Products from electronics categories.</description>
+        <template>slots/product/cat_product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="fr-FR">Derniers produits</callout-msg>
+        <callout-msg xml:lang="it-IT">Prodotti più recenti</callout-msg>
+        <callout-msg xml:lang="ja-JP">最新商品</callout-msg>
+        <callout-msg xml:lang="zh-CN">最新商品</callout-msg>
+        <content>
+            <products>
+                <product product-id="vizio-vw46lfM"/>
+                <product product-id="sony-cybershot-t77M"/>
+                <product product-id="microsoft-zune120M"/>
+                <product product-id="easports-nascar-09-ps3M"/>
+                <product product-id="garmin-foretrex-101M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-televisions-projection" configuration-id="electronics-projectionTV" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-televisions-projection"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbanner-m" context="category" context-id="electronics" configuration-id="electronics-subcategories" default="true" assigned-to-site="true">
+        <description>Subcategory tiles for electronics.</description>
+        <template>slots/category/categoryTile.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-televisions"/>
+                <category category-id="electronics-digital-cameras"/>
+                <category category-id="electronics-digital-media-players"/>
+                <category category-id="electronics-gps-units"/>
+                <category category-id="electronics-gaming"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="electronics-televisions" configuration-id="electronics-tv" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="electronics-televisions"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="footer-column-m" context="global" configuration-id="footer-social-email" assigned-to-site="true">
+        <description>Footer slot containing the social icons and email form.</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="footer-social-email"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-bottom-center-m" context="global" configuration-id="free-shipping-orders-over-150" assigned-to-site="true">
+        <description>This is the free shipping promotion slot at the bottom of the home page.</description>
+        <template>slots/content/homepage/home-bottom-center.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="home-free-shipping-orders-over-150"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="header-banner-m" context="global" configuration-id="free2dayshiporderover300" default="true" assigned-to-site="true">
+        <description>HTML slot for Free 2 Day Shipping</description>
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="x-default">&lt;div class="header-promotion"&gt;&lt;strong&gt;FREE 2-Day SHIPPING&lt;/strong&gt; FOR ORDERS OVER $300&lt;/div&gt;</body>
+                <body xml:lang="fr-FR">&lt;div class="header-promotion"&gt;&lt;strong&gt;LIVRAISON en 2 jours GRATUITE&lt;/strong&gt; POUR LES COMMANDES DE PLUS DE 300 €&lt;/div&gt;</body>
+                <body xml:lang="it-IT">&lt;div class="header-promotion"&gt;&lt;strong&gt;SPEDIZIONE GRATUITA entro 2 giorni&lt;/strong&gt; PER ORDINI SUPERIORI A € 300&lt;/div&gt;</body>
+                <body xml:lang="ja-JP">&lt;div class="header-promotion"&gt;ご注文金額が ¥30,000 を超えると &lt;strong&gt;2 日配送が無料&lt;/strong&gt;&lt;/div&gt;</body>
+                <body xml:lang="zh-CN">&lt;div class="header-promotion"&gt;超过 300 美元的订单&lt;strong&gt;免费 2 日送达&lt;/strong&gt;&lt;/div&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-bottom-left-m" context="global" configuration-id="home-bottom-womens-shoes" default="true" assigned-to-site="false">
+        <description>The slot displays on the bottom left of the home page.</description>
+        <template>slots/content/homepage/home-bottom-left.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="home-bottom-womens-shoes"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-categories-m" context="global" configuration-id="home-categories" default="true" assigned-to-site="true">
+        <description>Category links and images for the home page.</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="home-categories"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-product-set-m" context="global" configuration-id="home-product-set" default="true" assigned-to-site="true">
+        <description>homepage product set(Spring Has Sprung) slot</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="home-product-set-content"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-products-m" context="global" configuration-id="home-products" default="true" assigned-to-site="true">
+        <description>Homepage product tiles slot.</description>
+        <template>slots/product/homePageProductSlot.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <products>
+                <product product-id="701644329402M"/>
+                <product product-id="701644391737M"/>
+                <product product-id="750518699578M"/>
+                <product product-id="25519318M"/>
+                <product product-id="013742003154M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-main-m" context="global" configuration-id="homepage-main-image" default="true" assigned-to-site="true">
+        <description>Homepage main home page image</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="home-main"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbanner-m" context="category" context-id="mens" configuration-id="mens" assigned-to-site="true">
+        <description>Default banner for mens category landing page</description>
+        <template>slots/category/catLandingBanner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-accessories" configuration-id="mens-accessories" default="true" assigned-to-site="true">
+        <description>rendering/category/categoryproducthits</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-accessories"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing" configuration-id="mens-clothing" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-accessories-gloves" configuration-id="mens-gloves" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-accessories-gloves"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing-jackets" configuration-id="mens-jackets" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-jackets"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-accessories-luggage" configuration-id="mens-luggage" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-accessories-luggage"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing-pants" configuration-id="mens-pants" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-pants"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing-dress-shirts" configuration-id="mens-shirts" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-dress-shirts"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing-shorts" configuration-id="mens-shorts" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-shorts"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom-m" context="category" context-id="mens" configuration-id="mens-subcategories" assigned-to-site="true">
+        <description>Default slot to link to sub-categories under men's</description>
+        <template>slots/category/categoryTile.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-suits"/>
+                <category category-id="mens-clothing-jackets"/>
+                <category category-id="mens-clothing-shorts"/>
+                <category category-id="mens-clothing-dress-shirts"/>
+                <category category-id="mens-clothing-pants"/>
+                <category category-id="mens-accessories"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-clothing-suits" configuration-id="mens-suits" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-clothing-suits"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="mens-accessories-ties" configuration-id="mens-ties" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="mens-accessories-ties"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="newarrivals-electronics" configuration-id="newarrivals-electronics" default="true" assigned-to-site="true">
+        <description>Default banner for this catagory</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="newarrivals-electronics"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="newarrivals-mens" configuration-id="newarrivals-men" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="newarrivals-mens"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom2-m" context="category" context-id="newarrivals" configuration-id="newarrivals-mens-products" default="true" assigned-to-site="true">
+        <description>New Arrival Products for Mens</description>
+        <template>slots/product/product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="x-default">Mens New Arrivals</callout-msg>
+        <callout-msg xml:lang="fr-FR">Nouveautés Homme</callout-msg>
+        <callout-msg xml:lang="it-IT">Nuovi arrivi Uomo</callout-msg>
+        <callout-msg xml:lang="ja-JP">メンズ新着商品</callout-msg>
+        <callout-msg xml:lang="zh-CN">男款新品</callout-msg>
+        <content>
+            <products>
+                <product product-id="25604524M"/>
+                <product product-id="25686514M"/>
+                <product product-id="25686571M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbanner-m" context="category" context-id="newarrivals" configuration-id="newarrivals-subcategories" default="true" assigned-to-site="true">
+        <description>Default slot to link to sub-categories under new arrivals</description>
+        <template>slots/category/categoryTile.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="newarrivals-womens"/>
+                <category category-id="newarrivals-mens"/>
+                <category category-id="newarrivals-electronics"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="newarrivals-womens" configuration-id="newarrivals-women" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="newarrivals-womens"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom-m" context="category" context-id="newarrivals" configuration-id="newarrivals-womens-products" default="true" assigned-to-site="true">
+        <description>New Arrival Products for Womens</description>
+        <template>slots/product/product_listing.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="x-default">Womens New Arrivals</callout-msg>
+        <callout-msg xml:lang="fr-FR">Nouveautés Femme</callout-msg>
+        <callout-msg xml:lang="it-IT">Nuovi arrivi Donna</callout-msg>
+        <callout-msg xml:lang="ja-JP">レディース新着商品</callout-msg>
+        <callout-msg xml:lang="zh-CN">女款新品</callout-msg>
+        <content>
+            <products>
+                <product product-id="701644259280M"/>
+                <product product-id="25697151M"/>
+                <product product-id="25696513M"/>
+                <product product-id="25695436M"/>
+                <product product-id="25697561M"/>
+                <product product-id="25695217M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="noresults-help" context="global" configuration-id="noresults-help" default="true" assigned-to-site="true">
+        <description>Recommendations for no result search</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="noresults-help"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="search-result-banner-m" context="global" configuration-id="search-results-banner" default="true" assigned-to-site="true">
+        <description>Slot Banner that displays above search results</description>
+        <template>slots/content/contentAssetBody.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <content-assets>
+                <content-asset content-id="search-result-banner"/>
+            </content-assets>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="home-bottom-right-m" context="global" configuration-id="this-weeks-deals" default="true" assigned-to-site="true">
+        <description>Product Carousel of This Weeks Deals</description>
+        <template>slots/product/homerightcarousel.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <callout-msg xml:lang="x-default">&lt;h2&gt;This Weeks&lt;/h2&gt;&lt;h3&gt;Deals&lt;/h3&gt;</callout-msg>
+        <callout-msg xml:lang="fr-FR">&lt;h2&gt;Les bonnes affaires&lt;/h2&gt;&lt;h3&gt;De la semaine&lt;/h3&gt;</callout-msg>
+        <callout-msg xml:lang="it-IT">&lt;h2&gt;Offerte&lt;/h2&gt;&lt;h3&gt;della settimana&lt;/h3&gt;</callout-msg>
+        <callout-msg xml:lang="ja-JP">&lt;h2&gt;今週の&lt;/h2&gt;&lt;h3&gt;特価商品&lt;/h3&gt;</callout-msg>
+        <callout-msg xml:lang="zh-CN">&lt;h2&gt;本周&lt;/h2&gt;&lt;h3&gt;热卖&lt;/h3&gt;</callout-msg>
+        <content>
+            <products>
+                <product product-id="25591535M"/>
+                <product product-id="640188017003M"/>
+                <product product-id="54736828M"/>
+                <product product-id="25590891M"/>
+                <product product-id="793775370033M"/>
+            </products>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbanner-m" context="category" context-id="womens" configuration-id="womens" default="true" assigned-to-site="true">
+        <description>Default banner for womens category landing page</description>
+        <template>slots/category/catLandingBanner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbanner-m" context="category" context-id="womens" configuration-id="womens-abtest" assigned-to-site="false">
+        <description>AB Test slot for womens-landing slot</description>
+        <template>slots/content/htmlSlotContainer.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <html>
+                <body xml:lang="fr-FR">&lt;img alt="Image Catégorie Femme" src="images/slot/landing/cat-landing-slotbanner-womens-abtest.jpg?$staticlink$" title="" /&gt;</body>
+                <body xml:lang="it-IT">&lt;img alt="Immagini per categoria Donna" src="images/slot/landing/cat-landing-slotbanner-womens-abtest.jpg?$staticlink$" title="" /&gt;</body>
+                <body xml:lang="ja-JP">&lt;img alt="レディースカテゴリの画像" src="images/slot/landing/cat-landing-slotbanner-womens-abtest.jpg?$staticlink$" title="" /&gt;</body>
+                <body xml:lang="zh-CN">&lt;img alt="女款类别图片" src="images/slot/landing/cat-landing-slotbanner-womens-abtest.jpg?$staticlink$" title="" /&gt;</body>
+            </html>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-accessories" configuration-id="womens-accessories" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-accessories"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing-bottoms" configuration-id="womens-bottoms" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing-bottoms"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-jewelry-bracelets" configuration-id="womens-bracelets" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-jewelry-bracelets"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing" configuration-id="womens-clothing" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing-dresses" configuration-id="womens-dresses" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing-dresses"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-jewelry-earrings" configuration-id="womens-earrings" default="true" assigned-to-site="true">
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-jewelry-earrings"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing-feeling-red" configuration-id="womens-feelingred" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing-feeling-red"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing-jackets" configuration-id="womens-jackets" default="true" assigned-to-site="true">
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing-jackets"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-jewelry" configuration-id="womens-jewelry" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-jewelry"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-jewelry-necklaces" configuration-id="womens-necklaces" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-jewelry-necklaces"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-outfits" configuration-id="womens-outfits" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-outfits"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-accessories-scarves" configuration-id="womens-scarves" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-accessories-scarves"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-accessories-shoes" configuration-id="womens-shoes-cat-banner" default="true" assigned-to-site="true">
+        <description>This is the default banner for the womens shoes banner.</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-accessories-shoes"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-landing-slotbottom-m" context="category" context-id="womens" configuration-id="womens-subcategories" default="true" assigned-to-site="true">
+        <description>Default slot to link to sub-categories under Womens</description>
+        <template>slots/category/categoryTile.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing"/>
+                <category category-id="womens-jewelry"/>
+                <category category-id="womens-accessories"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+    <slot-configuration slot-id="cat-banner-m" context="category" context-id="womens-clothing-tops" configuration-id="womens-tops" default="true" assigned-to-site="true">
+        <description>Default banner for this category</description>
+        <template>slots/category/cat-banner.isml</template>
+        <enabled-flag>true</enabled-flag>
+        <content>
+            <categories>
+                <category category-id="womens-clothing-tops"/>
+            </categories>
+        </content>
+    </slot-configuration>
+
+</slot-configurations>

@@ -1,0 +1,12 @@
+/mens p,,,Search-Show,,cgid,mens
+/womens p,,,Search-Show,,cgid,womens
+/kids p,,,Search-Show,,cgid,kids
+/electronics p,,,Search-Show,,cgid,electronics
+/giftcertificates p,,,GiftCert-Purchase
+/sale p,,,Search-Show,,cgid,sale
+/contactus p,,,CustomerService-ContactUs
+
+**.jpg i s,,,,,/images/imagenotfound.gif
+**.jpeg i s,,,,,/images/imagenotfound.gif
+**.gif i s,,,,,/images/imagenotfound.gif
+**.png i s,,,,,/images/imagenotfound.gif

@@ -1,0 +1,8 @@
+/affiliate/* p,,,SourceCodeRedirect-Start,,src,{0}
+/email/* p,,,SourceCodeRedirect-Start,,src,{0}
+/VIP/email/* p,,,SourceCodeRedirect-Start,,src,{0}
+/wishlist/* p,,,Wishlist-ShowOther,,WishListID,{0}
+/giftregistry/* p,,,GiftRegistryCustomer-Show,,ID,{0}
+
+# catch-all rule
+** p,,,Home-ErrorNotFound,,,

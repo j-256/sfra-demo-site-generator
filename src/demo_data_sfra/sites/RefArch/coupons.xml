@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coupons xmlns="http://www.demandware.com/xml/impex/coupon/2008-06-17">
+    <coupon coupon-id="5ties">
+        <description>$5 off men's ties</description>
+        <enabled-flag>true</enabled-flag>
+        <single-code>5ties</single-code>
+    </coupon>
+
+    <coupon coupon-id="OrderLevel">
+        <enabled-flag>true</enabled-flag>
+        <redemption-limits>
+            <limit-per-time-frame>
+                <limit>1000</limit>
+                <time-frame>5</time-frame>
+            </limit-per-time-frame>
+            <allow-multiple-codes-per-order>false</allow-multiple-codes-per-order>
+        </redemption-limits>
+        <single-code>orderLevel</single-code>
+    </coupon>
+
+    <coupon coupon-id="product">
+        <description>coupon used for product level promotions.</description>
+        <enabled-flag>true</enabled-flag>
+        <redemption-limits>
+            <allow-multiple-codes-per-order>false</allow-multiple-codes-per-order>
+        </redemption-limits>
+        <single-code>product</single-code>
+    </coupon>
+
+    <coupon coupon-id="shipping">
+        <description>coupon used with shipping promotions</description>
+        <enabled-flag>true</enabled-flag>
+        <redemption-limits>
+            <allow-multiple-codes-per-order>false</allow-multiple-codes-per-order>
+        </redemption-limits>
+        <single-code>shipping</single-code>
+    </coupon>
+
+</coupons>
