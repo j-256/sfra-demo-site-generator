@@ -64,11 +64,28 @@ test('remaps colon-delimited SitePriceBooks list', () => {
   assert.equal(transformXml(input, map), out);
 });
 
-test('remaps <parent> pricebook link and inventoryListId', () => {
-  assert.equal(transformXml('<parent>usd-m-list-prices</parent>', map), '<parent>usd-m-list-pricesJ</parent>');
+test('remaps <parent> pricebook link (scoped to a pricebook header block) and inventoryListId', () => {
+  // pricebook-id itself ('usd-m-base-prices') is deliberately NOT a key in map, so this test
+  // isolates the <parent> element remap from the (separately-tested) pricebook-id attribute remap
+  const input = '<header pricebook-id="usd-m-base-prices"><parent>usd-m-list-prices</parent></header>';
+  const out = '<header pricebook-id="usd-m-base-prices"><parent>usd-m-list-pricesJ</parent></header>';
+  assert.equal(transformXml(input, map), out);
   assert.equal(
     transformXml('<custom-attribute attribute-id="inventoryListId">inventory_m_store_store1</custom-attribute>', map),
     '<custom-attribute attribute-id="inventoryListId">inventory_m_store_store1J</custom-attribute>');
+});
+
+test('does NOT corrupt a category or folder <parent> even when its id collides with a mapped id', () => {
+  // 'electronics' is a real category id in electronics-m-catalog today; nothing structurally
+  // stops a renamed resource id from colliding with a category or library-folder id, so this
+  // guards against the collision rather than relying on it never happening
+  const collidingMap = new Map([['electronics', 'electronicsJ']]);
+  assert.equal(
+    transformXml('<category category-id="electronics-accessories"><parent>electronics</parent></category>', collidingMap),
+    '<category category-id="electronics-accessories"><parent>electronics</parent></category>');
+  assert.equal(
+    transformXml('<folder folder-id="some-folder"><parent>electronics</parent></folder>', collidingMap),
+    '<folder folder-id="some-folder"><parent>electronics</parent></folder>');
 });
 
 test('leaves unmapped attribute values alone', () => {
