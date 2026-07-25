@@ -76,6 +76,21 @@ test('a library folder <parent> pointing at an undefined id is not reported as d
   rmSync(dir, { recursive: true });
 });
 
+test('single-quoted definition plus a reference to it must yield ok:true (real vendored data mixes quote styles)', () => {
+  // electronics-m-catalog/catalog.xml uses catalog-id='...' and product product-id='...' with
+  // single quotes, which harvest.mjs and transform.mjs already handle via the same backreference
+  // approach. A double-quote-only DEFINED collector here would miss this definition entirely and
+  // report referentially-valid data as dangling - the exact cry-wolf failure mode this module
+  // must never have, since a false alarm trains people to ignore the guard
+  const dir = tree({
+    'catalogs/c.xml': "<catalog catalog-id='single-quoted-cat'></catalog>",
+    'sites/S/preferences.xml': '<preference preference-id="SiteCatalog">single-quoted-cat</preference>',
+  });
+  const r = verifyTree(dir);
+  assert.equal(r.ok, true, JSON.stringify(r.dangling));
+  rmSync(dir, { recursive: true });
+});
+
 test('real pipeline output (harvestIds -> buildRenameMap -> transformTree over src/demo_data_sfra) is referentially valid', () => {
   // THE positive case: run the tool's own generator end to end and prove its OWN output has
   // zero dangling references. This is what makes the verifier trustworthy as a release gate -
