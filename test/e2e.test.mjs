@@ -49,6 +49,24 @@ function buildFixtureProject({ brokenRef = false } = {}) {
   writeFileSync(join(src, 'sites/RefArchGlobal/site.xml'),
     '<site xmlns="http://www.demandware.com/xml/impex/site/2007-04-30" site-id="RefArchGlobal"><name>RefArchGlobal</name></site>');
 
+  // a per-site cache-settings.xml so the overlay has something to act on, carrying a partition so
+  // the fixture also proves partitions survive. Values here are the OOTB (wrong) orientation on
+  // purpose - the point is that the generator overwrites the whole <settings> block
+  for (const site of ['RefArch', 'RefArchGlobal']) {
+    writeFileSync(join(src, 'sites', site, 'cache-settings.xml'),
+      '<?xml version="1.0" encoding="UTF-8"?>\n'
+      + '<cache-settings xmlns="http://www.demandware.com/xml/impex/cachesettings/2013-08-15">\n'
+      + '    <settings>\n'
+      + '        <development><static-cache-ttl>0</static-cache-ttl><page-cache-enabled>false</page-cache-enabled></development>\n'
+      + '        <staging><static-cache-ttl>2592000</static-cache-ttl><page-cache-enabled>true</page-cache-enabled></staging>\n'
+      + '        <production><static-cache-ttl>2592000</static-cache-ttl><page-cache-enabled>true</page-cache-enabled></production>\n'
+      + '    </settings>\n'
+      + '    <page-cache-partitions>\n'
+      + '        <page-cache-partition partition-id="Homepage"><name>Homepage</name></page-cache-partition>\n'
+      + '    </page-cache-partitions>\n'
+      + '</cache-settings>');
+  }
+
   // two org-scoped inventory lists, always defined regardless of brokenRef - these are what the
   // --only tests check survive intact no matter which site is selected
   for (const id of ['inventory_a', 'inventory_b']) {
@@ -105,11 +123,15 @@ test('full generate with --token J: valid, isolated, cache-corrected', () => {
     assert.ok(existsSync(join(tree, 'sites/RefArchGlobalJ/site.xml')));
 
     // cache corrected: dev enabled, staging disabled in RefArchJ
+    // default is production-only caching: a sandbox reads the development block, so leaving dev
+    // enabled would silently turn caching on there
     const cache = readFileSync(join(tree, 'sites/RefArchJ/cache-settings.xml'), 'utf8');
     const dev = cache.match(/<development>[\s\S]*?<\/development>/)[0];
     const stg = cache.match(/<staging>[\s\S]*?<\/staging>/)[0];
-    assert.match(dev, /page-cache-enabled>true/);
+    const prd = cache.match(/<production>[\s\S]*?<\/production>/)[0];
+    assert.match(dev, /page-cache-enabled>false/);
     assert.match(stg, /page-cache-enabled>false/);
+    assert.match(prd, /page-cache-enabled>true/);
 
     // partitions preserved
     assert.match(cache, /page-cache-partition/);
@@ -227,9 +249,78 @@ test('--only primary / --only global through the real CLI: selected site only, i
   }
 });
 
-test('CLI subprocess: missing --token produces a clean one-line message and exit 1', () => {
+test('CLI subprocess: missing --token produces a clean one-line message and exit 2', () => {
   const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs')], { encoding: 'utf8' });
-  assert.equal(r.status, 1);
+  assert.equal(r.status, 2, 'a usage error exits 2, distinct from a runtime failure');
   assert.match(r.stderr, /token is required/);
   assert.doesNotMatch(r.stderr, /at .*\(.*:\d+:\d+\)/, 'stderr must not contain a stack trace frame');
+});
+
+test('--cache through the real CLI: production only by default, staging and development opt-in', () => {
+  const cases = [
+    { args: [], on: ['production'] },
+    { args: ['--cache', 'stg'], on: ['production', 'staging'] },
+    { args: ['--cache', 'dev'], on: ['production', 'development'] },
+    { args: ['--cache', 'staging', '--cache', 'development'], on: ['production', 'staging', 'development'] },
+  ];
+  for (const { args, on } of cases) {
+    const project = buildFixtureProject({ brokenRef: false });
+    try {
+      const out = join(project, 'out');
+      const r = spawnSync('node',
+        [join(project, 'generate.mjs'), '--token', 'J', '--out', out, ...args],
+        { encoding: 'utf8' });
+      assert.equal(r.status, 0, `expected exit 0 for ${args.join(' ') || '(no flags)'}; stderr: ${r.stderr}`);
+
+      const cache = readFileSync(join(out, 'demo_data_sfra_J', 'sites', 'RefArchJ', 'cache-settings.xml'), 'utf8');
+      for (const env of ['development', 'staging', 'production']) {
+        const blk = cache.match(new RegExp(`<${env}>[\\s\\S]*?</${env}>`))[0];
+        const want = on.includes(env);
+        assert.match(blk, new RegExp(`<page-cache-enabled>${want}</page-cache-enabled>`),
+          `${env} should be ${want} for "${args.join(' ') || '(default)'}"`);
+        assert.match(blk, new RegExp(`<static-cache-ttl>${want ? 2592000 : 0}</static-cache-ttl>`),
+          `${env} ttl should follow the enabled flag`);
+      }
+      assert.match(cache, /partition-id="Homepage"/, 'partitions must survive the overlay');
+    } finally {
+      rmSync(project, { recursive: true, force: true });
+    }
+  }
+});
+
+test('--cache rejects an unknown environment through the real CLI', () => {
+  const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), '--token', 'J', '--cache', 'sandbox'],
+    { encoding: 'utf8' });
+  assert.equal(r.status, 2, 'a bad flag value is a usage error');
+  assert.match(r.stderr, /--cache requires one of/);
+  assert.doesNotMatch(r.stderr, /at .*\.mjs:\d+/, 'should be a clean message, not a stack trace');
+});
+
+test('--help and -h print usage and exit 0, and the help stays in sync with the parser', () => {
+  for (const flag of ['--help', '-h']) {
+    const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), flag], { encoding: 'utf8' });
+    assert.equal(r.status, 0, `${flag} must exit 0`);
+    assert.match(r.stdout, /^NAME/, `${flag} must print usage on stdout`);
+    for (const section of ['SYNOPSIS', 'DESCRIPTION', 'OPTIONS', 'EXIT STATUS', 'EXAMPLES', 'CAVEATS']) {
+      assert.ok(r.stdout.includes(section), `${flag} output should have a ${section} section`);
+    }
+    // help must not require a token, so it works as the first thing anyone types
+    assert.doesNotMatch(r.stderr, /token is required/);
+  }
+
+  // surface parity: every flag the parser accepts is documented, with its short form
+  const help = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), '--help'], { encoding: 'utf8' }).stdout;
+  const parser = readFileSync(join(REPO_ROOT, 'lib/options.mjs'), 'utf8');
+  const longFlags = [...new Set([...parser.matchAll(/'(--[a-z][a-z-]+)'/g)].map((m) => m[1]))];
+  assert.ok(longFlags.length >= 6, `expected to find the parser's long flags, got ${longFlags}`);
+  for (const f of longFlags) {
+    assert.ok(help.includes(f), `${f} is accepted by the parser but missing from --help`);
+  }
+  for (const short of ['-t', '-c', '-O', '-k', '-o', '-f', '-h']) {
+    assert.ok(help.includes(short), `${short} is accepted but missing from --help`);
+  }
+
+  // the token cap is stated in two places; they must agree
+  const cap = parser.match(/MAX_TOKEN = (\d+)/)[1];
+  assert.ok(help.includes(`${cap} chars max`), `--help must state the real ${cap}-char token cap`);
 });

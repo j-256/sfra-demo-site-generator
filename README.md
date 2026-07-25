@@ -35,15 +35,22 @@ This is not decorative. Doing this by hand is what motivated the tool: a hand-ed
 
 The OOTB data ships page caching **disabled on development** and **enabled on staging**, which is backwards for how the instances actually relate: Development and Production are copies of Staging, so Staging is the one you edit against and the one that wants caching off.
 
-A cache-settings file always carries all three blocks, and the import takes all three. Which one is *active* depends on the instance doing the reading. The generated archive sets:
+A cache-settings file always carries all three blocks, and an import takes all three. Which one is *active* depends on the instance doing the reading, so there is no way to ship "just the staging setting" – the archive necessarily states a value for every environment.
 
-| Block | Value | Read by |
+That makes the default deliberately conservative: **caching is enabled for production only.**
+
+| Block | Default | Read by |
 |---|---|---|
-| `development` | caching ON | Development, and sandboxes |
-| `staging` | caching OFF | Staging |
-| `production` | caching ON | Production |
+| `development` | OFF | Development, **and sandboxes** |
+| `staging` | OFF | Staging |
+| `production` | ON | Production |
 
-**Note for sandbox imports.** A sandbox reads the `development` block, so importing this archive onto one turns page caching **on** there. That is usually not what you want while iterating on a sandbox, and it is an easy thing to be caught out by when template or content edits stop showing up. Turn it off in Business Manager under Administration > Sites > Manage Sites > *your site* > Cache, or accept it and flush the cache as needed.
+Opt an environment back in with `--cache`, which is repeatable:
+
+    node generate.mjs --token alice --cache stg          # staging on, sandboxes still off
+    node generate.mjs --token alice -c stg -c dev        # both on
+
+**Why development is off by default.** A sandbox reads the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
 
 Existing `<page-cache-partitions>` in the source are preserved untouched.
 
@@ -57,11 +64,17 @@ Existing `<page-cache-partitions>` in the source are preserved untouched.
 
 | Flag | Effect |
 |---|---|
-| `--token <t>` | Required. The isolation token. First letter is auto-capitalized. `[A-Za-z0-9_-]`, 19 chars max |
-| `--only primary\|global` | Emit just one of the two sites instead of both |
-| `--keep-allocation-timestamps` | Retain `allocation-timestamp` in inventory records |
-| `--out <dir>` | Output directory (default `out`) |
-| `--force` | Regenerate over an existing output tree |
+| `-t, --token <t>` | Required. The isolation token. First letter is auto-capitalized. `[A-Za-z0-9_-]`, 19 chars max |
+| `-c, --cache <env>` | Enable page caching for an environment. Repeatable. Accepts `production`, `staging`, `development` and the aliases `prd`, `stg`, `dev` |
+| `-O, --only primary\|global` | Emit just one of the two sites instead of both |
+| `-k, --keep-allocation-timestamps` | Retain `allocation-timestamp` in inventory records |
+| `-o, --out <dir>` | Output directory (default `out`) |
+| `-f, --force` | Regenerate over an existing output tree |
+| `-h, --help` | Show usage |
+
+Long options also accept an `=` joined value (`--token=alice`), and short flags bundle (`-kf`) and glue (`-talice`). `node generate.mjs --help` is self-contained, so the tool is usable without this README.
+
+Exit codes: `0` success, `1` runtime failure (including a dangling reference that blocked archiving), `2` usage error.
 
 The 19-character cap comes from the platform: `site-id` is limited to 32 characters and `RefArchGlobal` already uses 13.
 

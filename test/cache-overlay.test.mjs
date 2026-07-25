@@ -1,7 +1,7 @@
 // test/cache-overlay.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { overlayCacheSettings } from '../lib/cache-overlay.mjs';
+import { overlayCacheSettings, buildSettingsBlock } from '../lib/cache-overlay.mjs';
 
 const corrected = `<?xml version="1.0" encoding="UTF-8"?>
 <cache-settings xmlns="x">
@@ -73,4 +73,44 @@ test('throws on ambiguous multiple <settings> blocks in the corrected file', () 
 test('throws on nested <settings> tags rather than silently truncating at the inner close tag', () => {
   const nestedSite = '<root><settings><settings>inner</settings></settings><page-cache-partitions/></root>';
   assert.throws(() => overlayCacheSettings(nestedSite, corrected), /ambiguous|nested|expected exactly 1/i);
+});
+
+test('buildSettingsBlock: production only by default', () => {
+  const b = buildSettingsBlock(['production']);
+  assert.match(b, /<development>[\s\S]*?<page-cache-enabled>false<\/page-cache-enabled>[\s\S]*?<\/development>/);
+  assert.match(b, /<staging>[\s\S]*?<page-cache-enabled>false<\/page-cache-enabled>[\s\S]*?<\/staging>/);
+  assert.match(b, /<production>[\s\S]*?<page-cache-enabled>true<\/page-cache-enabled>[\s\S]*?<\/production>/);
+});
+
+test('buildSettingsBlock: ttl follows the enabled flag', () => {
+  const b = buildSettingsBlock(['production']);
+  const dev = b.match(/<development>[\s\S]*?<\/development>/)[0];
+  const prd = b.match(/<production>[\s\S]*?<\/production>/)[0];
+  assert.match(dev, /<static-cache-ttl>0<\/static-cache-ttl>/);
+  assert.match(prd, /<static-cache-ttl>2592000<\/static-cache-ttl>/);
+});
+
+test('buildSettingsBlock: opting staging and development in', () => {
+  const b = buildSettingsBlock(['production', 'staging', 'development']);
+  for (const env of ['development', 'staging', 'production']) {
+    const blk = b.match(new RegExp(`<${env}>[\\s\\S]*?</${env}>`))[0];
+    assert.match(blk, /<page-cache-enabled>true<\/page-cache-enabled>/, `${env} should be enabled`);
+    assert.match(blk, /<static-cache-ttl>2592000<\/static-cache-ttl>/, `${env} ttl`);
+  }
+});
+
+test('buildSettingsBlock: emits exactly one settings block, all three envs, in schema order', () => {
+  const b = buildSettingsBlock(['production']);
+  assert.equal((b.match(/<settings>/g) || []).length, 1);
+  assert.ok(b.indexOf('<development>') < b.indexOf('<staging>'));
+  assert.ok(b.indexOf('<staging>') < b.indexOf('<production>'));
+});
+
+test('buildSettingsBlock output is usable by overlayCacheSettings and preserves partitions', () => {
+  const out = overlayCacheSettings(siteFile, buildSettingsBlock(['production', 'development']));
+  assert.match(out, /partition-id="Homepage"/);
+  const dev = out.match(/<development>[\s\S]*?<\/development>/)[0];
+  const stg = out.match(/<staging>[\s\S]*?<\/staging>/)[0];
+  assert.match(dev, /<page-cache-enabled>true</);
+  assert.match(stg, /<page-cache-enabled>false</);
 });

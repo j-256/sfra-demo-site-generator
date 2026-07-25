@@ -7,7 +7,7 @@ import { parseOptions } from './lib/options.mjs';
 import { harvestIds } from './lib/harvest.mjs';
 import { buildRenameMap } from './lib/rename-map.mjs';
 import { transformTree } from './lib/transform.mjs';
-import { overlayCacheSettings } from './lib/cache-overlay.mjs';
+import { overlayCacheSettings, buildSettingsBlock } from './lib/cache-overlay.mjs';
 import { zipDir, makeInventoryDoc } from './lib/archive.mjs';
 import { verifyTree } from './lib/verify.mjs';
 
@@ -17,6 +17,7 @@ const CORRECTED_CACHE = join(here, 'src', 'cache-settings.xml');
 
 export function run(argv) {
   const opts = parseOptions(argv);
+  if (opts.help) return { ok: true, help: helpText() };
   const token = opts.token;
   const outRoot = opts.out;
   const innerName = `demo_data_sfra_${token}`;
@@ -35,12 +36,12 @@ export function run(argv) {
   const rename = buildRenameMap(ids, token);
   transformTree(SRC, outTree, rename, { only: opts.only, keepAllocationTimestamps: opts.keepAllocationTimestamps });
 
-  // overlay corrected cache settings into each emitted site
-  const corrected = readFileSync(CORRECTED_CACHE, 'utf8');
+  // overlay the requested cache settings into each emitted site, preserving its partitions
+  const settings = buildSettingsBlock(opts.cacheEnvs);
   const sitesDir = join(outTree, 'sites');
   for (const site of readdirSync(sitesDir)) {
     const cs = join(sitesDir, site, 'cache-settings.xml');
-    if (existsSync(cs)) writeFileSync(cs, overlayCacheSettings(readFileSync(cs, 'utf8'), corrected));
+    if (existsSync(cs)) writeFileSync(cs, overlayCacheSettings(readFileSync(cs, 'utf8'), settings));
   }
 
   // verify referential integrity BEFORE zipping
@@ -70,12 +71,80 @@ export function run(argv) {
   return { ok: true, outTree };
 }
 
+// Everything a caller needs to invoke this correctly lives here, so the tool is usable from the
+// file alone without the README: the token's accepted shape, the --cache/--only legal values, and
+// the sandbox-reads-development trap
+export function helpText() {
+  const s = process.stdout.isTTY ? '[4m' : '';
+  const r = process.stdout.isTTY ? '[24m' : '';
+  return `NAME
+  generate.mjs - generate an isolated SFRA demo site archive for a chosen token
+
+SYNOPSIS
+  node generate.mjs --token <${s}token${r}> [${s}options${r}]
+
+DESCRIPTION
+  Produces a site-import archive in which every org-scoped identifier carries your
+  token, so several people can each run their own RefArch demo site on one shared
+  B2C Commerce instance. Sites, catalogs, products, pricebooks, inventory lists,
+  the shared library, the customer list, stores and jobs are all renamed. Objects
+  that live inside a site (coupons, promotions, slots, customer groups, shipping
+  and payment methods, search and sort rules) are left alone, because each site
+  already owns its own namespace for them.
+
+  Every id is derived from the token alone, so nothing is assumed about what is
+  already on the target instance. The archive is checked for dangling references
+  before it is written; if any reference does not resolve, nothing is archived.
+
+OPTIONS
+  -t, --token <token>              Required. Isolation token appended to every
+                                   org-scoped id. First letter is capitalized.
+                                   Accepts [A-Za-z0-9_-], ${MAX_TOKEN_HELP} chars max
+  -c, --cache <env>                Enable page caching for an environment.
+                                   Repeatable. production is always enabled.
+                                   Accepts: production, staging, development
+                                   (aliases prd, stg, dev)
+  -O, --only primary|global        Emit only one of the two sites
+  -k, --keep-allocation-timestamps Retain allocation-timestamp in inventory
+  -o, --out <dir>                  Output directory (default: out)
+  -f, --force                      Regenerate over an existing output tree
+  -h, --help                       Show this help message
+
+EXIT STATUS
+  0  Success
+  1  Runtime failure, including a dangling reference that blocked archiving
+  2  Usage error (missing or invalid argument)
+
+EXAMPLES
+  node generate.mjs --token alice
+  node generate.mjs -t alice -c stg
+  node generate.mjs -t bob --only primary --out /tmp/bob
+
+CAVEATS
+  A sandbox reads the development block of a cache-settings file, so passing
+  --cache development turns page caching on for sandboxes as well as for
+  Development. That is usually not wanted while iterating on a sandbox.
+
+  Inventory imports separately from the site archive. Upload the generated
+  inventory_<token>.xml through Merchant Tools > Product and Catalogs >
+  Import & Export; the site archive goes through Administration > Site
+  Development > Site Import & Export.`;
+}
+
+// kept in sync with lib/options.mjs's MAX_TOKEN by the help-parity test
+const MAX_TOKEN_HELP = 19;
+
 // CLI entry
 if (process.argv[1] && process.argv[1].endsWith('generate.mjs')) {
   try {
-    run(process.argv.slice(2));
+    const r = run(process.argv.slice(2));
+    if (r && r.help) {
+      console.log(r.help);
+      process.exit(0);
+    }
   } catch (e) {
     console.error(String(e.message || e));
-    process.exit(1);
+    // usage errors are 2 so a caller can distinguish them from a runtime failure
+    process.exit(e.exitCode || 1);
   }
 }
