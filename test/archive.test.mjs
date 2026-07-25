@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { zipDir, makeInventoryDoc } from '../lib/archive.mjs';
 import { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync, unlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 
 test('zipDir produces a zip containing the inner folder', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-'));
@@ -17,6 +17,36 @@ test('zipDir produces a zip containing the inner folder', () => {
   assert.ok(existsSync(zip));
   const listing = execFileSync('unzip', ['-l', zip], { encoding: 'utf8' });
   assert.match(listing, /demo_data_sfra_J\/sites\/x\.xml/);
+  rmSync(work, { recursive: true });
+});
+
+// Pins the CONTRACT documented on zipDir: a relative zipPath (the natural case - every real call
+// site in this project passes a bare filename, e.g. `${innerName}.zip`) resolves against
+// dirname(dir), not against the process cwd. This is the scenario an earlier fix-round drive-by
+// almost broke: swapping to a single-argument resolve(zipPath) would have resolved bare filenames
+// against process.cwd() instead, silently landing the archive somewhere other than next to the
+// source tree. process.chdir is used here (restored in finally) so a bare relative zipPath has a
+// process cwd that is DIFFERENT from dirname(dir) - if resolution ever drifted to process.cwd(),
+// this test would look for the zip in the wrong place and fail loudly rather than passing by
+// coincidence
+test('zipDir resolves a relative zipPath against dirname(dir), not the process cwd', () => {
+  const work = mkdtempSync(join(tmpdir(), 'arc-relzip-'));
+  const tree = join(work, 'demo_data_sfra_J');
+  mkdirSync(tree, { recursive: true });
+  writeFileSync(join(tree, 'f.xml'), '<f/>');
+  const originalCwd = process.cwd();
+  try {
+    process.chdir(tmpdir()); // deliberately NOT dirname(tree), so a wrong resolution is detectable
+    const relZip = 'demo_data_sfra_J.zip'; // bare filename, exactly how every real call site builds it
+    zipDir(tree, relZip, 'demo_data_sfra_J');
+    const expected = join(dirname(tree), relZip); // dirname(dir) === work
+    assert.ok(existsSync(expected), `expected zip at ${expected} (dirname(dir)-relative)`);
+    assert.ok(!existsSync(join(process.cwd(), relZip)), 'must not have landed relative to process cwd instead');
+    const listing = execFileSync('unzip', ['-l', expected], { encoding: 'utf8' });
+    assert.match(listing, /demo_data_sfra_J\/f\.xml/);
+  } finally {
+    process.chdir(originalCwd);
+  }
   rmSync(work, { recursive: true });
 });
 
