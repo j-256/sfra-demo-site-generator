@@ -20,8 +20,19 @@ test('harvest collects site, catalog, product, store, pricebook, inventory, libr
   assert.ok(ids.has('store1'), 'store id');
 });
 
+test('harvest collects ids from single-quoted XML attributes', () => {
+  const ids = harvestIds(join(fixtures, 'harvest-tree'));
+  assert.ok(ids.has('SINGLEQUOTEDM'), 'single-quoted product id');
+});
+
+test('harvest collects a pricebook parent id from inside its header block', () => {
+  const ids = harvestIds(join(fixtures, 'harvest-tree'));
+  assert.ok(ids.has('usd-m-base-prices'), 'pricebook parent id nested in <header pricebook-id=...>');
+});
+
 test('harvest EXCLUDES category ids', () => {
   const ids = harvestIds(join(fixtures, 'harvest-tree'));
   assert.ok(!ids.has('womens'), 'category id must not be harvested');
   assert.ok(!ids.has('root'), 'root category id must not be harvested');
+  assert.ok(!ids.has('mens'), 'category parent id (bare <parent> inside a <category>) must not be harvested');
 });

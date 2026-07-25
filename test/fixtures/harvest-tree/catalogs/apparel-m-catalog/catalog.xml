@@ -2,7 +2,11 @@
 <catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="apparel-m-catalog">
     <category category-id="root"/>
     <category category-id="womens"/>
+    <category category-id="dresses">
+        <parent>mens</parent>
+    </category>
     <product product-id="008884303989M"><variant product-id="008884303989M-v1"/></product>
+    <product product-id='SINGLEQUOTEDM'/>
     <category-assignment category-id="womens" product-id="008884303989M"/>
     <recommendation source-id="11736753M" source-type="product" target-id="34736758M" type="1"/>
 </catalog>
