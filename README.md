@@ -33,7 +33,17 @@ This is not decorative. Doing this by hand is what motivated the tool: a hand-ed
 
 ## Cache settings are corrected
 
-The OOTB data ships page caching **disabled on development** and **enabled on staging**, which is backwards for the usual Staging-replicates-to-Dev-and-Production topology. The generated archive sets development and production ON, staging OFF. Each instance reads only its own block, so one corrected file is right everywhere.
+The OOTB data ships page caching **disabled on development** and **enabled on staging**, which is backwards for how the instances actually relate: Development and Production are copies of Staging, so Staging is the one you edit against and the one that wants caching off.
+
+A cache-settings file always carries all three blocks, and the import takes all three. Which one is *active* depends on the instance doing the reading. The generated archive sets:
+
+| Block | Value | Read by |
+|---|---|---|
+| `development` | caching ON | Development, and sandboxes |
+| `staging` | caching OFF | Staging |
+| `production` | caching ON | Production |
+
+**Note for sandbox imports.** A sandbox reads the `development` block, so importing this archive onto one turns page caching **on** there. That is usually not what you want while iterating on a sandbox, and it is an easy thing to be caught out by when template or content edits stop showing up. Turn it off in Business Manager under Administration > Sites > Manage Sites > *your site* > Cache, or accept it and flush the cache as needed.
 
 Existing `<page-cache-partitions>` in the source are preserved untouched.
 
