@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences xmlns="http://www.demandware.com/xml/impex/preferences/2007-03-31">
+    <standard-preferences>
+        <all-instances>
+            <preference preference-id="SiteCatalog">apparel-m-catalog</preference>
+            <preference preference-id="SiteCustomerList">RefArch</preference>
+            <preference preference-id="SiteLibrary">RefArchSharedLibrary</preference>
+            <preference preference-id="SiteInventoryList">inventory_m_store_store1</preference>
+            <preference preference-id="SitePriceBooks">usd-m-list-prices</preference>
+        </all-instances>
+        <development/>
+        <staging/>
+        <production/>
+    </standard-preferences>
+    <custom-preferences>
+        <all-instances/>
+        <development/>
+        <staging/>
+        <production/>
+    </custom-preferences>
+</preferences>

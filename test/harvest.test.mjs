@@ -1,0 +1,27 @@
+// test/harvest.test.mjs
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { harvestIds } from '../lib/harvest.mjs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const fixtures = join(here, 'fixtures');
+
+test('harvest collects site, catalog, product, store, pricebook, inventory, library, customer-list ids', () => {
+  const ids = harvestIds(join(fixtures, 'harvest-tree'));
+  assert.ok(ids.has('RefArch'), 'site id');
+  assert.ok(ids.has('apparel-m-catalog'), 'catalog id');
+  assert.ok(ids.has('008884303989M'), 'product id');
+  assert.ok(ids.has('11736753M'), 'recommendation source id');
+  assert.ok(ids.has('usd-m-list-prices'), 'pricebook id');
+  assert.ok(ids.has('inventory_m_store_store1'), 'inventory list id');
+  assert.ok(ids.has('RefArchSharedLibrary'), 'library id');
+  assert.ok(ids.has('store1'), 'store id');
+});
+
+test('harvest EXCLUDES category ids', () => {
+  const ids = harvestIds(join(fixtures, 'harvest-tree'));
+  assert.ok(!ids.has('womens'), 'category id must not be harvested');
+  assert.ok(!ids.has('root'), 'root category id must not be harvested');
+});

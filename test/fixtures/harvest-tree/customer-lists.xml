@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customer-lists xmlns="http://www.demandware.com/xml/impex/customerlist/2010-06-30">
+    <customer-list list-id="RefArch">
+        <customerno-sequence-enabled>false</customerno-sequence-enabled>
+        <customer-lockout-enabled>false</customer-lockout-enabled>
+        <max-failed-logins>10</max-failed-logins>
+        <lockout-effective-period>30</lockout-effective-period>
+        <customer-login-attempt-reset-time>30</customer-login-attempt-reset-time>
+    </customer-list>
+</customer-lists>

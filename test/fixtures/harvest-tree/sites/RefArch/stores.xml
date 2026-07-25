@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stores xmlns="http://www.demandware.com/xml/impex/store/2007-04-30">
+    <store store-id="store1">
+        <custom-attributes>
+            <custom-attribute attribute-id="inventoryListId">inventory_m_store_store1</custom-attribute>
+        </custom-attributes>
+    </store>
+</stores>

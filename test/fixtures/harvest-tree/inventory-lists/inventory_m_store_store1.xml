@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inventory xmlns="http://www.demandware.com/xml/impex/inventory/2007-05-31">
+    <inventory-list>
+        <header list-id="inventory_m_store_store1">
+            <default-instock>false</default-instock>
+            <description>Inventory list for store: Commerce Cloud</description>
+            <use-bundle-inventory-only>false</use-bundle-inventory-only>
+            <on-order>false</on-order>
+        </header>
+        <records>
+            <record product-id="008884303989M">
+                <allocation>100</allocation>
+                <perpetual>false</perpetual>
+                <preorder-backorder-handling>none</preorder-backorder-handling>
+            </record>
+        </records>
+    </inventory-list>
+</inventory>
