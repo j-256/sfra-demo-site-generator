@@ -27,12 +27,19 @@ function setupSrc() {
     Buffer.from([0xff, 0xd8, 0xff, 0x00, 0x01, 0x02, 0xfe, 0xfd]));
 
   mkdirSync(join(dir, 'sites/RefArch/active-data'), { recursive: true });
+  mkdirSync(join(dir, 'sites/RefArch/active-data-lite'), { recursive: true });
   mkdirSync(join(dir, 'sites/RefArch/urls'), { recursive: true });
   mkdirSync(join(dir, 'sites/RefArch/ocapi-settings'), { recursive: true });
   writeFileSync(join(dir, 'sites/RefArch/site.xml'),
     '<site site-id="RefArch"><name>RefArch</name></site>');
   writeFileSync(join(dir, 'sites/RefArch/active-data/product-Sites-RefArch.csv'),
     'productID\n008884303989M\n'); // must remain byte-identical
+  // active-data-lite is a SEPARATE real directory from active-data (not a typo, not a subset);
+  // the real tree also has 2 CSVs here. This file is deliberately XML (not .csv), so it is
+  // untouched ONLY by the directory rule, never by the "csv/sample extension" rule - proving the
+  // directory match itself covers "active-data" PREFIXED names, not just the exact segment
+  writeFileSync(join(dir, 'sites/RefArch/active-data-lite/customer-Sites-RefArch.xml'),
+    '<customer-export catalog-id="apparel-m-catalog"/>'); // must remain byte-identical
   writeFileSync(join(dir, 'sites/RefArch/urls/aliases'),
     '/mens\tp,,,Search-Show,,cgid,mens\n'); // must remain byte-identical (not xml at all)
   writeFileSync(join(dir, 'sites/RefArch/ocapi-settings/wapi_data_config.sample'),
@@ -77,9 +84,9 @@ function setupSrc() {
   return dir;
 }
 
-function run(src, out, token, only) {
+function run(src, out, token, only, keepAllocationTimestamps = false) {
   const rename = buildRenameMap(harvestIds(src), token, only);
-  transformTree(src, out, rename, { only, keepAllocationTimestamps: false });
+  transformTree(src, out, rename, { only, keepAllocationTimestamps });
   return rename;
 }
 
@@ -127,6 +134,22 @@ test('active-data csv is byte-identical despite containing a harvested id', () =
   rmSync(out, { recursive: true });
 });
 
+test('active-data-lite is untouched too, including a non-csv xml file inside it', () => {
+  // regression: active-data-lite is a real, separate directory (not covered by an EXACT
+  // segment-equals-"active-data" check). Using an .xml file here (rather than a .csv) isolates
+  // the directory rule from the csv/sample extension rule - this file has no other reason to
+  // survive untouched, so it only proves the fix if the directory match itself is prefix-aware
+  const src = setupSrc();
+  const out = mkdtempSync(join(tmpdir(), 'sfra-out-'));
+  run(src, out, 'J', null);
+
+  const xml = readFileSync(join(out, 'sites/RefArchJ/active-data-lite/customer-Sites-RefArch.xml'), 'utf8');
+  assert.equal(xml, '<customer-export catalog-id="apparel-m-catalog"/>');
+
+  rmSync(src, { recursive: true });
+  rmSync(out, { recursive: true });
+});
+
 test('meta xml is byte-identical despite containing a mapped-looking substring', () => {
   const src = setupSrc();
   const out = mkdtempSync(join(tmpdir(), 'sfra-out-'));
@@ -157,7 +180,7 @@ test('renames pricebook file and transforms its header pricebook-id and price-ta
 test('renames inventory file, transforms list-id and product-id, and strips read-only fields via cleanInventoryXml', () => {
   const src = setupSrc();
   const out = mkdtempSync(join(tmpdir(), 'sfra-out-'));
-  run(src, out, 'J', null);
+  run(src, out, 'J', null); // keepAllocationTimestamps defaults to false
 
   assert.ok(existsSync(join(out, 'inventory-lists/inventory_m_store_store1J.xml')));
   const inv = readFileSync(join(out, 'inventory-lists/inventory_m_store_store1J.xml'), 'utf8');
@@ -167,8 +190,29 @@ test('renames inventory file, transforms list-id and product-id, and strips read
   assert.doesNotMatch(inv, /<ats>/);
   assert.doesNotMatch(inv, /<on-order>0<\/on-order>/, 'record read-only field stripped');
   assert.doesNotMatch(inv, /<turnover>/);
-  assert.doesNotMatch(inv, /<allocation-timestamp>/);
+  assert.doesNotMatch(inv, /<allocation-timestamp>/, 'stripped by default');
   assert.match(inv, /<allocation>5<\/allocation>/, 'importable record field survives');
+
+  rmSync(src, { recursive: true });
+  rmSync(out, { recursive: true });
+});
+
+test('opts.keepAllocationTimestamps threads through transformTree to cleanInventoryXml', () => {
+  // regression: every other test in this file hardcodes keepAllocationTimestamps to false (via
+  // run()'s default), so nothing previously exercised the true branch through the FULL
+  // transformTree path (as opposed to calling cleanInventoryXml directly, which Task 6 already
+  // covers). This proves opts is passed through transformTree -> writeTransformedFile unchanged
+  const src = setupSrc();
+  const out = mkdtempSync(join(tmpdir(), 'sfra-out-'));
+  run(src, out, 'J', null, true);
+
+  const inv = readFileSync(join(out, 'inventory-lists/inventory_m_store_store1J.xml'), 'utf8');
+  assert.match(inv, /<allocation-timestamp>2023-01-01T00:00:00\.000Z<\/allocation-timestamp>/,
+    'survives when keepAllocationTimestamps is true');
+  // the always-stripped read-only fields must still be gone regardless of this flag
+  assert.doesNotMatch(inv, /<ats>/);
+  assert.doesNotMatch(inv, /<on-order>0<\/on-order>/);
+  assert.doesNotMatch(inv, /<turnover>/);
 
   rmSync(src, { recursive: true });
   rmSync(out, { recursive: true });
