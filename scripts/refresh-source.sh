@@ -4,6 +4,7 @@ set -euo pipefail
 
 REPO="https://github.com/SalesforceCommerceCloud/storefrontdata.git"
 TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
 DEST="$(cd "$(dirname "$0")/.." && pwd)/src/demo_data_sfra"
 
 echo "Cloning $REPO ..."
@@ -16,7 +17,6 @@ fi
 
 echo "Syncing into $DEST ..."
 rsync -a --delete --exclude='.DS_Store' "$TMP/demo_data_sfra/" "$DEST/"
-rm -rf "$TMP"
 echo "Done. Review 'git diff' and note the new upstream version in PROVENANCE.md before committing."
 echo "NOTE: this refreshes only the site-archive data. The corrected src/cache-settings.xml is"
 echo "maintained by hand and is NOT overwritten."
