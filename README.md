@@ -35,11 +35,11 @@ This is not decorative. Doing this by hand is what motivated the tool: a hand-ed
 
 The OOTB data ships page caching **disabled on development** and **enabled on staging**, which is backwards for how the instances actually relate: Development and Production are copies of Staging, so Staging is the one you edit against and the one that wants caching off.
 
-A cache-settings file always carries all three blocks, and an import takes all three. Which one is *active* depends on the instance doing the reading, so there is no way to ship "just the staging setting" – the archive necessarily states a value for every environment.
+A cache-settings file always carries all three blocks, and every instance imports and stores all three of them. What differs is which block an instance actually **obeys**: only the one matching its own role has any effect. The other two sit there, editable and inert – you can change the production settings from a sandbox and they will save perfectly happily, they just will not do anything there.
 
-That makes the default deliberately conservative: **caching is enabled for production only.**
+So there is no way to ship "just the staging setting". The archive necessarily states a value for every environment, which makes the default deliberately conservative: **caching is enabled for production only.**
 
-| Block | Default | Read by |
+| Block | Default | Obeyed by |
 |---|---|---|
 | `development` | OFF | Development, **and sandboxes** |
 | `staging` | OFF | Staging |
@@ -50,7 +50,7 @@ Opt an environment back in with `--cache`, which is repeatable:
     node generate.mjs --token alice --cache stg          # staging on, sandboxes still off
     node generate.mjs --token alice -c stg -c dev        # both on
 
-**Why development is off by default.** A sandbox reads the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
+**Why development is off by default.** A sandbox obeys the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
 
 Existing `<page-cache-partitions>` in the source are preserved untouched.
 

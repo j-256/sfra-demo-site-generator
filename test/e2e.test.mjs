@@ -123,7 +123,7 @@ test('full generate with --token J: valid, isolated, cache-corrected', () => {
     assert.ok(existsSync(join(tree, 'sites/RefArchGlobalJ/site.xml')));
 
     // cache corrected: dev enabled, staging disabled in RefArchJ
-    // default is production-only caching: a sandbox reads the development block, so leaving dev
+    // default is production-only caching: a sandbox obeys the development block, so leaving dev
     // enabled would silently turn caching on there
     const cache = readFileSync(join(tree, 'sites/RefArchJ/cache-settings.xml'), 'utf8');
     const dev = cache.match(/<development>[\s\S]*?<\/development>/)[0];

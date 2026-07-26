@@ -121,9 +121,10 @@ EXAMPLES
   node generate.mjs -t bob --only primary --out /tmp/bob
 
 CAVEATS
-  A sandbox reads the development block of a cache-settings file, so passing
-  --cache development turns page caching on for sandboxes as well as for
-  Development. That is usually not wanted while iterating on a sandbox.
+  Every instance stores all three cache blocks and obeys only the one matching
+  its own role. A sandbox obeys the development block, so --cache development
+  turns page caching on for sandboxes as well as Development. That is usually
+  not wanted while iterating on a sandbox.
 
   Inventory imports separately from the site archive. Upload the generated
   inventory_<token>.xml through Merchant Tools > Product and Catalogs >
