@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // generate.mjs
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import { existsSync, rmSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { existsSync, rmSync, mkdirSync, readFileSync, writeFileSync, readdirSync, realpathSync } from 'node:fs';
 import { parseOptions } from './lib/options.mjs';
 import { harvestIds } from './lib/harvest.mjs';
 import { buildRenameMap } from './lib/rename-map.mjs';
@@ -23,9 +23,8 @@ export function run(argv) {
   const innerName = `demo_data_sfra_${token}`;
   const outTree = join(outRoot, innerName);
 
-  // NOTE this clears only the unzipped output TREE. The zip archives are handled by zipDir,
-  // which unlinks an existing archive before writing - necessary because `zip -r` merges into a
-  // pre-existing zip and would otherwise retain entries whose source files are gone
+  // This clears only the unzipped output tree
+  // zipDir replaces each archive after it has collected the current source tree
   if (existsSync(outTree)) {
     if (!opts.force) throw new Error(`${outTree} exists; pass --force to overwrite`);
     rmSync(outTree, { recursive: true });
@@ -58,13 +57,9 @@ export function run(argv) {
   const invPath = join(outRoot, `inventory_${token}.xml`);
   writeFileSync(invPath, invDoc);
 
-  // archives
-  // zipDir resolves zipPath relative to dirname(dir) and runs zip with cwd=dirname(dir), so pass
-  // BARE FILENAMES for zipPath. Passing join(outRoot, ...) would double the outRoot segment
-  // (out/out/demo_data_sfra_J.zip)
+  // zipPath is relative to dirname(dir), so pass bare filenames
   zipDir(outTree, `${innerName}.zip`, innerName);
-  // for the inventory archive, pass the doc's own path as dir: dirname() then lands on outRoot,
-  // so the zip is written there and innerName is the file sitting in that same directory
+  // Using the inventory document as dir places its archive beside the document
   zipDir(invPath, `inventory_${token}.zip`, `inventory_${token}.xml`);
 
   console.log(`Generated ${innerName}.zip and inventory_${token}.zip in ${outRoot}`);
@@ -136,17 +131,30 @@ CAVEATS
 // kept in sync with lib/options.mjs's MAX_TOKEN by the help-parity test
 const MAX_TOKEN_HELP = 19;
 
-// CLI entry
-if (process.argv[1] && process.argv[1].endsWith('generate.mjs')) {
+export function main(argv) {
   try {
-    const r = run(process.argv.slice(2));
-    if (r && r.help) {
-      console.log(r.help);
-      process.exit(0);
+    const result = run(argv);
+    if (result && result.help) {
+      console.log(result.help);
     }
+    return result;
   } catch (e) {
     console.error(String(e.message || e));
-    // usage errors are 2 so a caller can distinguish them from a runtime failure
-    process.exit(e.exitCode || 1);
+    // Usage errors are 2 so callers can distinguish them from runtime failures
+    process.exitCode = e.exitCode || 1;
+    return { ok: false, error: e };
   }
+}
+
+function isDirectNodeRun() {
+  if (!process.argv[1]) return false;
+  try {
+    return realpathSync(resolve(process.argv[1])) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectNodeRun()) {
+  main(process.argv.slice(2));
 }

@@ -20,15 +20,7 @@ test('zipDir produces a zip containing the inner folder', () => {
   rmSync(work, { recursive: true });
 });
 
-// Pins the CONTRACT documented on zipDir: a relative zipPath (the natural case - every real call
-// site in this project passes a bare filename, e.g. `${innerName}.zip`) resolves against
-// dirname(dir), not against the process cwd. This is the scenario an earlier fix-round drive-by
-// almost broke: swapping to a single-argument resolve(zipPath) would have resolved bare filenames
-// against process.cwd() instead, silently landing the archive somewhere other than next to the
-// source tree. process.chdir is used here (restored in finally) so a bare relative zipPath has a
-// process cwd that is DIFFERENT from dirname(dir) - if resolution ever drifted to process.cwd(),
-// this test would look for the zip in the wrong place and fail loudly rather than passing by
-// coincidence
+// A relative zipPath resolves against dirname(dir), not the process cwd
 test('zipDir resolves a relative zipPath against dirname(dir), not the process cwd', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-relzip-'));
   const tree = join(work, 'demo_data_sfra_J');
@@ -36,10 +28,10 @@ test('zipDir resolves a relative zipPath against dirname(dir), not the process c
   writeFileSync(join(tree, 'f.xml'), '<f/>');
   const originalCwd = process.cwd();
   try {
-    process.chdir(tmpdir()); // deliberately NOT dirname(tree), so a wrong resolution is detectable
-    const relZip = 'demo_data_sfra_J.zip'; // bare filename, exactly how every real call site builds it
+    process.chdir(tmpdir()); // Keep the process cwd different from dirname(tree)
+    const relZip = 'demo_data_sfra_J.zip';
     zipDir(tree, relZip, 'demo_data_sfra_J');
-    const expected = join(dirname(tree), relZip); // dirname(dir) === work
+    const expected = join(dirname(tree), relZip);
     assert.ok(existsSync(expected), `expected zip at ${expected} (dirname(dir)-relative)`);
     assert.ok(!existsSync(join(process.cwd(), relZip)), 'must not have landed relative to process cwd instead');
     const listing = execFileSync('unzip', ['-l', expected], { encoding: 'utf8' });
@@ -50,12 +42,6 @@ test('zipDir resolves a relative zipPath against dirname(dir), not the process c
   rmSync(work, { recursive: true });
 });
 
-// Regression: `zip -r` MERGES into a pre-existing archive at the same path - it updates entries
-// that still exist in the source and, critically, KEEPS entries whose source file was since
-// DELETED. Re-running zipDir at the same zipPath after the source tree changed must produce a
-// FRESH archive (stale entries gone), not an accumulating one. Reproduces the exact shape found
-// in review: zip once with stale-file.xml + keep-file.xml, then delete stale-file.xml, modify
-// keep-file.xml, add new-file.xml, and re-zip to the SAME zipPath
 test('zipDir re-run at the same zipPath does not retain a since-deleted source file (no stale merge)', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-stale-'));
   const tree = join(work, 'demo_data_sfra_J');
@@ -78,13 +64,7 @@ test('zipDir re-run at the same zipPath does not retain a since-deleted source f
   rmSync(work, { recursive: true });
 });
 
-// Regression: zip's OWN argv parser (not a shell - execFileSync never invokes one) treats a
-// leading "-" as an option introducer for positional args. A directory literally named "-x" is
-// misread as the "-x" (exclude) flag and errors "requires a value" unless a "--" separator
-// precedes it. Call sites always build innerName as a fixed literal prefix
-// (demo_data_sfra_<token> / inventory_<token>.xml) so this is defense in depth, not a reachable
-// bug today - but the fix is cheap and protects the module boundary regardless of caller care
-test('zipDir handles a dash-leading innerName via the -- separator (zip argv parsing, not shell injection)', () => {
+test('zipDir handles a dash-leading innerName', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-dash-'));
   const tree = join(work, '-x');
   mkdirSync(tree, { recursive: true });
@@ -96,26 +76,51 @@ test('zipDir handles a dash-leading innerName via the -- separator (zip argv par
   rmSync(work, { recursive: true });
 });
 
-// Regression: zip's argv parser ALSO misreads a dash-leading ARCHIVE path (zipPath) as an
-// option - e.g. "-foo.zip" errors "short option ... not supported" / "invalid date entered for
-// -t option". Unlike innerName, this one IS reachable in practice: lib/options.mjs's --out is
-// unvalidated, and --out is one segment of how zipPath gets built downstream. zip refuses "--"
-// immediately before the archive-name position ("can't use -- before archive name"), so the fix
-// has to be normalization, not a "--" separator. The zipPath passed here is a BARE relative
-// string starting with "-" (not pre-joined with the absolute work dir, which would cancel the
-// leading dash and defeat the repro) - zip resolves it relative to zipDir's execFileSync `cwd`
-// (dir's parent), so the resulting file is expected at join(parent, relDashZip)
-test('zipDir handles a dash-leading relative zipPath without misparsing it as a zip option', () => {
+test('zipDir handles a dash-leading relative zipPath', () => {
   const work = mkdtempSync(join(tmpdir(), 'arc-dashzip-'));
   const tree = join(work, 'demo_data_sfra_J');
   mkdirSync(tree, { recursive: true });
   writeFileSync(join(tree, 'f.xml'), '<f/>');
   const relDashZip = '-dash-out.zip';
   zipDir(tree, relDashZip, 'demo_data_sfra_J');
-  const expectedZip = join(work, relDashZip); // parent (dirname(tree)) === work
+  const expectedZip = join(work, relDashZip);
   assert.ok(existsSync(expectedZip), `expected zip at ${expectedZip}`);
   const listing = execFileSync('unzip', ['-l', expectedZip], { encoding: 'utf8' });
   assert.match(listing, /demo_data_sfra_J\/f\.xml/);
+  rmSync(work, { recursive: true });
+});
+
+test('zipDir does not depend on an executable in PATH', () => {
+  const work = mkdtempSync(join(tmpdir(), 'arc-path-'));
+  const tree = join(work, 'demo_data_sfra_J');
+  mkdirSync(tree, { recursive: true });
+  writeFileSync(join(tree, 'f.xml'), '<f/>');
+  const zip = join(work, 'demo_data_sfra_J.zip');
+  const originalPath = process.env.PATH;
+
+  try {
+    process.env.PATH = '/path-that-does-not-exist';
+    zipDir(tree, zip, 'demo_data_sfra_J');
+  } finally {
+    if (originalPath === undefined) delete process.env.PATH;
+    else process.env.PATH = originalPath;
+  }
+
+  const listing = execFileSync('unzip', ['-l', zip], { encoding: 'utf8' });
+  assert.match(listing, /demo_data_sfra_J\/f\.xml/);
+  rmSync(work, { recursive: true });
+});
+
+test('zipDir marks UTF-8 entry names correctly', () => {
+  const work = mkdtempSync(join(tmpdir(), 'arc-utf8-'));
+  const tree = join(work, 'demo_data_sfra_J');
+  mkdirSync(tree, { recursive: true });
+  writeFileSync(join(tree, 'café.xml'), '<f/>');
+  const zip = join(work, 'demo_data_sfra_J.zip');
+  zipDir(tree, zip, 'demo_data_sfra_J');
+
+  const listing = execFileSync('unzip', ['-Z1', zip], { encoding: 'utf8' });
+  assert.match(listing, /demo_data_sfra_J\/café\.xml/);
   rmSync(work, { recursive: true });
 });
 
