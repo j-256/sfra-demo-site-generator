@@ -3,9 +3,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseOptions } from '../lib/options.mjs';
 
-test('capitalizes first char of token', () => {
-  assert.equal(parseOptions(['--token', 'alice']).token, 'Alice');
+test('preserves token value and case exactly', () => {
+  assert.equal(parseOptions(['--token', 'alice']).token, 'alice');
+  assert.equal(parseOptions(['--token', 'aLiCe']).token, 'aLiCe');
   assert.equal(parseOptions(['--token', 'J']).token, 'J');
+  assert.equal(parseOptions(['--token=_alice']).token, '_alice');
+  assert.equal(parseOptions(['--token=-alice']).token, '-alice');
 });
 
 test('rejects missing token', () => {
@@ -104,13 +107,13 @@ test('short options bundle, and a value-taking short can be glued', () => {
   assert.equal(bundled.keepAllocationTimestamps, true);
   assert.equal(bundled.force, true);
   // -tx == -t x
-  assert.equal(parseOptions(['-tx']).token, 'X');
+  assert.equal(parseOptions(['-tx']).token, 'x');
   // -c takes a value when glued
   assert.deepEqual(parseOptions(['-t', 'x', '-cstg']).cacheEnvs.sort(), ['production', 'staging']);
 });
 
 test('long options accept an = joined value', () => {
-  assert.equal(parseOptions(['--token=alice']).token, 'Alice');
+  assert.equal(parseOptions(['--token=alice']).token, 'alice');
   assert.equal(parseOptions(['--token', 'x', '--out=dist']).out, 'dist');
   assert.deepEqual(parseOptions(['--token', 'x', '--cache=dev']).cacheEnvs.sort(),
     ['development', 'production']);

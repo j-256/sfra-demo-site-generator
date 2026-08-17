@@ -3,9 +3,9 @@
 Generate an isolated, referentially-valid SFRA demo site archive under a token of your choosing, so several people can each run their own RefArch demo site on one shared B2C Commerce instance.
 
     node generate.mjs --token alice
-    # -> out/demo_data_sfra_Alice.zip   sites RefArchAlice + RefArchGlobalAlice
-    #    out/inventory_Alice.xml        the inventory list, imported separately
-    #    out/inventory_Alice.zip        the same document, zipped for transport
+    # -> out/demo_data_sfra_alice.zip   sites RefArchalice + RefArchGlobalalice
+    #    out/inventory_alice.xml        the inventory list, imported separately
+    #    out/inventory_alice.zip        the same document, zipped for transport
 
 Zero runtime dependencies. The OOTB demo data is vendored in this repo, so a clone is all you need – no network access and nothing to supply by hand.
 
@@ -64,7 +64,7 @@ Existing `<page-cache-partitions>` in the source are preserved untouched.
 
 | Flag | Effect |
 |---|---|
-| `-t, --token <t>` | Required. The isolation token. First letter is auto-capitalized. `[A-Za-z0-9_-]`, 19 chars max |
+| `-t, --token <t>` | Required. The isolation token, used exactly as supplied with case preserved. `[A-Za-z0-9_-]`, 19 chars max |
 | `-c, --cache <env>` | Enable page caching for an environment. Repeatable. Accepts `production`, `staging`, `development` and the aliases `prd`, `stg`, `dev` |
 | `-O, --only primary\|global` | Emit just one of the two sites instead of both |
 | `-k, --keep-allocation-timestamps` | Retain `allocation-timestamp` in inventory records |

@@ -310,6 +310,8 @@ test('--help and -h print usage and exit 0, and the help stays in sync with the 
 
   // surface parity: every flag the parser accepts is documented, with its short form
   const help = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), '--help'], { encoding: 'utf8' }).stdout;
+  assert.match(help, /exactly as supplied; case is\s+preserved/,
+    '--help should promise that token case is preserved');
   const parser = readFileSync(join(REPO_ROOT, 'lib/options.mjs'), 'utf8');
   const longFlags = [...new Set([...parser.matchAll(/'(--[a-z][a-z-]+)'/g)].map((m) => m[1]))];
   assert.ok(longFlags.length >= 6, `expected to find the parser's long flags, got ${longFlags}`);

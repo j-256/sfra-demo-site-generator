@@ -98,7 +98,8 @@ DESCRIPTION
 
 OPTIONS
   -t, --token <token>              Required. Isolation token appended to every
-                                   org-scoped id. First letter is capitalized.
+                                   org-scoped id exactly as supplied; case is
+                                   preserved.
                                    Accepts [A-Za-z0-9_-], ${MAX_TOKEN_HELP} chars max
   -c, --cache <env>                Enable page caching for an environment.
                                    Repeatable. production is always enabled.
