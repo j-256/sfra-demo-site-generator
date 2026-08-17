@@ -7,7 +7,7 @@ Generate an isolated, referentially-valid SFRA demo site archive under a token o
     #    out/inventory_alice.xml        the inventory list, imported separately
     #    out/inventory_alice.zip        the same document, zipped for transport
 
-Zero runtime dependencies. The OOTB demo data is vendored in this repo, so a clone is all you need – no network access and nothing to supply by hand.
+The standalone release executable has zero runtime dependencies. The OOTB demo data is embedded in it, so generation needs no network access and nothing to supply by hand.
 
 ## Why
 
@@ -16,6 +16,29 @@ Zero runtime dependencies. The OOTB demo data is vendored in this repo, so a clo
 **Ready-made SFRA demo data is only offered on sandboxes.** On Staging you supply the files yourself, and the usual workaround is a round trip: import the data on a sandbox, export it from there, then import that archive into Staging.
 
 **Nothing here assumes what is already on the instance.** Every id is derived from your token alone, so the archive imports the same way onto a bare Staging instance as onto a sandbox that already has a RefArch site. That is the property that makes it safe to hand to someone else.
+
+## Standalone executable
+
+Download the artifact for your platform from the repository's Releases page. The macOS and Linux archives each contain an executable named `sfra-demo-site-generator`; Windows is distributed as an executable directly.
+
+| Platform | Artifact suffix |
+|---|---|
+| macOS on Apple silicon | `macos-arm64.tar.gz` |
+| macOS on Intel | `macos-x64.tar.gz` |
+| Linux on ARM64 | `linux-arm64.tar.gz` |
+| Linux on x64 | `linux-x64.tar.gz` |
+| Windows on x64 | `windows-x64.exe` |
+
+On macOS, extract the download and run the executable:
+
+    tar -xzf sfra-demo-site-generator-vX.Y.Z-macos-arm64.tar.gz
+    ./sfra-demo-site-generator --token alice
+
+On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly.
+
+The macOS executables are ad hoc signed, not Developer ID signed or notarized. If Gatekeeper blocks a browser-downloaded executable, open it once through Finder's Open context menu or remove its quarantine attribute with `xattr -d com.apple.quarantine sfra-demo-site-generator`.
+
+To run from a source checkout instead, use `./generate --token alice` as shown throughout this README.
 
 ## What gets renamed, and what does not
 
@@ -56,9 +79,10 @@ Existing `<page-cache-partitions>` in the source are preserved untouched.
 
 ## Requirements
 
-- Node.js 18+ (standard library only)
-- `zip` on PATH
-- `unzip` and `xmllint`, for the test suite only
+- Standalone release: no runtime dependencies
+- Source checkout: Node.js 18+ using only the standard library
+- Standalone builds: the Deno version pinned in `.deno-version` and `tar`
+- Test suite: `unzip` and `xmllint`
 
 ## Options
 
@@ -116,3 +140,18 @@ The OOTB data lives under `src/` and its origin is recorded in PROVENANCE.md. Ru
     npm test
 
 Unit tests per module, plus end-to-end tests that run the real pipeline over the full vendored dataset and assert on the result: site isolation, corrected cache settings, byte-identical passthrough files, well-formed output, and that a dangling reference produces no archive.
+
+## Building and publishing a release
+
+The preparation command runs the test suite, builds every supported target, packages macOS and Linux executables in archives that retain executable mode, and validates the extracted executable for the build host with `PATH` disabled. It writes the artifacts under `dist/releases/<tag>/`.
+
+Set `package.json` to the release version, then run:
+
+    TAG=vX.Y.Z
+    REPOSITORY=host/owner/repository
+    npm run release:prepare -- "$TAG"
+    git tag -a "$TAG" -m "$TAG"
+    git push origin "$TAG"
+    npm run release:publish -- "$TAG" "$REPOSITORY" /path/to/release-notes.md
+
+The publisher requires a clean worktree, a local tag pointing to `HEAD`, the same tag on the named remote repository, all expected artifacts, and no existing release for that tag. It displays the repository, tag, and notes path and requires confirmation immediately before creating the release. It never creates or pushes a tag.

@@ -6,7 +6,12 @@
   "engines": { "node": ">=18" },
   "scripts": {
     "generate": "./generate",
-    "test": "node --test"
+    "test": "node --test",
+    "standalone:build": "./scripts/build-standalone.sh",
+    "standalone:validate": "./scripts/validate-standalone.sh",
+    "release:build": "./scripts/build-release.sh",
+    "release:prepare": "./scripts/prepare-release.sh",
+    "release:publish": "./scripts/publish-release.sh"
   },
   "license": "UNLICENSED",
   "private": true
