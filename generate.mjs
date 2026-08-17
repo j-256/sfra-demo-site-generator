@@ -78,10 +78,10 @@ export function helpText() {
   const s = process.stdout.isTTY ? '[4m' : '';
   const r = process.stdout.isTTY ? '[24m' : '';
   return `NAME
-  generate.mjs - generate an isolated SFRA demo site archive for a chosen token
+  generate - generate an isolated SFRA demo site archive for a chosen token
 
 SYNOPSIS
-  node generate.mjs --token <${s}token${r}> [${s}options${r}]
+  ./generate --token <${s}token${r}> [${s}options${r}]
 
 DESCRIPTION
   Produces a site-import archive in which every org-scoped identifier carries your
@@ -117,9 +117,9 @@ EXIT STATUS
   2  Usage error (missing or invalid argument)
 
 EXAMPLES
-  node generate.mjs --token alice
-  node generate.mjs -t alice -c stg
-  node generate.mjs -t bob --only primary --out /tmp/bob
+  ./generate --token alice
+  ./generate -t alice -c stg
+  ./generate -t bob --only primary --out output/bob
 
 CAVEATS
   Every instance stores all three cache blocks and obeys only the one matching

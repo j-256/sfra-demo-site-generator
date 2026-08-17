@@ -2,7 +2,7 @@
 
 Generate an isolated, referentially-valid SFRA demo site archive under a token of your choosing, so several people can each run their own RefArch demo site on one shared B2C Commerce instance.
 
-    node generate.mjs --token alice
+    ./generate --token alice
     # -> out/demo_data_sfra_alice.zip   sites RefArchalice + RefArchGlobalalice
     #    out/inventory_alice.xml        the inventory list, imported separately
     #    out/inventory_alice.zip        the same document, zipped for transport
@@ -47,8 +47,8 @@ So there is no way to ship "just the staging setting". The archive necessarily s
 
 Opt an environment back in with `--cache`, which is repeatable:
 
-    node generate.mjs --token alice --cache stg          # staging on, sandboxes still off
-    node generate.mjs --token alice -c stg -c dev        # both on
+    ./generate --token alice --cache stg          # staging on, sandboxes still off
+    ./generate --token alice -c stg -c dev        # both on
 
 **Why development is off by default.** A sandbox obeys the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
 
@@ -72,7 +72,7 @@ Existing `<page-cache-partitions>` in the source are preserved untouched.
 | `-f, --force` | Regenerate over an existing output tree |
 | `-h, --help` | Show usage |
 
-Long options also accept an `=` joined value (`--token=alice`), and short flags bundle (`-kf`) and glue (`-talice`). `node generate.mjs --help` is self-contained, so the tool is usable without this README.
+Long options also accept an `=` joined value (`--token=alice`), and short flags bundle (`-kf`) and glue (`-talice`). `./generate --help` is self-contained, so the tool is usable without this README.
 
 Exit codes: `0` success, `1` runtime failure (including a dangling reference that blocked archiving), `2` usage error.
 

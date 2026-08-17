@@ -5,7 +5,7 @@
   "type": "module",
   "engines": { "node": ">=18" },
   "scripts": {
-    "generate": "node generate.mjs",
+    "generate": "./generate",
     "test": "node --test"
   },
   "license": "UNLICENSED",

@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(here, '..');
+const CLI = join(REPO_ROOT, 'generate');
 
 // Artifacts here are large (~200MB unzipped tree + ~81MB zip per run), so OUT lives under the OS
 // temp dir rather than the repo. Each test creates its own mkdtemp parent and rmSync's it in a
@@ -250,7 +251,7 @@ test('--only primary / --only global through the real CLI: selected site only, i
 });
 
 test('CLI subprocess: missing --token produces a clean one-line message and exit 2', () => {
-  const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs')], { encoding: 'utf8' });
+  const r = spawnSync(CLI, [], { encoding: 'utf8' });
   assert.equal(r.status, 2, 'a usage error exits 2, distinct from a runtime failure');
   assert.match(r.stderr, /token is required/);
   assert.doesNotMatch(r.stderr, /at .*\(.*:\d+:\d+\)/, 'stderr must not contain a stack trace frame');
@@ -289,7 +290,7 @@ test('--cache through the real CLI: production only by default, staging and deve
 });
 
 test('--cache rejects an unknown environment through the real CLI', () => {
-  const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), '--token', 'J', '--cache', 'sandbox'],
+  const r = spawnSync(CLI, ['--token', 'J', '--cache', 'sandbox'],
     { encoding: 'utf8' });
   assert.equal(r.status, 2, 'a bad flag value is a usage error');
   assert.match(r.stderr, /--cache requires one of/);
@@ -298,9 +299,10 @@ test('--cache rejects an unknown environment through the real CLI', () => {
 
 test('--help and -h print usage and exit 0, and the help stays in sync with the parser', () => {
   for (const flag of ['--help', '-h']) {
-    const r = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), flag], { encoding: 'utf8' });
+    const r = spawnSync(CLI, [flag], { encoding: 'utf8' });
     assert.equal(r.status, 0, `${flag} must exit 0`);
     assert.match(r.stdout, /^NAME/, `${flag} must print usage on stdout`);
+    assert.match(r.stdout, /\.\/generate --token/, `${flag} must show the executable entrypoint`);
     for (const section of ['SYNOPSIS', 'DESCRIPTION', 'OPTIONS', 'EXIT STATUS', 'EXAMPLES', 'CAVEATS']) {
       assert.ok(r.stdout.includes(section), `${flag} output should have a ${section} section`);
     }
@@ -309,7 +311,7 @@ test('--help and -h print usage and exit 0, and the help stays in sync with the 
   }
 
   // surface parity: every flag the parser accepts is documented, with its short form
-  const help = spawnSync('node', [join(REPO_ROOT, 'generate.mjs'), '--help'], { encoding: 'utf8' }).stdout;
+  const help = spawnSync(CLI, ['--help'], { encoding: 'utf8' }).stdout;
   assert.match(help, /exactly as supplied; case is\s+preserved/,
     '--help should promise that token case is preserved');
   const parser = readFileSync(join(REPO_ROOT, 'lib/options.mjs'), 'utf8');
