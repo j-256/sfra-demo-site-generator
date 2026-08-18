@@ -2,7 +2,7 @@
 
 Generate an isolated, referentially-valid SFRA demo site archive under a token of your choosing, so several people can each run their own RefArch demo site on one shared B2C Commerce instance.
 
-    ./generate --token alice
+    ./generate --token alice --cache dev
     # -> out/demo_data_sfra_alice.zip   sites RefArchalice + RefArchGlobalalice
     #    out/inventory_alice.xml        the inventory list, imported separately
     #    out/inventory_alice.zip        the same document, zipped for transport
@@ -32,21 +32,40 @@ Download the artifact for your platform from the repository's Releases page. The
 On macOS, extract the download and run the executable:
 
     tar -xzf sfra-demo-site-generator-vX.Y.Z-macos-arm64.tar.gz
-    ./sfra-demo-site-generator --token alice
+    ./sfra-demo-site-generator --token alice --cache dev
 
 On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly.
 
 The macOS executables are ad hoc signed, not Developer ID signed or notarized. If Gatekeeper blocks a browser-downloaded executable, open it once through Finder's Open context menu or remove its quarantine attribute with `xattr -d com.apple.quarantine sfra-demo-site-generator`.
 
-To run from a source checkout instead, use `./generate --token alice` as shown throughout this README.
+To run from a source checkout instead, use `./generate --token alice --cache dev` as shown throughout this README.
 
 ## What gets renamed, and what does not
 
 Your token is appended to every **org-scoped** identifier, because those share one namespace instance-wide and would otherwise collide:
 
-sites, catalogs, products, pricebooks, inventory lists, the shared library, the customer list, stores, jobs.
+- Sites
+- Catalogs
+- Products
+- Pricebooks
+- Inventory lists
+- The shared library
+- The customer list
+- Stores
+- Jobs
 
-**Site-scoped** objects are deliberately left alone: coupons, campaigns, promotions, slots, customer groups, shipping and payment methods, search and sort rules, page-meta-tag rules. Each site owns its own namespace for these, so a second site's copy cannot collide with the first's. Categories and content assets are likewise untouched, because the catalog and library that contain them are renamed.
+**Site-scoped** objects are deliberately left alone:
+
+- Coupons
+- Campaigns
+- Promotions
+- Slots
+- Customer groups
+- Shipping and payment methods
+- Search and sort rules
+- Page-meta-tag rules
+
+Each site owns its own namespace for these, so a second site's copy cannot collide with the first's. Categories and content assets are likewise untouched, because the catalog and library that contain them are renamed.
 
 ## Every archive is verified before it is written
 
@@ -70,8 +89,8 @@ So there is no way to ship "just the staging setting". The archive necessarily s
 
 Opt an environment back in with `--cache`, which is repeatable:
 
-    ./generate --token alice --cache stg          # staging on, sandboxes still off
-    ./generate --token alice -c stg -c dev        # both on
+    ./generate --token alice --cache dev          # development and sandboxes on, Staging still off
+    ./generate --token alice -c dev -c stg        # development, sandboxes, and Staging on
 
 **Why development is off by default.** A sandbox obeys the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
 
@@ -127,7 +146,17 @@ Inventory records are cleaned as they are tokenized:
 
 ## What passes through untouched
 
-`active-data/*.csv`, `active-data-lite/*.csv`, `meta/*.xml`, `*.sample`, `urls/*`, `geolocations/*`, `version.txt`, the shared library's one `.css` asset, and every image are copied byte for byte.
+The following are copied byte for byte:
+
+- `active-data/*.csv`
+- `active-data-lite/*.csv`
+- `meta/*.xml`
+- `*.sample`
+- `urls/*`
+- `geolocations/*`
+- `version.txt`
+- The shared library's one `.css` asset
+- Every image
 
 One consequence is worth stating plainly. The active-data CSVs do carry product ids, in their `productID` column, and those are **not** renamed while the catalog's product ids are. The mismatch is intentional, but it means the imported Active Data never matches the tokenized catalog, so an activeData-driven sort rule (`most-popular`, `top-sellers`) has nothing to sort by and will not reorder results in the generated site.
 
