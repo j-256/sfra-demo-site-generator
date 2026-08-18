@@ -179,7 +179,7 @@ Set `package.json` to the release version, then run:
     TAG=vX.Y.Z
     REPOSITORY=host/owner/repository
     npm run release:prepare -- "$TAG"
-    git tag -a "$TAG" -m "$TAG"
+    git tag -a "$TAG" -m "${TAG#v}"
     git push origin "$TAG"
     npm run release:publish -- "$TAG" "$REPOSITORY" /path/to/release-notes.md
 
