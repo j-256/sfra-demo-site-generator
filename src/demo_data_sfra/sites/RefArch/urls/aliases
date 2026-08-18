@@ -1,81 +1,127 @@
 {
-	/* 
-	 *
-	 * The file is used to configure host names for a site.
-	 *
-	 * Please remove all comments before installing this file!
-	 *
-	 * Go to http://www.jsonlint.com/ to validate our file.
-	 * 
-	 */
-   
-	/*	
-	 *  __version must be set to "1"	
-	 */
-	
-	"__version" : "1",
-	
-	/*
-	 * Settings section is used to configure main HTTP and HTTPS hostnames for a site.
-	 *  
-	 */
-	"settings" : {
-		// "http-host" : "www.refarch.com",
-		// "https-host" : "secure. refarch.com"
-	},
-	
+    /*
+     * RefArch is the single-locale example and owns its hostname root
+     * Every example hostname is commented so generated sites cannot collide
+     *
+     * The OOTB starter says to remove all comments, but the alias parser supports them
+     * Alias files are not strict JSON; JSONC conveniences such as trailing commas are valid too
+     * Strict JSON validators need a temporary sanitized copy, not a changed import file
+     * Site import and export preserve comments and trailing commas byte-for-byte
+     */
+    "__version": "1",
 
-	/*	
-	 * Host name definitions. 
-	 * The following section allows to define additional hostnames associated with the site.
-	 * With each hostname it is possible to define set of redirect rules.  
-	 *
-	 */
-	 
-	/*
-	 * Examples
-	 */
-	  
-	/*
-	 * Host redirect from refarch.com to www.sitegesis.com.
-	 * All URLs coming to refarch.com (http://refarch.com/*) will be permanently redirected (301) to www.refarch.com
-	 *  
-	 *	"refarch.com": [
-	 *      {
-	 *        "host": "www.refarch.com"
-	 *		}
-	 *  ],
-	 */
-    
-	/*
-	 * Host redirect to specific pipeline.
-	 * Hostname-only URL (e.g. http://electronics.refarch.com/) will result in a call of Search-Show pipeline.    
-	 *
-	 *	"electronics.refarch.com": [
-	 *      {
-	 *        "pipeline": "Search-Show",
-	 *        "params" : {"cgid":"electronics"}
-	 *		}
-	 *  ],
-	 */
+    "settings": {
+        /*
+         * Site-wide default hosts for absolute URL generation
+         * Used when neither URLAction nor the original request supplies a hostname
+         * These settings do not map incoming requests, so keep the hostname rule below
+         * HTTP and HTTPS defaults may differ when protocol-specific hosts are required
+         * Add a hostname rule below for every configured default
+         */
+        /*
+        "http-host": "www.example.com",
+        "https-host": "www.example.com"
+        */
 
+        /*
+         * Job-specific fallback for URL generation without a storefront request
+         * Used when URLAction has no hostname and no http-host or https-host applies
+         * Every job hostname must also map to this site below
+         */
+        /*
+        "job-hostnames": {
+            "default": "www.example.com"
+        }
+        */
+    },
 
-	/*
-	 * Host redirect based on user agent header.
-	 * With each rule it is possible to associate precondition based on content of "user-agent" http header.
-	 * In the example below an HTTP requests with "User-Agent" header containing "iphone" or "ipod" will be redirected (301) to apple.refarch.com
-	 * and those with "blackberry" to bb.refarch.com.      
-	 *
-	 *	"www.refarch.com": [
-	 *     	{
-	 *        "if-agent-contains": ["iphone","ipod"],
-	 *        "host": "apple.refarch.com"
-	 *	   	},
-	 *     	{
-	 *        "if-agent-contains": ["blackberry"],
-	 *        "host": "bb.refarch.com"
-	 *		}
-	 *  ]
-	 */
- 
+    /*
+     * Canonical single-locale storefront
+     *
+     * The first rule owns the hostname root and selects en_US
+     * The apply flag also routes host-only requests that have query parameters
+     * This is required by the bundled URL rules when they add ?lang=en_US
+     *
+     * The second rule removes the /home and /homepage controller entry points
+     * With the bundled URL rules they redirect to /?lang=en_US
+     * Pipeline is omitted from the root rule so Default-Start handles the root
+     */
+    /*
+    "www.example.com": [
+        {
+            "locale": "en_US",
+            "apply-to-host-only-request-with-params": "true"
+        },
+        {
+            "entry-point-pipelines": ["Default-Start", "Home-Show"],
+            "entry-point-destination": ["host"]
+        }
+    ],
+    */
+
+    /*
+     * Alternate, legacy, or misspelled hostname redirect
+     *
+     * Host redirects return permanent 301 responses
+     * A host-only request uses the configured root path
+     * A request below the source host keeps its original path instead
+     * The apply rule retains query parameters on a host-only redirect
+     */
+    /*
+    "example.com": [
+        {
+            "host": "www.example.com",
+            "path": "/"
+        },
+        {
+            "apply-to-host-only-request-with-params": "true"
+        }
+    ],
+    */
+
+    /*
+     * Host-only campaign or vanity-domain landing page
+     *
+     * The hostname root runs Page-Show with the configured content asset
+     * Normal paths such as /cart continue through storefront URL routing
+     * The apply flag keeps host-only links with tracking parameters on this rule
+     * This preserves the OOTB Search-Show/cgid pipeline-plus-params mechanism
+     * Page-Show avoids making the example depend on a populated search index
+     */
+    /*
+    "about.example.com": [
+        {
+            "locale": "en_US",
+            "pipeline": "Page-Show",
+            "params": {
+                "cid": "about-us"
+            },
+            "apply-to-host-only-request-with-params": "true"
+        }
+    ],
+    */
+
+    /*
+     * Legacy user-agent redirect with an unconditional fallback
+     *
+     * if-agent-contains matches text in the User-Agent request header
+     * Each matching host redirect returns a permanent 301 response
+     * Conditional rules must precede the fallback because rule order matters
+     * SFRA is responsive, so use this only for a genuinely separate experience
+     */
+    /*
+    "device.example.com": [
+        {
+            "if-agent-contains": ["iphone", "ipod", "android"],
+            "host": "m.example.com"
+        },
+        {
+            "if-agent-contains": ["blackberry"],
+            "host": "legacy-mobile.example.com"
+        },
+        {
+            "host": "www.example.com"
+        }
+    ],
+    */
 }

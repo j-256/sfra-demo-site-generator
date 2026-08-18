@@ -137,6 +137,10 @@ Both accept an Account Manager access token as a plain `Authorization: Bearer` h
 
 **3. Afterwards,** assign the cartridge path for the new site or sites and run a search index rebuild. The archive includes disabled `RebuildURLs<Token>` and `Reindex<Token>` jobs you can run for the latter.
 
+Each generated site includes a comprehensive commented hostname-alias reference. Both starters are corrected strict informational supersets of the OOTB files: they retain the valid HTTP/HTTPS defaults, permanent hostname redirects, host-only pipeline-plus-params, and multiple user-agent-condition patterns while correcting the false instruction to remove comments before import. `RefArch` adds root ownership, job hostnames, duplicate-homepage canonicalization, query-safe redirects, and two landing-page patterns. `RefArchGlobal` adds shared-host locale paths, a dedicated international hostname, locale-specific domains and job hostnames, and retired locale-domain redirects. Every example hostname remains commented, so separately generated sites cannot collide. Comments and trailing commas are valid in the B2C Commerce alias format and survive site import and export.
+
+The [B2C Commerce Hostname Aliases Cheat Sheet](ALIASES.md) explains the parser quirks, evaluation model, overloaded terminology, entry-point behavior, copyable ownership patterns, redirect limitations, and storefront verification matrix behind those examples.
+
 ## Inventory list cleaning
 
 Inventory records are cleaned as they are tokenized:
@@ -162,7 +166,7 @@ One consequence is worth stating plainly. The active-data CSVs do carry product 
 
 ## Refreshing the vendored data
 
-The OOTB data lives under `src/` and its origin is recorded in PROVENANCE.md. Run `scripts/refresh-source.sh` to re-pull upstream, then review the diff and commit deliberately. The script needs `git` and `rsync` on PATH, and leaves the hand-maintained `src/cache-settings.xml` alone.
+The OOTB data lives under `src/` and its origin is recorded in PROVENANCE.md. Run `scripts/refresh-source.sh` to re-pull upstream, then review the diff and commit deliberately. The script needs `git` and `rsync` on PATH, and leaves the hand-maintained `src/cache-settings.xml` and hostname-alias starters alone.
 
 ## Tests
 

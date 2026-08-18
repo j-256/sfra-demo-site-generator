@@ -1,5 +1,5 @@
 #!/bin/bash
-# Deliberately re-pull upstream SFRA demo data into src/. Review the diff before committing
+# Deliberately re-pull upstream SFRA demo data into src/ and preserve maintained overlays
 set -euo pipefail
 
 REPO="https://github.com/SalesforceCommerceCloud/storefrontdata.git"
@@ -16,7 +16,11 @@ if [ ! -d "$TMP/demo_data_sfra" ]; then
 fi
 
 echo "Syncing into $DEST ..."
-rsync -a --delete --exclude='.DS_Store' "$TMP/demo_data_sfra/" "$DEST/"
+rsync -a --delete \
+  --exclude='.DS_Store' \
+  --exclude='sites/RefArch/urls/aliases' \
+  --exclude='sites/RefArchGlobal/urls/aliases' \
+  "$TMP/demo_data_sfra/" "$DEST/"
 echo "Done. Review 'git diff' and note the new upstream version in PROVENANCE.md before committing."
-echo "NOTE: this refreshes only the site-archive data. The corrected src/cache-settings.xml is"
-echo "maintained by hand and is NOT overwritten."
+echo "NOTE: the corrected src/cache-settings.xml and site alias starters are maintained by hand"
+echo "and are NOT overwritten."
