@@ -1,6 +1,6 @@
 {
   "name": "sfra-demo-site-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate isolated, referentially-valid SFRA demo-data site-import archives for a chosen token",
   "type": "module",
   "engines": { "node": ">=18" },
