@@ -1,108 +1,141 @@
 # B2C Commerce Hostname Aliases Cheat Sheet
 
-This is an operational reference for people who already know what a B2C Commerce hostname aliases file is supposed to accomplish. It concentrates on the parser quirks, evaluation rules, overloaded terms, and interactions that make a plausible-looking configuration silently ineffective.
+This is an operational reference for people who already know what a B2C Commerce hostname aliases file is supposed to accomplish. It concentrates on the parser behavior, evaluation order, overloaded terms, and interactions that make a plausible-looking configuration silently ineffective.
 
 The complete maintained examples are the [RefArch single-locale aliases](src/demo_data_sfra/sites/RefArch/urls/aliases) and [RefArchGlobal multi-locale aliases](src/demo_data_sfra/sites/RefArchGlobal/urls/aliases). Every example hostname in those files is commented out so generated sites cannot collide.
 
 This guide stays with hostname aliases. It only discusses URL Rules where their generated pipeline endpoints interact with alias canonicalization.
 
-> Import success is not proof that an alias mapping works. Test the resulting storefront route, locale, redirect, and generated URL.
+> Import success is not proof that an alias mapping works. Test the resulting storefront route, locale, redirect, generated URL, and runtime error behavior.
 
 ## Keep four mechanisms separate
 
-Most confusion comes from treating the whole file as one routing table. It actually participates in several related mechanisms:
+Most confusion comes from treating the whole file as one routing table. It participates in four related mechanisms:
 
-1. **Incoming hostname routing:** A top-level hostname and its mapping rules decide which site and locale handle a storefront request.
-2. **Special host behavior:** A mapping rule can redirect to another host, invoke a controller or pipeline, add parameters, or filter by site path or user agent.
-3. **Absolute URL hostname selection:** `settings` supplies fallback hostnames when a URL action or storefront request does not already provide one.
+1. **Settings-based inbound ownership:** `settings.http-host`, `settings.https-host`, `settings.default`, and `settings.site-path` can assign a hostname root or path to a site.
+2. **Top-level inbound rules:** A top-level hostname array can select a site and locale, normalize a site path, redirect, invoke a controller or pipeline, or filter by user agent.
+3. **Absolute URL hostname selection:** URL APIs consult different hostname sources according to the API, request or job context, scheme settings, and applicable job hostname.
 4. **Duplicate-entry canonicalization:** `entry-point-pipelines` declares equivalent controllers or pipelines, while `entry-point-destination` ranks their canonical URL representations.
 
-The useful request-side mental model is:
+The request-side evaluation order starts with settings:
 
 ```text
 incoming hostname
-    -> matching top-level hostname key
-    -> applicable root, site-path, or conditional mapping
+    -> matching settings ownership, including default or site-path
+    -> otherwise matching top-level hostname key and rule
     -> site, locale, redirect, or explicit pipeline
     -> normal storefront URL resolution
     -> duplicate-entry canonicalization, if configured
 ```
 
-A hostname array is not a simple `switch` where exactly one object always wins. Ordinary mappings can coexist with the special entry-point declaration. Order matters when rules compete, particularly when a conditional rule is followed by an unconditional fallback.
+A settings match wins before top-level rules, even when a top-level rule has a more specific `if-site-path`. Use one ownership model consistently for every site that shares a hostname.
+
+A hostname array is not a simple `switch` where exactly one object always wins. Conditional and unconditional rules can compete, ordinary mappings can coexist with the special entry-point declaration, and order is consequential.
 
 ## The format is JSON-like, not JSON
 
 The OOTB starter says to remove comments before installation, but the platform parser accepts comments. It also accepts trailing commas after object properties, array elements, and top-level hostname entries. Site import and export preserve both comments and trailing commas byte-for-byte.
 
-Use JSONC-style comments and trailing commas freely, but treat aliases as their own grammar rather than assuming that every feature of a particular JSONC parser is supported. The alias parser also accepts equal signs for legacy compatibility, but colons are clearer and remain compatible with JSON-aware tooling.
+The alias parser accepts equal signs for legacy compatibility, but colons are clearer and remain compatible with JSON-aware tooling. Treat aliases as their own grammar rather than assuming every feature of a particular JSONC parser is supported.
 
-When a strict JSON validator is useful, validate a temporary copy with comments and trailing commas removed. Restore them afterward or leave the imported source untouched; strict JSON compatibility is a debugging technique, not an alias-file requirement.
+When a strict JSON validator is useful, validate a temporary sanitized copy. Do not change the imported source merely to satisfy a validator that does not implement the platform grammar.
 
-`__version` is required and must remain the string `"1"`. Other values cause the entries to be ignored.
+`__version` must be the string `"1"`. A site import can report success and store a file with another version or malformed syntax, but runtime compilation ignores its mappings. The tested result was an unallowlisted custom hostname and a 200 Technical Page. Business Manager applies a stricter save-time gate and rejects those inputs instead of storing them.
 
 ```jsonc
 {
     "__version": "1",
 
     "settings": {
-        // Optional URL-generation fallbacks
+        // Optional inbound ownership and URL-generation configuration
     },
 
     "www.example.com": [
-        // Incoming mappings for this hostname
+        // Optional top-level ownership or action rules
     ],
 }
 ```
 
-## `settings` chooses fallback hosts; it does not map requests
+## Settings participate in inbound ownership
 
-When B2C Commerce generates an absolute URL, the hostname source is effectively chosen in this order:
-
-1. A hostname explicitly supplied by `URLAction`
-2. The original storefront request hostname, when request context exists
-3. The scheme-appropriate `http-host` or `https-host` site-wide default
-4. `job-hostnames` in a requestless job context when no applicable site-wide default exists
-
-This makes `http-host` and `https-host` defaults, not an alternative to ordinary hostname mappings. A generated URL might use a setting, but an incoming request for that hostname still needs a matching top-level hostname rule.
-
-A settings-only hostname is not allowlisted for storefront routing. The platform rejects the incoming host until a top-level rule maps it, even though the same setting can be selected during URL generation.
-
-The HTTP and HTTPS defaults may be different hostnames when a protocol-specific host is genuinely required. Each distinct value still needs its own top-level incoming mapping.
+`http-host` and `https-host` are not generation-only fallbacks. On an eCDN-registered hostname, a settings-only configuration can map incoming requests to the site. Settings are evaluated before top-level hostname arrays.
 
 ```jsonc
 "settings": {
     "http-host": "www.example.com",
-    "https-host": "www.example.com",
-
-    "job-hostnames": {
-        "default": "www.example.com"
-    },
+    "https-host": "www.example.com"
 },
-
-"www.example.com": [
-    {
-        "locale": "en_US"
-    },
-],
 ```
 
-`job-hostnames` can be locale-specific. Resolution falls back from a locale-specific key to its language and then to `default`, so language keys are often enough:
+The same hostname can be assigned to multiple sites through settings. Give one site the root with `default: true` and give another site a path with `site-path`:
+
+```jsonc
+// Root-owning site
+"settings": {
+    "http-host": "www.example.com",
+    "https-host": "www.example.com",
+    "default": true
+},
+```
+
+```jsonc
+// Path-owning site
+"settings": {
+    "http-host": "www.example.com",
+    "https-host": "www.example.com",
+    "site-path": "fr"
+},
+```
+
+This settings topology maps `/` to the default site and `/fr/` to the path site. The path site uses its site default locale. When one site needs several locale-specific paths, top-level `if-site-path` rules provide the required per-path locale selection.
+
+Do not put settings ownership for a hostname on one participating site and top-level ownership for the same hostname on another. The settings match captures the request before the top-level rule can run.
+
+## Absolute URL hostname selection is API-specific
+
+There is no single hostname-precedence list that applies to every URL API. These behaviors were observed with the instance CDN default-domain feature enabled:
+
+| Call and context | Observed hostname selection |
+|---|---|
+| `URLUtils.https(URLAction(host), ...)` in a job | The explicit `URLAction` hostname |
+| `URLUtils.url(URLAction(host), ...).https()` in a job | The host selected while `url()` constructs the URL: `http-host` when configured, otherwise the instance `.my` domain |
+| `URLUtils.https(pipeline, ...)` during a storefront request | `https-host`, otherwise the incoming request hostname |
+| `URLUtils.https(pipeline, ...)` in a job | `https-host`, then an applicable mapped `job-hostnames` value, then the instance `.my` domain |
+
+Calling `.https()` on the result of `URLUtils.url(...)` changes the scheme after the URL has been constructed. It does not make that call equivalent to `URLUtils.https(...)`.
+
+The instance `.my.commercecloud.salesforce.com` hostname is the normal final fallback when Instance CDN Default Domain is enabled. The `.dx.commercecloud.salesforce.com` hostname is the instance origin or legacy entry point, not the normal generated storefront default.
+
+Treat Enable Instance CDN Default Domain as the normative behavior. Feature-switch metadata can retain a historical default of `false` from the gradual rollout; that metadata is not a reason to design new hostname behavior around the `.dx` origin.
+
+`job-hostnames` resolves an allowed locale by exact locale, then language, then `default`:
 
 ```jsonc
 "job-hostnames": {
     "default": "gb.example.com",
-    "fr": "fr.example.com",
-    "it": "it.example.com",
-    "ja": "jp.example.com",
-    "zh": "cn.example.com"
+    "en": "gb.example.com",
+    "en_US": "us.example.com",
+    "fr": "fr.example.com"
 },
 ```
 
-Every hostname emitted from `job-hostnames` should also have an incoming hostname mapping in the same site's aliases file.
+For `en_US`, the exact key wins over `en`. For `en_GB`, `en` applies. A locale with neither uses `default`.
 
-Do not confuse `settings.site-path` with `if-site-path`. The former belongs to the `http-host`/`https-host` default-host settings model. The practical shared-hostname mappings in this repository use `if-site-path` inside hostname rules to establish site and locale ownership.
+A `job-hostnames` value must also be mapped to the same site if it is expected to be used. An unmapped value is silently skipped and generation falls through to the instance `.my` domain.
 
-## Hostname ownership patterns
+## Related feature switches
+
+These instance switches change the environment around aliases without changing the alias grammar:
+
+- **Enable Instance CDN Default Domain** supplies the `.my` storefront fallback described above
+- **Use Custom Hostname for Preview URL** makes Business Manager preview prefer a configured custom hostname, then the eCDN default zone, then the MRT origin
+- **Permit Allowlisted Hostnames Only** rejects arbitrary unregistered hostnames, so a syntactically valid alias still needs eCDN or sandbox hostname registration
+
+Preview URL selection is separate from runtime `URLUtils` hostname selection. Test both when Business Manager preview and storefront-generated links must agree.
+
+## Top-level hostname ownership patterns
+
+Use top-level rules when a site needs per-locale paths, user-agent conditions, redirects, or explicit pipelines. Do not also claim the same hostname through settings.
 
 ### A site owns the hostname root
 
@@ -112,12 +145,12 @@ A rule without `if-site-path` maps the hostname root to the site. Omitting `pipe
 "www.example.com": [
     {
         "locale": "en_US",
-        "apply-to-host-only-request-with-params": "true"
+        "apply-to-host-only-request-with-params": true
     },
 ],
 ```
 
-`apply-to-host-only-request-with-params` extends host-only matching to requests such as `https://www.example.com/?lang=en_US`. Use the string `"true"`, matching the platform's alias syntax. This matters when URL rules add a query parameter to a generated home URL.
+`apply-to-host-only-request-with-params` extends host-only matching to requests such as `https://www.example.com/?lang=en_US`. Both boolean `true` and string `"true"` work; boolean `true` is clearer.
 
 ### Two sites share one hostname
 
@@ -150,17 +183,14 @@ Site that owns locale paths:
 ],
 ```
 
-The result is one site at `https://www.example.com/` and another at `https://www.example.com/gb/` and `https://www.example.com/fr/`. Adding a root rule to the second site creates competing ownership rather than a fallback.
+The result is one site at `https://www.example.com/` and another at `https://www.example.com/gb/` and `https://www.example.com/fr/`. A second root rule is not a fallback. It creates competing ownership, and one site can preempt the other regardless of import order.
 
 ### One site owns the root and locale paths
 
-Combine one root rule with `if-site-path` rules. The root rule establishes the default locale; each path rule establishes another locale.
+Put every `if-site-path` rule before the unconditional root rule. The path rules select their locales; the final root rule selects the default locale.
 
 ```jsonc
 "global.example.com": [
-    {
-        "locale": "en_GB"
-    },
     {
         "if-site-path": "fr",
         "locale": "fr_FR",
@@ -171,10 +201,14 @@ Combine one root rule with `if-site-path` rules. The root rule establishes the d
         "locale": "it_IT",
         "site-path-trailing-slash": "yes"
     },
+    {
+        "locale": "en_GB",
+        "apply-to-host-only-request-with-params": true
+    },
 ],
 ```
 
-`site-path-trailing-slash` controls normalization of the bare site path. With `"yes"`, `/fr` redirects to `/fr/`; with `"no"`, `/fr/` redirects to `/fr`.
+`site-path-trailing-slash: "yes"` redirects `/fr` to `/fr/`. The value `"no"` does the reverse and redirects `/fr/` to `/fr`.
 
 ### Each locale owns a domain
 
@@ -205,22 +239,22 @@ The shortest accurate translation is:
 }
 ```
 
-> `Default-Start` and `Home-Show` are equivalent ways to enter the same logical page. Prefer its site-path representation; if no site path applies, use its hostname-root representation.
+> `Default-Start` and `Home-Show` are equivalent ways to enter the same logical page. Prefer its site-path representation; if no site path applies for that locale, use its hostname-root representation.
 
 This rule affects both directions:
 
 - An incoming duplicate such as `/home` or `/homepage` redirects to the selected canonical representation
-- URL generation for any listed controller or pipeline emits the selected canonical representation directly
+- URL generation for a listed controller or pipeline emits the selected canonical representation
 
 The entries in `entry-point-pipelines` are controller or pipeline names, not literal URL paths. Endpoints such as `/home` and `/homepage` reach those names through URL Rules before entry-point canonicalization collapses them.
 
-The first listed pipeline is the preferred logical entry point when a pipeline-shaped destination is needed. Put the actual canonical controller or pipeline first.
+The first listed pipeline is the preferred logical entry point when a pipeline-shaped destination is needed. Reversing the list changes which pipeline endpoint remains canonical.
 
 The destination values are alternatives tried from left to right, not pieces concatenated to construct a URL:
 
 | Destination | Meaning | Required mapping |
 |---|---|---|
-| `"host"` | The hostname-root representation, such as `https://www.example.com/` | A root mapping without `if-site-path` |
+| `"host"` | The hostname-root representation, such as `https://www.example.com/` | A root mapping for the same site and locale |
 | `"site-path"` | A matching site-path root, such as `https://www.example.com/fr/` | An applicable `if-site-path` mapping |
 | `"pipeline"` | The preferred pipeline's normal URL-rule endpoint | A generated URL for the preferred pipeline |
 
@@ -235,43 +269,63 @@ Choose the preference list from the site's ownership shape:
 | Site owns the root for its default locale and paths for other locales | `["site-path", "host"]` | Locale path when available, otherwise `/` |
 | A controller or pipeline endpoint should remain visible | `["pipeline"]` or a preference ending in `"pipeline"` | The preferred pipeline URL |
 
-Order is consequential. On a dedicated international hostname, `["site-path", "host"]` preserves `/fr/` for `fr_FR` and falls back to `/` for a root-owning `en_GB`. Reversing it to `["host", "site-path"]` lets the root win first and can collapse locale homes onto `/`.
+Both ordinary rule order and destination order matter. For one site that owns a root and locale paths, put path rules before the root rule and put `"site-path"` before `"host"` to preserve non-default locale paths. Reversing either order can collapse a locale home to the hostname root.
 
-For a site that owns only paths beneath a hostname whose root belongs to another site, do not offer `"host"` as a destination. The canonical Global home must remain `/gb/` or `/fr/`, never the other site's `/`.
+For a site that owns only paths beneath a hostname whose root belongs to another site, do not offer `"host"` as a destination. The other site's root is not an applicable representation, so the path-only site must remain under its own path.
 
 An entry-point rule does not establish hostname ownership, choose a locale by itself, or invent a site path. The ordinary rules beside it must already provide the representations it ranks.
 
-## Redirect behavior is narrower than it looks
+## Mapping actions are not composable mixins
 
-A `host` property permanently redirects to another hostname with a 301 response. A `path` property only contributes its configured value to a host-only source request.
+Fields that work separately can change meaning or become irrelevant when combined. Test the exact object, request path, and query string.
+
+### Host redirect with an optional root path
+
+A `host` property permanently redirects a host-only request to another hostname. A `path` property supplies the redirect path for that host-only request.
 
 ```jsonc
 "example.com": [
     {
         "host": "www.example.com",
-        "path": "/"
-    },
-    {
-        "apply-to-host-only-request-with-params": "true"
+        "path": "/",
+        "apply-to-host-only-request-with-params": true
     },
 ],
 ```
 
-The behavior is:
-
-| Incoming request | Redirect target |
+| Incoming request | Observed behavior |
 |---|---|
-| `https://example.com/` | `https://www.example.com/` |
-| `https://example.com/?src=x` | `https://www.example.com/?src=x` |
-| `https://example.com/products/item` | `https://www.example.com/products/item` |
+| `https://example.com/` | 301 to `https://www.example.com/` |
+| `https://example.com/?src=x` | 301 with the incoming query preserved |
+| `https://example.com/products/item` | No alias host redirect; normal storefront routing continues on the incoming host |
 
-For a deeper request, the incoming path replaces the configured `path`; the platform does not prepend the configured path. Consequently, this rule cannot reliably move every deep URL from `old-example.fr/*` beneath `www.example.com/fr/*`. Use URL Redirects when the locale prefix must be retained for deep legacy URLs.
+The configured `path` is neither prepended to nor replaced by a deeper incoming path because the host action is not applied to that deep request. Use URL Redirects when legacy deep URLs must move to another hostname or locale prefix.
 
-`path` has no effect without `host`. If a mapping contains both `host` and `pipeline`, hostname redirection wins; pipeline mappings apply when no `host` is supplied.
+`path` has no effect without `host`.
 
-## A hostname root can invoke a controller without owning every path
+### Host and pipeline combine
 
-This pattern turns only the hostname root into a campaign or vanity landing page:
+When one mapping contains both `host` and `pipeline`, the fields combine. `host` chooses the destination hostname and the pipeline's generated URL chooses the destination path. A configured `path` in the same object is ignored in favor of the pipeline URL.
+
+```jsonc
+"campaign.example.com": [
+    {
+        "host": "www.example.com",
+        "locale": "en_US",
+        "pipeline": "Home-Show",
+        "params": {
+            "src": "campaign"
+        },
+        "apply-to-host-only-request-with-params": true
+    },
+],
+```
+
+For redirect target construction, an incoming query value wins when the same identifier is also configured in `params`. Other configured parameters remain.
+
+### A hostname root invokes a controller
+
+Without `host`, a `pipeline` mapping invokes that controller or pipeline for the hostname root:
 
 ```jsonc
 "about.example.com": [
@@ -281,20 +335,20 @@ This pattern turns only the hostname root into a campaign or vanity landing page
         "params": {
             "cid": "about-us"
         },
-        "apply-to-host-only-request-with-params": "true"
+        "apply-to-host-only-request-with-params": true
     },
 ],
 ```
 
-The root invokes `Page-Show` with `cid=about-us`. Normal paths such as `/cart` continue through storefront URL routing rather than inheriting the landing-page pipeline.
+The root invokes `Page-Show` with `cid=about-us`. Query-bearing root requests need the apply flag. Normal paths such as `/cart` continue through storefront URL routing rather than inheriting the root pipeline.
 
-The OOTB category-landing example uses the same mechanism with `"pipeline": "Search-Show"` and `"params": {"cgid": "electronics"}`. The maintained starters use `Page-Show` and `cid` so the example works without a populated search index while preserving the controller-plus-parameters behavior.
+For direct pipeline invocation, a configured parameter wins over an incoming query value with the same identifier. This differs from redirect target construction, so do not state one universal parameter-precedence rule.
 
-The two maintained recipes intentionally differ. RefArch's locale and host-only-query modifiers work with its bundled URL Rules, while RefArchGlobal keeps the OOTB-shaped pipeline rule minimal because adding that modifier combination makes the mapping inapplicable there. Alias properties are not safely composable mixins; test the exact combination on the target site.
+The OOTB category-landing pattern uses the same mechanism with `Search-Show` and `cgid`. The maintained starters use `Page-Show` and `cid` so the example works without a populated search index.
 
-## Conditional rules need an explicit fallback
+### User-agent conditions need a fallback
 
-Put a specific condition before an unconditional rule:
+Put specific conditions before an unconditional rule:
 
 ```jsonc
 "device.example.com": [
@@ -312,61 +366,68 @@ Put a specific condition before an unconditional rule:
 ],
 ```
 
-`if-agent-contains` matches text in the incoming `User-Agent` header. Any number of specific conditions can target different hosts before the final `else` branch. If the unconditional rule came first, it would preempt every user-agent-specific redirect. Each matching `host` action returns a permanent 301 response. SFRA is responsive, so this is primarily useful when a genuinely separate experience still exists.
+`if-agent-contains` matches the incoming `User-Agent` case-insensitively. The first applicable rule wins, so an unconditional rule placed first preempts every later user-agent condition. Each matching `host` action returns a permanent 301 response.
+
+When `if-site-path` is present, the rule acts as a site-path mapping. `host`, `path`, and `if-agent-contains` in that same object are ignored. Keep those behaviors in separate rules.
 
 ## Practical field reference
 
 | Property | Practical meaning | Common trap |
 |---|---|---|
-| `locale` | Locale selected when this mapping handles the request | The locale must belong to the site; omission falls back to site behavior |
-| `if-site-path` | Path prefix that makes this rule applicable | This is a hostname rule, not a `settings` property |
+| `locale` | Locale selected when this mapping handles the request | An invalid site locale makes the mapping inapplicable |
+| `if-site-path` | Path prefix that makes a top-level rule applicable | Settings matches run first; `host`, `path`, and user-agent fields in this object are ignored |
 | `site-path-trailing-slash` | Normalizes the matched site path | Values are `"yes"` and `"no"`, not booleans |
-| `pipeline` | Controller or pipeline invoked by this mapping | Omit it on an ordinary root mapping when `Default-Start` should handle `/` |
-| `params` | Parameters passed to the configured pipeline | A request parameter wins when the same identifier is also configured |
-| `host` | Literal hostname target for a permanent 301 redirect | Unrelated to the abstract `"host"` entry-point destination token |
-| `path` | Redirect path used for a host-only source request | A deeper incoming path replaces it; it is ignored without `host` |
-| `apply-to-host-only-request-with-params` | Applies host-only behavior when a query string is present | Use the string `"true"` |
-| `if-agent-contains` | Applies a rule to matching user agents | Put it before an unconditional fallback |
+| `pipeline` | Controller or pipeline invoked by a root mapping or used to build a redirect path | With `host`, it supplies the destination path and supersedes `path` |
+| `params` | Parameters passed to a pipeline or added to a redirect | Direct invocation and redirect construction have different collision precedence |
+| `host` | Literal hostname target for a permanent root redirect | Unrelated to the abstract `"host"` entry-point destination token |
+| `path` | Redirect path for a host-only source request | Ignored without `host` and superseded by `pipeline` |
+| `apply-to-host-only-request-with-params` | Applies host-only behavior when a query string is present | Boolean `true` and string `"true"` both work |
+| `if-agent-contains` | Applies a rule to matching user agents | Matching is case-insensitive and order-sensitive |
 | `entry-point-pipelines` | Controllers or pipelines treated as duplicate entry points | Put the preferred logical entry point first |
 | `entry-point-destination` | Ordered canonical-representation preferences | Values are alternatives, not URL components |
 
 ## Failure modes worth memorizing
 
-- A hostname in `settings` can generate URLs while incoming requests still fail because no top-level hostname rule maps it.
-- A top-level hostname rule can route incoming requests while requestless URL generation still lacks a hostname fallback.
-- `site-path` and `if-site-path` are not interchangeable.
-- The word `host` means a literal redirect target in one context and an abstract root representation in another.
-- `entry-point-destination` order can silently remove locale paths while leaving every URL technically valid.
-- A configured redirect `path` is not prepended to deeper incoming paths.
-- A syntactically accepted aliases file can be semantically inert, lose to another site's mapping, or canonicalize to the wrong place.
-- A custom hostname still needs the corresponding DNS or sandbox hostname registration outside the aliases file.
-- The reserved path prefixes `/dw`, `/_dw`, and `/s` cannot be configured as alias mappings.
-- Comments and trailing commas are valid even though strict JSON validators and the OOTB warning imply otherwise.
+- A settings-owned hostname captures inbound requests before top-level rules, including a more specific `if-site-path`
+- Mixing settings ownership on one site with top-level ownership on another breaks the intended shared-host topology
+- Duplicate root ownership is competition, not fallback behavior
+- An unmapped `job-hostnames` value is silently skipped and generation can fall through to the instance `.my` domain
+- `URLUtils.url(...).https()` and `URLUtils.https(...)` can choose different hosts
+- `site-path`, `settings.site-path`, and `if-site-path` are related but not interchangeable
+- The word `host` means a literal redirect target in one context and an abstract root representation in another
+- Ordinary rule order and `entry-point-destination` order can independently remove locale paths while leaving valid URLs
+- A host redirect does not apply to deeper incoming paths
+- A site import can store invalid alias source while runtime ignores every mapping
+- A custom hostname still needs eCDN or sandbox hostname registration outside the aliases file
+- The reserved path prefixes `/dw`, `/_dw`, and `/s` cannot be claimed as alias site paths
+- Hostname aliases and eCDN custom-domain registrations are instance-specific deployment data and must be configured on each target instance
 
 ## Verification matrix
 
-Test the exact archive that will be imported. Register test hostnames with the sandbox or resolve them locally as appropriate, and inspect both the response and the site or locale that actually served it.
+Test the exact archive that will be imported. Register test hostnames with the eCDN or sandbox hostname service, and inspect both the response and the site or locale that served it.
 
 | Probe | What it catches |
 |---|---|
-| `https://host/` | Root ownership, default locale, and root pipeline |
+| Settings-only `https://host/` | Settings-based inbound ownership |
+| `https://host/` with settings and top-level rules on different sites | Settings precedence and accidental capture |
 | `https://host/?probe=1` | Missing `apply-to-host-only-request-with-params` behavior |
 | `https://host/fr` and `/fr/` | Site-path ownership and trailing-slash normalization |
-| `/home` and `/homepage` at the root | Entry-point canonicalization to the host |
-| `/fr/home` and `/fr/homepage` | Entry-point canonicalization without losing the locale path |
-| A normal deep storefront URL | Over-broad root pipeline or redirect mappings |
-| Old hostname root with a query string | Host-only redirect and query preservation |
-| Old hostname with a deep path | The configured-`path` replacement behavior |
-| URL generation during a storefront request | Original-request hostname precedence and canonical endpoints |
-| URL generation from a job | `http-host`/`https-host` versus `job-hostnames` fallback behavior |
-| Site export after import | Parser preservation of comments, commas, and the exact stored source |
+| `/home` and `/homepage` at the root | Entry-point pipeline and destination ordering |
+| `/fr/home` and `/fr/homepage` | Canonicalization without losing the locale path |
+| A normal deep storefront URL | Over-broad assumptions about root pipeline or redirect mappings |
+| Redirect hostname root with and without a query | Host-only redirect, parameter collision, and query preservation |
+| Redirect hostname with a deep path | Confirmation that the alias host action is not applied |
+| URL generation during a storefront request | `https-host` versus incoming-request fallback |
+| Each URL API from a job | Explicit action, scheme setting, mapped job hostname, and `.my` fallback behavior |
+| Exact, language-only, default, and unmapped job locales | `job-hostnames` fallback and allowlist applicability |
+| Save through Business Manager and import through Site Import | Different validation gates for malformed syntax and unsupported versions |
+| Site export after import | Parser preservation of comments, commas, and exact stored source |
 
-Inspect the first response without automatically following redirects so the status and `Location` header are visible. Then follow the redirect and confirm the expected site and locale render. A generic 200 response is not enough.
-
-The maintained examples in this repository were checked by site-importing the exact alias source, issuing storefront requests for the routing and canonicalization behavior, and exporting the files for comparison. That level of verification is intentional because aliases are unusually good at accepting configurations that look right but do not control the intended route.
+Inspect the first response without automatically following redirects so the status and `Location` header are visible. Then follow the redirect and confirm the expected site and locale render. A generic 200 response is not enough because invalid aliases can return a 200 Technical Page.
 
 ## Official references
 
 - [Hostname Aliases for B2C Commerce](https://help.salesforce.com/s/articleView?id=cc.b2c_hostname_aliases.htm&language=en_US&type=5)
 - [Duplicate Home Page URLs](https://help.salesforce.com/s/articleView?id=cc.b2c_avoiding_duplicate_home_page_urls.htm&language=en_US&type=5)
 - [Configure a Hostname Alias](https://help.salesforce.com/s/articleView?id=cc.b2c_configuring_hostname_alias.htm&language=en_US&type=5)
+- [Configure the Embedded CDN](https://help.salesforce.com/s/articleView?id=cc.b2c_configure_the_embedded_cdn.htm&language=en_US&type=5)

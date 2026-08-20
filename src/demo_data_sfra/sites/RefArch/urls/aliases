@@ -1,56 +1,58 @@
 {
     /*
-     * RefArch is the single-locale example and owns its hostname root
+     * RefArch is the single-locale example
      * Every example hostname is commented so generated sites cannot collide
      *
-     * The OOTB starter says to remove all comments, but the alias parser supports them
-     * Alias files are not strict JSON; JSONC conveniences such as trailing commas are valid too
-     * Strict JSON validators need a temporary sanitized copy, not a changed import file
-     * Site import and export preserve comments and trailing commas byte-for-byte
+     * The alias parser accepts comments, trailing commas, and legacy equal signs
+     * Site import and export preserve the source byte-for-byte
+     * Site import can store invalid syntax or an unsupported version while runtime ignores it
+     * Business Manager rejects those invalid files at save time
      */
     "__version": "1",
 
     "settings": {
         /*
-         * Site-wide default hosts for absolute URL generation
-         * Used when neither URLAction nor the original request supplies a hostname
-         * These settings do not map incoming requests, so keep the hostname rule below
-         * HTTP and HTTPS defaults may differ when protocol-specific hosts are required
-         * Add a hostname rule below for every configured default
+         * Settings-owned hostname
+         *
+         * http-host and https-host participate in inbound site ownership
+         * A settings match is evaluated before top-level hostname rules
+         * URLUtils.https(pipeline) also prefers https-host over the request hostname
+         * Do not add a top-level rule for this hostname on another site
          */
         /*
-        "http-host": "www.example.com",
-        "https-host": "www.example.com"
+        "http-host": "settings.example.com",
+        "https-host": "settings.example.com",
         */
 
         /*
-         * Job-specific fallback for URL generation without a storefront request
-         * Used when URLAction has no hostname and no http-host or https-host applies
-         * Every job hostname must also map to this site below
+         * Job hostname selection without a storefront request
+         *
+         * https-host wins first when it is configured
+         * Otherwise lookup is exact locale, language, then default
+         * Every value must also have a top-level mapping to this site
+         * An unmapped value is skipped and generation falls through to the instance .my domain
          */
         /*
         "job-hostnames": {
-            "default": "www.example.com"
+            "default": "jobs.example.com",
+            "en_US": "us-jobs.example.com"
         }
         */
     },
 
     /*
-     * Canonical single-locale storefront
+     * Canonical single-locale storefront using top-level ownership
      *
-     * The first rule owns the hostname root and selects en_US
-     * The apply flag also routes host-only requests that have query parameters
-     * This is required by the bundled URL rules when they add ?lang=en_US
-     *
-     * The second rule removes the /home and /homepage controller entry points
-     * With the bundled URL rules they redirect to /?lang=en_US
-     * Pipeline is omitted from the root rule so Default-Start handles the root
+     * Do not also claim this hostname through settings
+     * The root rule selects en_US without replacing Default-Start
+     * The apply flag also handles host-only requests with query parameters
+     * The entry-point rule collapses /home and /homepage to the hostname root
      */
     /*
     "www.example.com": [
         {
             "locale": "en_US",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -60,21 +62,38 @@
     */
 
     /*
+     * Top-level mappings required by the job-hostnames example
+     *
+     * These mappings make the job values applicable
+     * They also make the hostnames valid inbound roots for this site
+     */
+    /*
+    "jobs.example.com": [
+        {
+            "locale": "en_US"
+        }
+    ],
+    "us-jobs.example.com": [
+        {
+            "locale": "en_US"
+        }
+    ],
+    */
+
+    /*
      * Alternate, legacy, or misspelled hostname redirect
      *
-     * Host redirects return permanent 301 responses
-     * A host-only request uses the configured root path
-     * A request below the source host keeps its original path instead
-     * The apply rule retains query parameters on a host-only redirect
+     * The host-only root redirects permanently to the configured host and path
+     * The apply flag preserves an incoming query string
+     * Deeper requests do not use this alias redirect and continue on the incoming host
+     * Use URL Redirects when legacy deep paths must move to another hostname
      */
     /*
     "example.com": [
         {
             "host": "www.example.com",
-            "path": "/"
-        },
-        {
-            "apply-to-host-only-request-with-params": "true"
+            "path": "/",
+            "apply-to-host-only-request-with-params": true
         }
     ],
     */
@@ -83,10 +102,9 @@
      * Host-only campaign or vanity-domain landing page
      *
      * The hostname root runs Page-Show with the configured content asset
+     * Query-bearing root requests need the apply flag
      * Normal paths such as /cart continue through storefront URL routing
-     * The apply flag keeps host-only links with tracking parameters on this rule
-     * This preserves the OOTB Search-Show/cgid pipeline-plus-params mechanism
-     * Page-Show avoids making the example depend on a populated search index
+     * A configured pipeline parameter wins over the same incoming query parameter
      */
     /*
     "about.example.com": [
@@ -96,7 +114,29 @@
             "params": {
                 "cid": "about-us"
             },
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
+        }
+    ],
+    */
+
+    /*
+     * Combined host and pipeline redirect
+     *
+     * Host chooses the destination hostname
+     * The pipeline-generated URL chooses the destination path
+     * Do not add path because pipeline supersedes it
+     * An incoming query value wins over the same configured redirect parameter
+     */
+    /*
+    "campaign.example.com": [
+        {
+            "host": "www.example.com",
+            "locale": "en_US",
+            "pipeline": "Home-Show",
+            "params": {
+                "src": "campaign"
+            },
+            "apply-to-host-only-request-with-params": true
         }
     ],
     */
@@ -104,10 +144,9 @@
     /*
      * Legacy user-agent redirect with an unconditional fallback
      *
-     * if-agent-contains matches text in the User-Agent request header
-     * Each matching host redirect returns a permanent 301 response
-     * Conditional rules must precede the fallback because rule order matters
-     * SFRA is responsive, so use this only for a genuinely separate experience
+     * if-agent-contains matches User-Agent text case-insensitively
+     * The first applicable rule wins
+     * Each matching host action returns a permanent 301 response
      */
     /*
     "device.example.com": [

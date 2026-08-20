@@ -3,40 +3,51 @@
      * RefArchGlobal is the multi-locale example
      * Every example hostname is commented so generated sites cannot collide
      *
-     * The OOTB starter says to remove all comments, but the alias parser supports them
-     * Alias files are not strict JSON; JSONC conveniences such as trailing commas are valid too
-     * Strict JSON validators need a temporary sanitized copy, not a changed import file
-     * Site import and export preserve comments and trailing commas byte-for-byte
+     * The alias parser accepts comments, trailing commas, and legacy equal signs
+     * Site import and export preserve the source byte-for-byte
+     * Site import can store invalid syntax or an unsupported version while runtime ignores it
+     * Business Manager rejects those invalid files at save time
      */
     "__version": "1",
 
     "settings": {
         /*
-         * Site-wide default hosts for absolute URL generation
-         * Used when neither URLAction nor the original request supplies a hostname
-         * These settings do not map incoming requests, so keep the hostname rules below
-         * HTTP and HTTPS defaults may differ when protocol-specific hosts are required
-         * Add a hostname rule below for every configured default
+         * Choose one of the two settings ownership patterns below
+         * job-hostnames can accompany either pattern
+         */
+
+        /*
+         * Settings-owned hostname
+         *
+         * http-host and https-host participate in inbound site ownership
+         * A settings match is evaluated before top-level hostname rules
+         * Do not mix settings ownership with top-level ownership on another site
          */
         /*
-        "http-host": "global.example.com",
-        "https-host": "global.example.com"
+        "http-host": "settings-global.example.com",
+        "https-host": "settings-global.example.com",
         */
 
         /*
-         * Job-specific fallback for URL generation without a storefront request
-         * Used when URLAction has no hostname and no http-host or https-host applies
-         * The default hostname can serve every locale through site paths
+         * Settings-based shared hostname path
+         *
+         * The root site must use the same hosts with default set to true
+         * This site then owns one path and serves its site default locale there
+         * Use top-level if-site-path rules instead when each path needs its own locale
          */
         /*
-        "job-hostnames": {
-            "default": "www.example.com"
-        }
+        "http-host": "settings-shared.example.com",
+        "https-host": "settings-shared.example.com",
+        "site-path": "global",
         */
 
         /*
-         * Locale-specific job hostname alternative with language fallback
-         * Enable the matching locale-domain rules below at the same time
+         * Locale-specific job hostname selection
+         *
+         * https-host wins first when it is configured
+         * Otherwise lookup is exact locale, language, then default
+         * Every value must also have a top-level mapping to this site
+         * An unmapped value is skipped and generation falls through to the instance .my domain
          */
         /*
         "job-hostnames": {
@@ -50,12 +61,12 @@
     },
 
     /*
-     * Locale paths on a hostname whose root belongs to RefArch
+     * Locale paths on a top-level hostname whose root belongs to RefArch
      *
-     * Enable the RefArch root rule for this same hostname
-     * RefArch handles / while this site handles /gb/, /fr/, /it/, /jp/, and /cn/
-     * The trailing-slash rule normalizes each bare site path
-     * The entry-point rule removes /home and /homepage below every site path
+     * Neither site can claim this hostname through settings
+     * RefArch owns / while this site owns /gb/, /fr/, /it/, /jp/, and /cn/
+     * The entry-point rule keeps canonical homes beneath each site path
+     * Do not add a root rule here because duplicate roots compete rather than fall back
      */
     /*
     "www.example.com": [
@@ -94,16 +105,12 @@
     /*
      * One international hostname owned entirely by RefArchGlobal
      *
-     * The root is en_GB and the other locales use site paths
-     * Site path must precede host so non-default locales keep their site path
-     * Host is the fallback destination for the en_GB root
+     * Conditional path rules must precede the unconditional root rule
+     * site-path must precede host so non-default locales keep their paths
+     * The en_GB root is the fallback representation when no locale path applies
      */
     /*
     "global.example.com": [
-        {
-            "locale": "en_GB",
-            "apply-to-host-only-request-with-params": "true"
-        },
         {
             "if-site-path": "fr",
             "locale": "fr_FR",
@@ -125,6 +132,10 @@
             "site-path-trailing-slash": "yes"
         },
         {
+            "locale": "en_GB",
+            "apply-to-host-only-request-with-params": true
+        },
+        {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
             "entry-point-destination": ["site-path", "host"]
         }
@@ -132,16 +143,16 @@
     */
 
     /*
-     * Locale-specific domains
+     * Locale-specific domains and job-hostname mappings
      *
-     * Each hostname owns its root and fixes the locale for the request
-     * Repeat the same shape for every locale that has a dedicated domain
+     * Each hostname owns its root and fixes the locale for inbound requests
+     * The same mappings make the job-hostnames values applicable
      */
     /*
     "gb.example.com": [
         {
             "locale": "en_GB",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -151,7 +162,7 @@
     "fr.example.com": [
         {
             "locale": "fr_FR",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -161,7 +172,7 @@
     "it.example.com": [
         {
             "locale": "it_IT",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -171,7 +182,7 @@
     "jp.example.com": [
         {
             "locale": "ja_JP",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -181,7 +192,7 @@
     "cn.example.com": [
         {
             "locale": "zh_CN",
-            "apply-to-host-only-request-with-params": "true"
+            "apply-to-host-only-request-with-params": true
         },
         {
             "entry-point-pipelines": ["Default-Start", "Home-Show"],
@@ -193,19 +204,17 @@
     /*
      * Alternate, legacy, or misspelled hostname redirect
      *
-     * Host redirects return permanent 301 responses
-     * A host-only request uses the configured root path
-     * A request below the source host keeps its original path instead
-     * The apply rule retains query parameters on a host-only redirect
+     * The host-only root redirects permanently to the configured host and path
+     * The apply flag preserves an incoming query string
+     * Deeper requests do not use this alias redirect and continue on the incoming host
+     * Use URL Redirects when legacy deep paths must move to another hostname
      */
     /*
     "global-example.com": [
         {
             "host": "global.example.com",
-            "path": "/"
-        },
-        {
-            "apply-to-host-only-request-with-params": "true"
+            "path": "/",
+            "apply-to-host-only-request-with-params": true
         }
     ],
     */
@@ -213,19 +222,20 @@
     /*
      * Host-only content landing page with pipeline parameters
      *
-     * The hostname root runs Page-Show with the configured content asset
+     * The root runs Page-Show with the configured content asset
+     * Query-bearing root requests need the apply flag
      * Normal paths continue through storefront URL routing
-     * This preserves the OOTB Search-Show/cgid pipeline-plus-params mechanism
-     * Page-Show avoids making the example depend on a populated search index
-     * Keep this OOTB-shaped rule minimal and test any added matching modifiers
+     * A configured pipeline parameter wins over the same incoming query parameter
      */
     /*
     "about.global.example.com": [
         {
+            "locale": "en_GB",
             "pipeline": "Page-Show",
             "params": {
                 "cid": "about-us"
-            }
+            },
+            "apply-to-host-only-request-with-params": true
         }
     ],
     */
@@ -233,10 +243,9 @@
     /*
      * Legacy user-agent redirect with multiple conditions and a fallback
      *
-     * if-agent-contains matches text in the User-Agent request header
-     * Each matching host redirect returns a permanent 301 response
-     * Conditional rules must precede the fallback because rule order matters
-     * SFRA is responsive, so use this only for a genuinely separate experience
+     * if-agent-contains matches User-Agent text case-insensitively
+     * The first applicable rule wins
+     * Each matching host action returns a permanent 301 response
      */
     /*
     "device.global.example.com": [
@@ -255,21 +264,18 @@
     */
 
     /*
-     * Retired locale domain redirected to a site path on the shared hostname
+     * Retired locale domain redirected to a shared-host site path
      *
-     * Host redirects return permanent 301 responses
-     * Host-only requests use /fr and retain incoming query parameters
-     * Deeper paths ignore /fr and use this site's default-locale path instead
-     * Use URL redirects when deep legacy paths must remain under /fr
+     * The host-only root redirects to /fr and preserves an incoming query string
+     * Deeper requests do not use this alias redirect or inherit /fr
+     * Use URL Redirects when deep legacy paths must remain below /fr
      */
     /*
     "old-example.fr": [
         {
             "host": "www.example.com",
-            "path": "fr"
-        },
-        {
-            "apply-to-host-only-request-with-params": "true"
+            "path": "/fr",
+            "apply-to-host-only-request-with-params": true
         }
     ],
     */
