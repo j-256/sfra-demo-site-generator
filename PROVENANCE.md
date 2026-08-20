@@ -1,6 +1,6 @@
 # Source Provenance
 
-The data under `src/demo_data_sfra/` is vendored (copied), not submoduled, because the upstream dataset is effectively immutable and the tool must run in constrained/offline environments (e.g. a Staging context with no outbound access to public GitHub).
+The data under `src/demo_data_sfra/` is vendored (copied), not submoduled, because the upstream dataset is effectively immutable and keeping it in the repository makes local generation self-contained and reproducible. The generated site archive is then imported into the target B2C Commerce instance, such as Staging.
 
 - Upstream: https://github.com/SalesforceCommerceCloud/storefrontdata
 - package.json version at vendor time: 6.3.0

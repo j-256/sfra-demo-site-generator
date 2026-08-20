@@ -32,11 +32,12 @@ Download the artifact for your platform from the repository's Releases page. The
 On macOS, extract the download and run the executable:
 
     tar -xzf sfra-demo-site-generator-vX.Y.Z-macos-arm64.tar.gz
+    sudo xattr -d com.apple.quarantine sfra-demo-site-generator
     ./sfra-demo-site-generator --token alice --cache dev
 
 On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly.
 
-The macOS executables are ad hoc signed, not Developer ID signed or notarized. If Gatekeeper blocks a browser-downloaded executable, open it once through Finder's Open context menu or remove its quarantine attribute with `xattr -d com.apple.quarantine sfra-demo-site-generator`.
+The macOS executables are ad hoc signed, not Developer ID signed or notarized, so Gatekeeper blocks a browser-downloaded executable. The `xattr` step removes its quarantine attribute before the first invocation.
 
 To run from a source checkout instead, use `./generate --token alice --cache dev` as shown throughout this README.
 
