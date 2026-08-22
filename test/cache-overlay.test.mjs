@@ -1,6 +1,10 @@
 // test/cache-overlay.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { overlayCacheSettingsFile } from '../generate.mjs';
 import { overlayCacheSettings, buildSettingsBlock } from '../lib/cache-overlay.mjs';
 
 const corrected = `<?xml version="1.0" encoding="UTF-8"?>
@@ -35,6 +39,21 @@ test('overlays corrected settings (dev on, staging off)', () => {
 test('preserves page-cache-partitions', () => {
   const out = overlayCacheSettings(siteFile, corrected);
   assert.match(out, /partition-id="Homepage"/);
+});
+
+test('updates one opened cache-settings file and skips a missing file', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'sfra-cache-overlay-'));
+  const sitePath = join(directory, 'cache-settings.xml');
+  const missingPath = join(directory, 'missing.xml');
+  try {
+    writeFileSync(sitePath, siteFile);
+    assert.equal(overlayCacheSettingsFile(sitePath, corrected), true);
+    assert.match(readFileSync(sitePath, 'utf8'), /partition-id="Homepage"/);
+    assert.match(readFileSync(sitePath, 'utf8'), /<staging><static-cache-ttl>0/);
+    assert.equal(overlayCacheSettingsFile(missingPath, corrected), false);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });
 
 // The four tests below probe weaknesses in a naive `str.replace(regex, matchedString)` approach

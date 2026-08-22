@@ -2,7 +2,19 @@
 // generate.mjs
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { existsSync, rmSync, mkdirSync, readFileSync, writeFileSync, readdirSync, realpathSync } from 'node:fs';
+import {
+  closeSync,
+  existsSync,
+  ftruncateSync,
+  mkdirSync,
+  openSync,
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  rmSync,
+  writeFileSync,
+  writeSync,
+} from 'node:fs';
 import { parseOptions } from './lib/options.mjs';
 import { harvestIds } from './lib/harvest.mjs';
 import { buildRenameMap } from './lib/rename-map.mjs';
@@ -14,6 +26,28 @@ import { verifyTree } from './lib/verify.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const SRC = join(here, 'src', 'demo_data_sfra');
 const CORRECTED_CACHE = join(here, 'src', 'cache-settings.xml');
+
+export function overlayCacheSettingsFile(path, settings) {
+  let file;
+  try {
+    file = openSync(path, 'r+');
+  } catch (error) {
+    if (error && typeof error === 'object' && error.code === 'ENOENT') return false;
+    throw error;
+  }
+
+  try {
+    const output = Buffer.from(overlayCacheSettings(readFileSync(file, 'utf8'), settings), 'utf8');
+    ftruncateSync(file, 0);
+    let offset = 0;
+    while (offset < output.length) {
+      offset += writeSync(file, output, offset, output.length - offset, offset);
+    }
+  } finally {
+    closeSync(file);
+  }
+  return true;
+}
 
 export function run(argv) {
   const opts = parseOptions(argv);
@@ -40,7 +74,7 @@ export function run(argv) {
   const sitesDir = join(outTree, 'sites');
   for (const site of readdirSync(sitesDir)) {
     const cs = join(sitesDir, site, 'cache-settings.xml');
-    if (existsSync(cs)) writeFileSync(cs, overlayCacheSettings(readFileSync(cs, 'utf8'), settings));
+    overlayCacheSettingsFile(cs, settings);
   }
 
   // verify referential integrity BEFORE zipping
