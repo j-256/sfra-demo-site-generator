@@ -37,9 +37,9 @@ test('harvest EXCLUDES category ids', () => {
   assert.ok(!ids.has('mens'), 'category parent id (bare <parent> inside a <category>) must not be harvested');
 });
 
-test('harvest collects job-id (org-scoped job objects must be tokenized too)', () => {
+test('harvest collects job-id (org-scoped job objects must be suffixed too)', () => {
   const ids = harvestIds(join(fixtures, 'harvest-tree'));
-  assert.ok(ids.has('RebuildURLs'), 'job-id must be harvested so jobs.xml job objects are isolated per token');
+  assert.ok(ids.has('RebuildURLs'), 'job-id must be harvested so jobs.xml job objects are isolated per suffix');
 });
 
 test('harvest EXCLUDES template-id and step-id (job-internal, never referenced outside their own job)', () => {

@@ -6,7 +6,7 @@ import { buildRenameMap } from '../lib/rename-map.mjs';
 const ids = new Set(['RefArch', 'RefArchGlobal', 'apparel-m-catalog', '008884303989M',
   'inventory_m', 'inventory_m_store_store1', 'usd-m-list-prices', 'RefArchSharedLibrary', 'store1']);
 
-test('appends token to every id (end-append)', () => {
+test('appends suffix to every id', () => {
   const { map } = buildRenameMap(ids, 'J');
   assert.equal(map.get('RefArch'), 'RefArchJ');
   assert.equal(map.get('RefArchGlobal'), 'RefArchGlobalJ');
@@ -15,6 +15,6 @@ test('appends token to every id (end-append)', () => {
   assert.equal(map.get('store1'), 'store1J');
 });
 
-test('primaryName is RefArch+token', () => {
+test('primaryName is RefArch plus suffix', () => {
   assert.equal(buildRenameMap(ids, 'Alice').primaryName, 'RefArchAlice');
 });

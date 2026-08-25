@@ -10,4 +10,4 @@ The data under `src/demo_data_sfra/` is vendored (copied), not submoduled, becau
 
 To refresh from upstream, run `scripts/refresh-source.sh` and commit the result as a deliberate, reviewed change. The refresh preserves the corrected cache settings and both alias starters.
 
-The maintained alias references leave every example hostname commented, so no hostname alias is declared and generated datasets cannot clash on a literal hostname. The generator copies these files byte for byte and does not tokenize their contents.
+The maintained alias references leave every example hostname commented, so no hostname alias is declared and generated datasets cannot clash on a literal hostname. The generator copies these files byte for byte and does not suffix identifiers within their contents.

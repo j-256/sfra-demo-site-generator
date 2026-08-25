@@ -10,7 +10,7 @@ import { join } from 'node:path';
 
 // One fixture tree exercising every routing case: a catalog (dir rename + xml transform,
 // category-id untouched), both sites (dir rename, site.xml <name> follows), the shared library
-// (dir rename, library-id tokenized, page-title prose rebranded), a site's own PRIVATE nested
+// (dir rename, library-id suffixed, page-title prose rebranded), a site's own PRIVATE nested
 // library (its "library" directory segment is not a mapped id and must not be renamed, unlike
 // the shared library's directory), a pricebook and an inventory FILE (both renamed, inventory
 // additionally cleaned), and every category of byte-identical passthrough (csv, meta xml,
@@ -84,8 +84,8 @@ function setupSrc() {
   return dir;
 }
 
-function run(src, out, token, only, keepAllocationTimestamps = false) {
-  const rename = buildRenameMap(harvestIds(src), token);
+function run(src, out, suffix, only, keepAllocationTimestamps = false) {
+  const rename = buildRenameMap(harvestIds(src), suffix);
   transformTree(src, out, rename, { only, keepAllocationTimestamps });
   return rename;
 }
@@ -218,7 +218,7 @@ test('opts.keepAllocationTimestamps threads through transformTree to cleanInvent
   rmSync(out, { recursive: true });
 });
 
-test('shared library dir and file renamed, library-id tokenized, page-title prose rebranded', () => {
+test('shared library dir and file renamed, library-id suffixed, page-title prose rebranded', () => {
   const src = setupSrc();
   const out = mkdtempSync(join(tmpdir(), 'sfra-out-'));
   run(src, out, 'J', null);

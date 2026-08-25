@@ -1,23 +1,8 @@
 # SFRA Demo Site Generator
 
-Generate an isolated, referentially-valid SFRA demo site archive under a token of your choosing, so several people can each run their own RefArch demo site on one shared B2C Commerce instance.
+Generate an isolated, referentially-valid SFRA demo site archive with an identifier suffix of your choosing, so several people can each run their own RefArch demo site on one shared B2C Commerce instance.
 
-    ./generate --token alice --cache dev
-    # -> out/demo_data_sfra_alice.zip   sites RefArchalice + RefArchGlobalalice
-    #    out/inventory_alice.xml        the inventory list, imported separately
-    #    out/inventory_alice.zip        the same document, zipped for transport
-
-The standalone release executable has zero runtime dependencies. The OOTB demo data is embedded in it, so generation needs no network access and nothing to supply by hand.
-
-## Why
-
-**The OOTB SFRA import gives everyone the same site.** It always creates `RefArch` and `RefArchGlobal` with fixed resource ids, so a second person importing onto the same instance collides with the first. There is no supported way to pick different names.
-
-**Ready-made SFRA demo data is only offered on sandboxes.** On Staging you supply the files yourself, and the usual workaround is a round trip: import the data on a sandbox, export it from there, then import that archive into Staging.
-
-**Nothing here assumes what is already on the instance.** Every id is derived from your token alone, so the archive imports the same way onto a bare Staging instance as onto a sandbox that already has a RefArch site. That is the property that makes it safe to hand to someone else.
-
-## Standalone executable
+## Installation
 
 Download the artifact for your platform from the repository's Releases page. The macOS and Linux archives each contain an executable named `sfra-demo-site-generator`; Windows is distributed as an executable directly.
 
@@ -29,21 +14,64 @@ Download the artifact for your platform from the repository's Releases page. The
 | Linux on x64 | `linux-x64.tar.gz` |
 | Windows on x64 | `windows-x64.exe` |
 
-On macOS, extract the download and run the executable:
+On macOS, extract the download and clear its quarantine attribute:
 
     tar -xzf sfra-demo-site-generator-vX.Y.Z-macos-arm64.tar.gz
     sudo xattr -d com.apple.quarantine sfra-demo-site-generator
-    ./sfra-demo-site-generator --token alice --cache dev
 
-On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly.
+On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly. The standalone executable has zero runtime dependencies, and the embedded OOTB demo data lets it generate archives without network access or additional input files.
 
 The macOS executables are ad hoc signed, not Developer ID signed or notarized, so Gatekeeper blocks a browser-downloaded executable. The `xattr` step removes its quarantine attribute before the first invocation.
 
-To run from a source checkout instead, use `./generate --token alice --cache dev` as shown throughout this README.
+To run from a source checkout instead, use the `generate` executable at the repository root.
+
+### Requirements
+
+- Standalone release: no runtime dependencies
+- Source checkout: Node.js 18+ using only the standard library
+- Standalone builds: the Deno version pinned in `.deno-version` and `tar`
+- Test suite: `unzip` and `xmllint`
+
+## Usage
+
+Run the installed standalone executable with a suffix that identifies your generated resources:
+
+    ./sfra-demo-site-generator --suffix alice --cache dev
+    # -> out/demo_data_sfra_alice.zip   sites RefArchalice + RefArchGlobalalice
+    #    out/inventory_alice.xml        the inventory list, imported separately
+    #    out/inventory_alice.zip        the same document, zipped for transport
+
+From a source checkout, use the same options with `./generate`:
+
+    ./generate --suffix alice --cache dev
+
+| Flag | Effect |
+|---|---|
+| `-s, --suffix <suffix>` | Required. Appended to every org-scoped identifier exactly as supplied, with case preserved. `[A-Za-z0-9_-]`, 19 chars max |
+| `-c, --cache <env>` | Enable page caching for an environment. Repeatable. Accepts `production`, `staging`, `development` and the aliases `prd`, `stg`, `dev` |
+| `-O, --only primary\|global` | Emit just one of the two sites instead of both |
+| `-k, --keep-allocation-timestamps` | Retain `allocation-timestamp` in inventory records |
+| `-o, --out <dir>` | Output directory (default `out`) |
+| `-f, --force` | Regenerate over an existing output tree |
+| `-h, --help` | Show usage |
+
+Long options also accept an `=` joined value (`--suffix=alice`), and short flags bundle (`-kf`) and glue (`-salice`). `./generate --help` is self-contained, so the tool is usable without this README.
+
+Exit codes: `0` success, `1` runtime failure (including a dangling reference that blocked archiving), `2` usage error.
+
+The 19-character cap comes from the platform: `site-id` is limited to 32 characters and `RefArchGlobal` already uses 13.
+
+## Why
+
+**The OOTB SFRA import gives everyone the same site.** It always creates `RefArch` and `RefArchGlobal` with fixed resource ids, so a second person importing onto the same instance collides with the first. There is no supported way to pick different names.
+
+**Ready-made SFRA demo data is only offered on sandboxes.** On Staging you supply the files yourself, and the usual workaround is a round trip: import the data on a sandbox, export it from there, then import that archive into Staging.
+
+**Nothing here assumes what is already on the instance.** Every renamed id is derived from its source id and your suffix alone, so the archive imports the same way onto a bare Staging instance as onto a sandbox that already has a RefArch site. That is the property that makes it safe to hand to someone else.
 
 ## What gets renamed, and what does not
 
-Your token is appended to every **org-scoped** identifier, because those share one namespace instance-wide and would otherwise collide:
+Your suffix is appended to every **org-scoped** identifier, because those share one namespace instance-wide and would otherwise collide:
 
 - Sites
 - Catalogs
@@ -90,53 +118,28 @@ So there is no way to ship "just the staging setting". The archive necessarily s
 
 Opt an environment back in with `--cache`, which is repeatable:
 
-    ./generate --token alice --cache dev          # development and sandboxes on, Staging still off
-    ./generate --token alice -c dev -c stg        # development, sandboxes, and Staging on
+    ./generate --suffix alice --cache dev          # development and sandboxes on, Staging still off
+    ./generate --suffix alice -c dev -c stg        # development, sandboxes, and Staging on
 
 **Why development is off by default.** A sandbox obeys the `development` block. Turning caching on there is rarely what you want while iterating, and it fails in a confusing way: template and content edits simply stop appearing. Since sandboxes are the most common target for a generated demo site, the default protects that case and Staging opts in explicitly.
 
 Existing `<page-cache-partitions>` in the source are preserved untouched.
 
-## Requirements
-
-- Standalone release: no runtime dependencies
-- Source checkout: Node.js 18+ using only the standard library
-- Standalone builds: the Deno version pinned in `.deno-version` and `tar`
-- Test suite: `unzip` and `xmllint`
-
-## Options
-
-| Flag | Effect |
-|---|---|
-| `-t, --token <t>` | Required. The isolation token, used exactly as supplied with case preserved. `[A-Za-z0-9_-]`, 19 chars max |
-| `-c, --cache <env>` | Enable page caching for an environment. Repeatable. Accepts `production`, `staging`, `development` and the aliases `prd`, `stg`, `dev` |
-| `-O, --only primary\|global` | Emit just one of the two sites instead of both |
-| `-k, --keep-allocation-timestamps` | Retain `allocation-timestamp` in inventory records |
-| `-o, --out <dir>` | Output directory (default `out`) |
-| `-f, --force` | Regenerate over an existing output tree |
-| `-h, --help` | Show usage |
-
-Long options also accept an `=` joined value (`--token=alice`), and short flags bundle (`-kf`) and glue (`-talice`). `./generate --help` is self-contained, so the tool is usable without this README.
-
-Exit codes: `0` success, `1` runtime failure (including a dangling reference that blocked archiving), `2` usage error.
-
-The 19-character cap comes from the platform: `site-id` is limited to 32 characters and `RefArchGlobal` already uses 13.
-
 ## Importing
 
-**1. The site archive.** Business Manager > Administration > Site Development > Site Import & Export, then upload and import `demo_data_sfra_<token>.zip`.
+**1. The site archive.** Business Manager > Administration > Site Development > Site Import & Export, then upload and import `demo_data_sfra_<suffix>.zip`.
 
 To script it instead, upload the zip to `Impex/src/instance/` over WebDAV and trigger the import job through the OCAPI Data API:
 
-    PUT  /on/demandware.servlet/webdav/Sites/Impex/src/instance/demo_data_sfra_<token>.zip
+    PUT  /on/demandware.servlet/webdav/Sites/Impex/src/instance/demo_data_sfra_<suffix>.zip
     POST /s/-/dw/data/<version>/jobs/sfcc-site-archive-import/executions
-         {"file_name": "demo_data_sfra_<token>.zip", "mode": "merge"}
+         {"file_name": "demo_data_sfra_<suffix>.zip", "mode": "merge"}
 
 Both accept an Account Manager access token as a plain `Authorization: Bearer` header; the client needs the `sfcc.jobs.rw` scope to run the job. Poll the returned execution for `execution_status`. A full archive takes several minutes.
 
-**2. The inventory list,** separately: Merchant Tools > Product and Catalogs > Import & Export > Upload, then Import Inventory Lists. That screen takes a raw XML file, so upload `inventory_<token>.xml`. The `.zip` beside it wraps the same document for transport and is not a documented input to that screen.
+**2. The inventory list,** separately: Merchant Tools > Product and Catalogs > Import & Export > Upload, then Import Inventory Lists. That screen takes a raw XML file, so upload `inventory_<suffix>.xml`. The `.zip` beside it wraps the same document for transport and is not a documented input to that screen.
 
-**3. Afterwards,** assign the cartridge path for the new site or sites and run a search index rebuild. The archive includes disabled `RebuildURLs<Token>` and `Reindex<Token>` jobs you can run for the latter.
+**3. Afterwards,** assign the cartridge path for the new site or sites and run a search index rebuild. The archive includes disabled `RebuildURLs<Suffix>` and `Reindex<Suffix>` jobs you can run for the latter.
 
 Each generated site includes a comprehensive commented hostname-alias reference. Both starters correct the OOTB instruction to remove comments and distinguish settings-based ownership from top-level rules. They cover mapped job hostnames and the instance CDN fallback, root and locale-path ownership, duplicate-homepage canonicalization, host-only redirects, direct and combined pipeline mappings, and ordered user-agent conditions. Every example hostname remains commented, so separately generated sites cannot collide. Comments and trailing commas are valid in the B2C Commerce alias format and survive site import and export.
 
@@ -144,7 +147,7 @@ The [B2C Commerce Hostname Aliases Cheat Sheet](ALIASES.md) explains settings pr
 
 ## Inventory list cleaning
 
-Inventory records are cleaned as they are tokenized:
+Inventory records are cleaned as their ids are suffixed:
 
 - `ats`, `on-order`, and `turnover` at the **record** level are always stripped, because the schema documents them as read-only and non-importable. The **header-level** `<on-order>` element is a different field – an importable boolean config flag – and is always preserved.
 - `allocation-timestamp` is stripped by default; `--keep-allocation-timestamps` retains it.
@@ -163,7 +166,7 @@ The following are copied byte for byte:
 - The shared library's one `.css` asset
 - Every image
 
-One consequence is worth stating plainly. The active-data CSVs do carry product ids, in their `productID` column, and those are **not** renamed while the catalog's product ids are. The mismatch is intentional, but it means the imported Active Data never matches the tokenized catalog, so an activeData-driven sort rule (`most-popular`, `top-sellers`) has nothing to sort by and will not reorder results in the generated site.
+One consequence is worth stating plainly. The active-data CSVs do carry product ids, in their `productID` column, and those are **not** renamed while the catalog's product ids are. The mismatch is intentional, but it means the imported Active Data never matches the suffixed catalog, so an activeData-driven sort rule (`most-popular`, `top-sellers`) has nothing to sort by and will not reorder results in the generated site.
 
 ## Refreshing the vendored data
 

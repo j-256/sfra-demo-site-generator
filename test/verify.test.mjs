@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-// The real hand-built dataset that motivated this whole module: a human find/replaced a J token
+// The real hand-built dataset that motivated this whole module: a human find/replaced a J suffix
 // across a copy of demo_data_sfra and silently produced 11 broken store->inventory references
 // Lives outside this repo (vendoring source only), so every test that touches it must stay
 // green when the path is absent - guarded with existsSync + t.skip(), never a hard dependency
@@ -55,8 +55,8 @@ test('detects a dangling element-form <product-id> reference on an already-trans
   // <product-id>ID</product-id>. Both are REFERENCES to a catalog product, distinct from the
   // ATTRIBUTE form product-id="..." that <product> and <variant> elements DEFINE. This fixture
   // simulates the exact defect this collector exists to catch: the catalog's product id has
-  // already been tokenized (as a correct transform pass would do) but the promotion still names
-  // the pre-token id, so the reference is dangling. Before this collector existed, verifyTree
+  // already been suffixed (as a correct transform pass would do) but the promotion still names
+  // the unsuffixed id, so the reference is dangling. Before this collector existed, verifyTree
   // was blind to this class entirely and reported ok:true on data shaped exactly like this
   const dir = tree({
     'catalogs/apparel-m-catalog/catalog.xml': '<catalog catalog-id="apparel-m-catalog"><product product-id="793775370033MJ"/></catalog>',
@@ -70,7 +70,7 @@ test('detects a dangling element-form <product-id> reference on an already-trans
       + '</promotions>',
   });
   const r = verifyTree(dir);
-  assert.equal(r.ok, false, 'the untokenized element-form product-id must be reported as dangling');
+  assert.equal(r.ok, false, 'the unsuffixed element-form product-id must be reported as dangling');
   assert.ok(r.dangling.includes('793775370033M'));
   rmSync(dir, { recursive: true });
 });

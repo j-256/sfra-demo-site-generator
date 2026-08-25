@@ -112,10 +112,10 @@ function anyZipUnder(dir) {
   return false;
 }
 
-test('full generate with --token J: valid, isolated, cache-corrected', () => {
+test('full generate with --suffix J: valid, isolated, cache-corrected', () => {
   const OUT = mkdtempSync(join(tmpdir(), 'sfra-e2e-'));
   try {
-    const r = run(['--token', 'J', '--out', OUT]);
+    const r = run(['--suffix', 'J', '--out', OUT]);
     assert.equal(r.ok, true);
     const tree = join(OUT, 'demo_data_sfra_J');
 
@@ -137,16 +137,16 @@ test('full generate with --token J: valid, isolated, cache-corrected', () => {
     // partitions preserved
     assert.match(cache, /page-cache-partition/);
 
-    // customer-list tokenized to RefArchJ (same string as site, but here it's the list id)
+    // customer-list id suffixed to RefArchJ (same string as site, but here it's the list id)
     const cl = readFileSync(join(tree, 'customer-lists.xml'), 'utf8');
     assert.match(cl, /list-id="RefArchJ"/);
 
-    // active-data CSV NOT tokenized (byte-preserved product ids)
+    // active-data CSV ids NOT suffixed (byte-preserved product ids)
     const csv = readFileSync(join(tree, 'sites/RefArchJ/active-data/product-Sites-RefArch.csv'), 'utf8');
     assert.match(csv, /\b8884304016M\b/); // original id present, not 8884304016MJ
     assert.doesNotMatch(csv, /MJ\b/);
 
-    // library prose rebranded, online-flag site-id tokenized
+    // library prose rebranded, online-flag site-id suffixed
     const lib = readFileSync(join(tree, 'libraries/RefArchSharedLibraryJ/library.xml'), 'utf8');
     assert.match(lib, /RefArchJ Online Store/);
     assert.match(lib, /<online-flag site-id="RefArchJ">/);
@@ -163,21 +163,21 @@ test('full generate with --token J: valid, isolated, cache-corrected', () => {
   }
 });
 
-test('idempotence guard: no double-tokenized IDs (no product-id "...JJ", no RefArchJJ)', () => {
+test('idempotence guard: no double-suffixed IDs (no product-id "...JJ", no RefArchJJ)', () => {
   // NOTE: a blind grep for "JJ" is WRONG here - the OOTB catalog data contains manufacturer
   // color codes and image filenames with literal "JJ" (e.g. value="JJ001XX",
   // path="large/PG.8211X3997.JJ001XX.PZ.jpg"). Those are legitimately untouched passthrough
-  // The real failure mode is double-TOKENIZATION: an ID we rename getting the token twice
+  // The real failure mode is double suffixing: an ID we rename getting the suffix twice
   // Assert against the ID-bearing positions only
   const OUT = mkdtempSync(join(tmpdir(), 'sfra-e2e-'));
   try {
-    run(['--token', 'J', '--out', OUT]);
+    run(['--suffix', 'J', '--out', OUT]);
     const tree = join(OUT, 'demo_data_sfra_J');
-    // any renamed id ending in the token followed by another token = double-tokenized
+    // any renamed id ending in the suffix twice = double-suffixed
     const bad = execFileSync('bash', ['-lc',
       `grep -rhoE '(product-id|catalog-id|site-id|list-id|pricebook-id|library-id|source-id|target-id)="[^"]*JJ"' ${tree} || true`],
       { encoding: 'utf8' }).trim();
-    assert.equal(bad, '', `found double-tokenized ids:\n${bad}`);
+    assert.equal(bad, '', `found double-suffixed ids:\n${bad}`);
     // and the site/library ids specifically
     const site = readFileSync(join(tree, 'sites/RefArchJ/site.xml'), 'utf8');
     assert.doesNotMatch(site, /RefArchJJ/);
@@ -189,9 +189,9 @@ test('idempotence guard: no double-tokenized IDs (no product-id "...JJ", no RefA
 test('refuses existing out without --force, succeeds with it', () => {
   const OUT = mkdtempSync(join(tmpdir(), 'sfra-e2e-'));
   try {
-    run(['--token', 'J', '--out', OUT]);
-    assert.throws(() => run(['--token', 'J', '--out', OUT]), /force/);
-    assert.equal(run(['--token', 'J', '--out', OUT, '--force']).ok, true);
+    run(['--suffix', 'J', '--out', OUT]);
+    assert.throws(() => run(['--suffix', 'J', '--out', OUT]), /force/);
+    assert.equal(run(['--suffix', 'J', '--out', OUT, '--force']).ok, true);
   } finally {
     rmSync(OUT, { recursive: true, force: true });
   }
@@ -208,12 +208,12 @@ test('verify-failure path: dangling reference reports the id, exits non-zero, pr
   const project = buildFixtureProject({ brokenRef: true });
   try {
     const out = join(project, 'out');
-    const r = spawnSync('node', [join(project, 'generate.mjs'), '--token', 'J', '--out', out], { encoding: 'utf8' });
+    const r = spawnSync('node', [join(project, 'generate.mjs'), '--suffix', 'J', '--out', out], { encoding: 'utf8' });
 
     assert.equal(r.status, 1, `expected exit 1, got ${r.status}; stderr: ${r.stderr}`);
     assert.match(r.stderr, /verification FAILED/);
     assert.match(r.stderr, /dangling reference/);
-    // the specific broken id (store-ghost's inventoryListId, tokenized) must be named
+    // the specific broken id (store-ghost's suffixed inventoryListId) must be named
     assert.match(r.stderr, /inventory_ghostJ/);
     assert.equal(r.stdout, '', 'no success message on stdout when verification fails');
 
@@ -229,7 +229,7 @@ test('--only primary / --only global through the real CLI: selected site only, i
     try {
       const out = join(project, 'out');
       const r = spawnSync('node',
-        [join(project, 'generate.mjs'), '--token', 'J', '--out', out, '--only', only],
+        [join(project, 'generate.mjs'), '--suffix', 'J', '--out', out, '--only', only],
         { encoding: 'utf8' });
       assert.equal(r.status, 0, `expected exit 0 for --only ${only}; stderr: ${r.stderr}`);
 
@@ -250,10 +250,10 @@ test('--only primary / --only global through the real CLI: selected site only, i
   }
 });
 
-test('CLI subprocess: missing --token produces a clean one-line message and exit 2', () => {
+test('CLI subprocess: missing --suffix produces a clean one-line message and exit 2', () => {
   const r = spawnSync(CLI, [], { encoding: 'utf8' });
   assert.equal(r.status, 2, 'a usage error exits 2, distinct from a runtime failure');
-  assert.match(r.stderr, /token is required/);
+  assert.match(r.stderr, /suffix is required/);
   assert.doesNotMatch(r.stderr, /at .*\(.*:\d+:\d+\)/, 'stderr must not contain a stack trace frame');
 });
 
@@ -269,7 +269,7 @@ test('--cache through the real CLI: production only by default, staging and deve
     try {
       const out = join(project, 'out');
       const r = spawnSync('node',
-        [join(project, 'generate.mjs'), '--token', 'J', '--out', out, ...args],
+        [join(project, 'generate.mjs'), '--suffix', 'J', '--out', out, ...args],
         { encoding: 'utf8' });
       assert.equal(r.status, 0, `expected exit 0 for ${args.join(' ') || '(no flags)'}; stderr: ${r.stderr}`);
 
@@ -290,7 +290,7 @@ test('--cache through the real CLI: production only by default, staging and deve
 });
 
 test('--cache rejects an unknown environment through the real CLI', () => {
-  const r = spawnSync(CLI, ['--token', 'J', '--cache', 'sandbox'],
+  const r = spawnSync(CLI, ['--suffix', 'J', '--cache', 'sandbox'],
     { encoding: 'utf8' });
   assert.equal(r.status, 2, 'a bad flag value is a usage error');
   assert.match(r.stderr, /--cache requires one of/);
@@ -302,29 +302,29 @@ test('--help and -h print usage and exit 0, and the help stays in sync with the 
     const r = spawnSync(CLI, [flag], { encoding: 'utf8' });
     assert.equal(r.status, 0, `${flag} must exit 0`);
     assert.match(r.stdout, /^NAME/, `${flag} must print usage on stdout`);
-    assert.match(r.stdout, /\.\/generate --token/, `${flag} must show the executable entrypoint`);
+    assert.match(r.stdout, /\.\/generate --suffix/, `${flag} must show the executable entrypoint`);
     for (const section of ['SYNOPSIS', 'DESCRIPTION', 'OPTIONS', 'EXIT STATUS', 'EXAMPLES', 'CAVEATS']) {
       assert.ok(r.stdout.includes(section), `${flag} output should have a ${section} section`);
     }
-    // help must not require a token, so it works as the first thing anyone types
-    assert.doesNotMatch(r.stderr, /token is required/);
+    // help must not require a suffix, so it works as the first thing anyone types
+    assert.doesNotMatch(r.stderr, /suffix is required/);
   }
 
   // surface parity: every flag the parser accepts is documented, with its short form
   const help = spawnSync(CLI, ['--help'], { encoding: 'utf8' }).stdout;
   assert.match(help, /exactly as supplied; case is\s+preserved/,
-    '--help should promise that token case is preserved');
+    '--help should promise that suffix case is preserved');
   const parser = readFileSync(join(REPO_ROOT, 'lib/options.mjs'), 'utf8');
   const longFlags = [...new Set([...parser.matchAll(/'(--[a-z][a-z-]+)'/g)].map((m) => m[1]))];
   assert.ok(longFlags.length >= 6, `expected to find the parser's long flags, got ${longFlags}`);
   for (const f of longFlags) {
     assert.ok(help.includes(f), `${f} is accepted by the parser but missing from --help`);
   }
-  for (const short of ['-t', '-c', '-O', '-k', '-o', '-f', '-h']) {
+  for (const short of ['-s', '-c', '-O', '-k', '-o', '-f', '-h']) {
     assert.ok(help.includes(short), `${short} is accepted but missing from --help`);
   }
 
-  // the token cap is stated in two places; they must agree
-  const cap = parser.match(/MAX_TOKEN = (\d+)/)[1];
-  assert.ok(help.includes(`${cap} chars max`), `--help must state the real ${cap}-char token cap`);
+  // the suffix cap is stated in two places; they must agree
+  const cap = parser.match(/MAX_SUFFIX = (\d+)/)[1];
+  assert.ok(help.includes(`${cap} chars max`), `--help must state the real ${cap}-char suffix cap`);
 });
