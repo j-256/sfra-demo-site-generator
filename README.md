@@ -4,7 +4,7 @@ Generate an isolated, referentially-valid SFRA demo site archive with an identif
 
 ## Installation
 
-Download the artifact for your platform from the repository's Releases page. The macOS and Linux archives each contain an executable named `sfra-demo-site-generator`; Windows is distributed as an executable directly.
+Download the artifact for your platform from the repository's Releases page. The macOS and Linux downloads are archives containing an executable named `sfra-demo-site-generator`. The Windows download is the executable itself, so there is no archive to extract.
 
 | Platform | Artifact suffix |
 |---|---|
@@ -19,7 +19,13 @@ On macOS, extract the download and clear its quarantine attribute:
     tar -xzf sfra-demo-site-generator-vX.Y.Z-macos-arm64.tar.gz
     sudo xattr -d com.apple.quarantine sfra-demo-site-generator
 
-On Linux, use the matching archive name in the extraction command. On Windows, run the downloaded `.exe` directly. The standalone executable has zero runtime dependencies, and the embedded OOTB demo data lets it generate archives without network access or additional input files.
+On Linux, use the matching archive name in the extraction command.
+
+On Windows, skip extraction because the downloaded `.exe` is the program itself. Do not double-click it; the generator is a command-line program and requires options. In File Explorer, open the folder containing the download, click the address bar, type `powershell`, and press Enter. Then run the following command, replacing `vX.Y.Z` with the version in the downloaded filename:
+
+    .\sfra-demo-site-generator-vX.Y.Z-windows-x64.exe --suffix alice --cache dev
+
+The standalone executable has zero runtime dependencies, and the embedded OOTB demo data lets it generate archives without network access or additional input files.
 
 The macOS executables are ad hoc signed, not Developer ID signed or notarized, so Gatekeeper blocks a browser-downloaded executable. The `xattr` step removes its quarantine attribute before the first invocation.
 
