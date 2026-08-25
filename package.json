@@ -5,12 +5,15 @@
   "type": "module",
   "engines": { "node": ">=18" },
   "scripts": {
+    "preversion": "npm run release:prepare",
+    "postversion": "npm run release:deploy",
     "generate": "./generate",
     "test": "node --test",
     "standalone:build": "./scripts/build-standalone.sh",
     "standalone:validate": "./scripts/validate-standalone.sh",
     "release:build": "./scripts/build-release.sh",
     "release:prepare": "./scripts/prepare-release.sh",
+    "release:deploy": "./scripts/deploy-release.sh",
     "release:publish": "./scripts/publish-release.sh"
   },
   "license": "UNLICENSED",

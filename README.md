@@ -186,15 +186,16 @@ Unit tests per module, plus end-to-end tests that run the real pipeline over the
 
 ## Building and publishing a release
 
-The preparation command runs the test suite, builds every supported target, packages macOS and Linux executables in archives that retain executable mode, and validates the extracted executable for the build host with `PATH` disabled. It writes the artifacts under `dist/releases/<tag>/`.
+Releases are driven locally so the same workflow can publish to GitHub.com and GitHub Enterprise. From a clean `main` branch with the `origin` and `soma` remotes configured and `gh` authenticated to both hosts, choose the appropriate semantic-version increment:
 
-Set `package.json` to the release version, then run:
+    npm version patch
+    npm version minor
+    npm version major
 
-    TAG=vX.Y.Z
-    REPOSITORY=host/owner/repository
-    npm run release:prepare -- "$TAG"
-    git tag -a "$TAG" -m "${TAG#v}"
-    git push origin "$TAG"
-    npm run release:publish -- "$TAG" "$REPOSITORY" /path/to/release-notes.md
+The `preversion` hook runs the test suite, builds every supported target, packages macOS and Linux executables in archives that retain executable mode, and validates the extracted executable for the build host with `PATH` disabled. npm then updates `package.json`, creates the configured release commit, and creates an annotated `vX.Y.Z` tag. The `postversion` hook preflights both remotes, atomically pushes the `main` branch and tag together to each remote, then creates the matching hosted releases with all artifacts.
 
-The publisher requires a clean worktree, a local tag pointing to `HEAD`, the same tag on the named remote repository, all expected artifacts, and no existing release for that tag. It displays the repository, tag, and notes path and requires confirmation immediately before creating the release. It never creates or pushes a tag.
+One operation cannot be atomic across two independent hosts. If a push or release upload fails after the other host has succeeded, fix the underlying problem and resume the same release without creating another version:
+
+    npm run release:deploy
+
+The deploy command recognizes remotes and releases that are already complete and fills in only the missing work. Preview its Git pushes without changing either host with `npm run release:deploy -- --dry-run`. Pass `--notes-file <path>` when a retry should use release notes other than the generated commit summary.

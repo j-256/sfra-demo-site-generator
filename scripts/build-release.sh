@@ -15,9 +15,10 @@ fi
 
 package_version=""
 package_version="$(node -p "require(process.argv[1]).version" "$REPO_ROOT/package.json")"
-tag="${1:-v$package_version}"
-if [ "$tag" != "v$package_version" ]; then
-  echo "Release tag $tag does not match package version v$package_version" >&2
+release_version="${npm_new_version:-$package_version}"
+tag="${1:-v$release_version}"
+if [ "$tag" != "v$release_version" ]; then
+  echo "Release tag $tag does not match release version v$release_version" >&2
   exit 1
 fi
 
