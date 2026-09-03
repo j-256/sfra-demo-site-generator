@@ -1,0 +1,66 @@
+#!/bin/bash
+set -u
+
+RELEASE_BRANCH_REF="refs/heads/main"
+RELEASE_DEPLOY_ACTIVE_VALUE="1"
+RELEASE_TAG_PATTERN='^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$'
+
+remote_name="${1-}"
+case "$remote_name" in
+  origin|soma) ;;
+  *) exit 0 ;;
+esac
+
+if [ "${SFRA_RELEASE_DEPLOY_ACTIVE-}" = "$RELEASE_DEPLOY_ACTIVE_VALUE" ]; then
+  exit 0
+fi
+
+is_zero_oid() {
+  case "$1" in
+    ''|*[!0]*) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+release_tag_push=false
+main_oid=""
+while read -r _local_ref local_oid remote_ref _remote_oid; do
+  if ! is_zero_oid "$local_oid" && printf '%s\n' "$remote_ref" | grep -Eq "$RELEASE_TAG_PATTERN"; then
+    release_tag_push=true
+  fi
+  if [ "$remote_ref" = "$RELEASE_BRANCH_REF" ] && ! is_zero_oid "$local_oid"; then
+    main_oid="$local_oid"
+  fi
+done
+
+tagged_main_push=false
+if [ -n "$main_oid" ]; then
+  repo_root=""
+  repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  package_version=""
+  if [ -n "$repo_root" ]; then
+    package_version="$(git -C "$repo_root" show "$main_oid:package.json" 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version" 2>/dev/null || true)"
+  fi
+  if printf '%s\n' "$package_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    version_tag="refs/tags/v$package_version"
+    tag_commit=""
+    tag_commit="$(git -C "$repo_root" rev-parse --verify -q "$version_tag^{commit}" 2>/dev/null || true)"
+    if [ "$tag_commit" = "$main_oid" ]; then
+      tagged_main_push=true
+    fi
+  fi
+fi
+
+if [ "$release_tag_push" = false ] && [ "$tagged_main_push" = false ]; then
+  exit 0
+fi
+
+cat >&2 <<'EOF'
+Release push reminder for sfra-demo-site-generator:
+  Prefer the guarded two-remote workflow, optionally previewing it first:
+    npm run release:deploy -- --dry-run
+    npm run release:deploy
+  This reminder does not block the push.
+EOF
+
+exit 0

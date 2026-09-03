@@ -188,6 +188,12 @@ Unit tests per module, plus end-to-end tests that run the real pipeline over the
 
 Releases are driven locally so the same workflow can publish to GitHub.com and GitHub Enterprise. From a clean `main` branch with the `origin` and `soma` remotes configured and `gh` authenticated to both hosts, choose the appropriate semantic-version increment:
 
+Enable the repository's non-blocking release-push reminder once per clone:
+
+    npm run hooks:install
+
+The hook reminds you to use the guarded release workflow before a direct push creates a `vX.Y.Z` tag or updates `main` to a commit carrying the matching package-version tag. Ordinary development pushes are unaffected, and the guarded workflow suppresses its own reminder.
+
     npm version patch
     npm version minor
     npm version major

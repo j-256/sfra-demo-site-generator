@@ -22,6 +22,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(here, '..');
 const DEPLOY = join(REPO_ROOT, 'scripts', 'deploy-release.sh');
 const PUBLISH = join(REPO_ROOT, 'scripts', 'publish-release.sh');
+const PRE_PUSH = join(REPO_ROOT, '.githooks', 'pre-push');
 
 function executableOnPath(name) {
   for (const dir of process.env.PATH.split(delimiter)) {
@@ -99,6 +100,76 @@ test('release script help and usage follow the CLI contract', () => {
   assert.match(emptyNotes.stderr, /requires a path/);
 });
 
+test('pre-push hook reminds only for direct release-like pushes', () => {
+  const root = mkdtempSync(join(tmpdir(), 'sfra-pre-push-test-'));
+  const repo = join(root, 'repo');
+  const origin = join(root, 'origin.git');
+  const soma = join(root, 'soma.git');
+  const backup = join(root, 'backup.git');
+  const hooks = join(repo, '.githooks');
+  const version = '2.0.0';
+  const tag = `v${version}`;
+
+  try {
+    mkdirSync(repo);
+    for (const remote of [origin, soma, backup]) {
+      assert.equal(run(REAL_GIT, ['init', '--bare', remote]).status, 0);
+    }
+    git(repo, ['init', '-b', 'main']);
+    git(repo, ['config', 'user.name', 'Hook Test']);
+    git(repo, ['config', 'user.email', 'hook-test@example.com']);
+    mkdirSync(hooks);
+    copyFileSync(PRE_PUSH, join(hooks, 'pre-push'));
+    chmodSync(join(hooks, 'pre-push'), 0o755);
+    writeFileSync(join(repo, 'package.json'), `${JSON.stringify({ version }, null, 2)}\n`);
+    writeFileSync(join(repo, 'baseline.txt'), 'baseline\n');
+    git(repo, ['add', 'package.json', 'baseline.txt']);
+    git(repo, ['commit', '-m', 'test: establish hook baseline']);
+    for (const [name, remote] of [['origin', origin], ['soma', soma], ['backup', backup]]) {
+      git(repo, ['remote', 'add', name, remote]);
+      git(repo, ['push', name, 'main']);
+    }
+
+    writeFileSync(join(repo, 'release.txt'), 'release\n');
+    git(repo, ['add', 'release.txt']);
+    git(repo, ['commit', '-m', 'chore(release): prepare v2.0.0']);
+    git(repo, ['tag', '-a', tag, '-m', `chore(release): prepare ${tag}`]);
+    git(repo, ['config', 'core.hooksPath', '.githooks']);
+
+    const taggedMain = run(REAL_GIT, ['-C', repo, 'push', 'origin', 'main']);
+    assert.equal(taggedMain.status, 0, taggedMain.stderr);
+    assert.match(taggedMain.stderr, /npm run release:deploy -- --dry-run/);
+
+    const versionTag = run(REAL_GIT, ['-C', repo, 'push', 'soma', `refs/tags/${tag}`]);
+    assert.equal(versionTag.status, 0, versionTag.stderr);
+    assert.match(versionTag.stderr, /npm run release:deploy$/m);
+
+    const unrelatedRemote = run(REAL_GIT, ['-C', repo, 'push', 'backup', `refs/tags/${tag}`]);
+    assert.equal(unrelatedRemote.status, 0, unrelatedRemote.stderr);
+    assert.doesNotMatch(unrelatedRemote.stderr, /Release push reminder/);
+
+    writeFileSync(join(repo, 'ordinary.txt'), 'ordinary\n');
+    git(repo, ['add', 'ordinary.txt']);
+    git(repo, ['commit', '-m', 'fix: ordinary development change']);
+    const ordinaryMain = run(REAL_GIT, ['-C', repo, 'push', 'origin', 'main']);
+    assert.equal(ordinaryMain.status, 0, ordinaryMain.stderr);
+    assert.doesNotMatch(ordinaryMain.stderr, /Release push reminder/);
+
+    git(repo, ['tag', '-a', 'v3.0.0', '-m', 'chore(release): prepare v3.0.0']);
+    const guardedPush = run(REAL_GIT, ['-C', repo, 'push', 'origin', 'refs/tags/v3.0.0'], {
+      env: { ...process.env, SFRA_RELEASE_DEPLOY_ACTIVE: '1' },
+    });
+    assert.equal(guardedPush.status, 0, guardedPush.stderr);
+    assert.doesNotMatch(guardedPush.stderr, /Release push reminder/);
+
+    const deletedTag = run(REAL_GIT, ['-C', repo, 'push', 'soma', `:refs/tags/${tag}`]);
+    assert.equal(deletedTag.status, 0, deletedTag.stderr);
+    assert.doesNotMatch(deletedTag.stderr, /Release push reminder/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('dual-host deploy resumes rejected pushes and partial releases', () => {
   const root = mkdtempSync(join(tmpdir(), 'sfra-release-test-'));
   const repo = join(root, 'repo');
@@ -161,6 +232,10 @@ if [ "\${1:-}" = "remote" ] && [ "\${2:-}" = "get-url" ]; then
     origin) printf '%s\\n' 'https://origin.test/owner/repo.git'; exit 0 ;;
     soma) printf '%s\\n' 'https://soma.test/owner/repo.git'; exit 0 ;;
   esac
+fi
+if [ "\${1:-}" = "push" ] && [ "\${SFRA_RELEASE_DEPLOY_ACTIVE:-}" != "1" ]; then
+  printf '%s\n' 'release deploy push did not set its hook suppression marker' >&2
+  exit 1
 fi
 exec "$REAL_GIT" "\${prefix[@]}" "$@"
 `);

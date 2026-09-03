@@ -10,6 +10,7 @@
     "preversion": "npm run release:prepare",
     "postversion": "npm run release:deploy",
     "generate": "./generate",
+    "hooks:install": "git config core.hooksPath .githooks",
     "test": "node --test",
     "standalone:build": "./scripts/build-standalone.sh",
     "standalone:validate": "./scripts/validate-standalone.sh",

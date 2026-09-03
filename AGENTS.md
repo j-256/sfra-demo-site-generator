@@ -35,5 +35,6 @@ The product is an offline, self-contained generator. It creates import artifacts
 - Run a focused `node --test test/<file>.test.mjs` target while iterating, then run `npm test`. Generator or vendored-data changes require the full end-to-end corpus tests.
 - Add regression coverage for both sides of a transformation rule: the intended identifier or reference changes, while a structurally similar site-scoped or passthrough value remains unchanged.
 - Build and validate standalone artifacts when changing entrypoints, filesystem use, archive behavior, embedded data, or runtime compatibility.
+- Keep `.githooks/pre-push` non-blocking and limited to direct pushes to `origin` or `soma` that create a `vX.Y.Z` tag or advance `main` to a commit carrying the matching package-version tag. The guarded deploy workflow must suppress its own reminder.
 - Treat `npm version` as a publishing operation, not a local version edit: its hooks test, build, tag, push remote refs, and create hosted releases. Do not run it without explicit release and push authorization.
 - `npm run release:deploy` and `npm run release:publish` also mutate remote state. Use the guarded release workflow rather than manually changing versions, tags, or hosted assets.

@@ -3,6 +3,7 @@ set -euo pipefail
 
 RELEASE_BRANCH="main"
 RELEASE_REMOTES=("origin" "soma")
+RELEASE_DEPLOY_ACTIVE="1"
 
 usage() {
   cat <<'EOF'
@@ -299,7 +300,7 @@ for index in "${!RELEASE_REMOTES[@]}"; do
   if [ "$dry_run" = true ]; then
     push_args+=(--dry-run)
   fi
-  git -C "$REPO_ROOT" push "${push_args[@]}" "$remote" \
+  SFRA_RELEASE_DEPLOY_ACTIVE="$RELEASE_DEPLOY_ACTIVE" git -C "$REPO_ROOT" push "${push_args[@]}" "$remote" \
     "HEAD:refs/heads/$RELEASE_BRANCH" "refs/tags/$tag:refs/tags/$tag"
   if [ "$dry_run" = false ]; then
     verify_remote_refs "$remote" "$tag" "$head_commit" "$local_tag_object"
