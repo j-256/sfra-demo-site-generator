@@ -69,11 +69,9 @@ The 19-character cap comes from the platform: `site-id` is limited to 32 charact
 
 ## Why
 
-**The OOTB SFRA import gives everyone the same site.** It always creates `RefArch` and `RefArchGlobal` with fixed resource ids, so a second person importing onto the same instance collides with the first. There is no supported way to pick different names.
+**The OOTB SFRA import uses fixed identifiers.** Both sandboxes and Staging instances can import the standard SFRA dataset, but each import uses `RefArch` and `RefArchGlobal` and the same org-scoped resource ids. It does not create independently named copies, so it cannot by itself give several people isolated demo sites on one shared instance.
 
-**Ready-made SFRA demo data is only offered on sandboxes.** On Staging you supply the files yourself, and the usual workaround is a round trip: import the data on a sandbox, export it from there, then import that archive into Staging.
-
-**Nothing here assumes what is already on the instance.** Every renamed id is derived from its source id and your suffix alone, so the archive imports the same way onto a bare Staging instance as onto a sandbox that already has a RefArch site. That is the property that makes it safe to hand to someone else.
+**This generator makes those sites coexist.** Every renamed id is derived from its source id and your suffix alone, so the archive can be imported whether or not the instance already has the standard RefArch sites. That is the property that makes it safe to hand to someone else.
 
 ## What gets renamed, and what does not
 
