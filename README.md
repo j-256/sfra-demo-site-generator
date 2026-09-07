@@ -34,7 +34,7 @@ To run from a source checkout instead, use the `generate` executable at the repo
 ### Requirements
 
 - Standalone release: no runtime dependencies
-- Source checkout: Node.js 18+ using only the standard library
+- Source checkout: Node.js 22+ using only the standard library
 - Standalone builds: the Deno version pinned in `.deno-version` and `tar`
 - Test suite: `unzip` and `xmllint`
 

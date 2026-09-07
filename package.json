@@ -4,7 +4,7 @@
   "description": "Generate isolated, referentially-valid SFRA demo-data site-import archives for a chosen suffix",
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "preversion": "npm run release:prepare",
